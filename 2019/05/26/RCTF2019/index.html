@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/05/26/RCTF2019/Picture19.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/RCTF2019/Picture20.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/26/RCTF2019/Picture21.png">
-<meta property="og:updated_time" content="2019-05-28T07:49:48.266Z">
+<meta property="og:updated_time" content="2019-05-29T15:52:47.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RCTF2019 WP">
 <meta name="twitter:description" content="Web0x00 nextphphttp://nextphp.2019.rctf.rois.io">
@@ -312,7 +312,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.9k
+                  2.1k
                 </span>
               
 
@@ -328,7 +328,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  9
+                  10
                 </span>
               
             </div>
@@ -396,6 +396,9 @@
 <p>得到图片<br><img src="/2019/05/26/RCTF2019/Picture17.png" alt><br>最后组合flag即可</p>
 <h3 id="0x02-disk"><a href="#0x02-disk" class="headerlink" title="0x02 disk"></a>0x02 disk</h3><p>这一题是在writeup出来后，复现了一遍<br><a href="https://github.com/zsxsoft/my-ctf-challenges/blob/master/rctf2019/disk/readme.md" target="_blank" rel="noopener">https://github.com/zsxsoft/my-ctf-challenges/blob/master/rctf2019/disk/readme.md</a></p>
 <p>首先得到的是一个vmdk文件和一个VecaCrypt的磁盘加密软件。<br>VecaCrypt原理 : <a href="https://blog.csdn.net/cmzsteven/article/details/54908125" target="_blank" rel="noopener">https://blog.csdn.net/cmzsteven/article/details/54908125</a><br>使用vecacrypt加载vmdk中的fat文件（官方说要先恢复vmdk文件）<br>使用密码rctf加载<br><img src="/2019/05/26/RCTF2019/Picture18.png" alt><br>打开磁盘内文件，得到password2 = RCTF2019<br>使用密码RCTF2019加载<br><img src="/2019/05/26/RCTF2019/Picture19.png" alt><br>得到一个隐藏的磁盘，但是磁盘被加密，导致格式不正确，系统提示格式化。<br>对vmdk文件可以使用<strong>strings encrypt.vmdk</strong>得到flag的一部分<br><img src="/2019/05/26/RCTF2019/Picture20.png" alt><br>rctf{unseCure_quick_form4t_vo1ume<br>使用<strong>diskgenius</strong>查看扇区数据得到flag的其余部分<br><img src="/2019/05/26/RCTF2019/Picture21.png" alt><br>_and_corrupted_1nner_v0lume}</p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>作为一个web手，做的都是杂项题，唯一做出来的nextphp7.4也是在学长的帮助下才做出来的：）<br>不过通过这一次比赛，我也学习到了很多新姿势，特别是这一道nextphp7.4，通过阅读文档来找思路写payload，在网上找不到类似的题目，要自己提取其中有用的信息，复现后还是很有意义的（可惜的是我看的那一篇中文的博客没有对FFI做介绍，导致我直接忽略掉了这个新特性。。。。</p>
+<p>希望以后的比赛能做出一道题！</p>
 
       
     </div>
@@ -543,7 +546,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web"><span class="nav-number">1.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-nextphp"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 nextphp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc"><span class="nav-number">2.</span> <span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-draw"><span class="nav-number">2.1.</span> <span class="nav-text">0x00 draw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-printer"><span class="nav-number">2.2.</span> <span class="nav-text">0x01 printer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-disk"><span class="nav-number">2.3.</span> <span class="nav-text">0x02 disk</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web"><span class="nav-number">1.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-nextphp"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 nextphp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc"><span class="nav-number">2.</span> <span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-draw"><span class="nav-number">2.1.</span> <span class="nav-text">0x00 draw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-printer"><span class="nav-number">2.2.</span> <span class="nav-text">0x01 printer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-disk"><span class="nav-number">2.3.</span> <span class="nav-text">0x02 disk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -577,7 +580,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">1.9k</span>
+    <span title="Site words total count">2.1k</span>
   
 </div>
 
