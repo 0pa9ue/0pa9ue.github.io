@@ -295,7 +295,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  526
+                  532
                 </span>
               
 
@@ -333,34 +333,14 @@
 
       
         
-          
-            <a id="more"></a>
-<h2 id="web3："><a href="#web3：" class="headerlink" title="web3："></a>web3：</h2><p>首先扫描目录可以扫出robots.txt和readme.txt两个文件</p>
-<p>robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框</p>
-<p>readme.txt文件内容是登录账号和密码，通过这两个登录到后台</p>
-<p><img src="/2019/06/06/ciscn2019/Picture1.png" alt></p>
-<p>登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限制了提交的格式为图片，而并没有在后端检测文件的格式类型。</p>
-<p>但是通过抓包修改文件格式后，所有上传到服务器的文件格式都为jpg格式，但是里面的内容没有变化。</p>
-<p>uploads目录</p>
-<p><img src="/2019/06/06/ciscn2019/Picture2.png" alt></p>
-<p>观察获取当前页面的url格式，发现时一个get型参数action，是读取文件目录中的pages/profile来显示页面的</p>
-<p><img src="/2019/06/06/ciscn2019/Picture3.png" alt></p>
-<p>猜测这里是文件包含的地方，那么尝试使用php://filter来读取文件<br><img src="/2019/06/06/ciscn2019/Picture4.png" alt></p>
-<p>可以看到base64加密后的index.php的代码</p>
-<p><img src="/2019/06/06/ciscn2019/Picture5.png" alt></p>
-<p><img src="/2019/06/06/ciscn2019/Picture6.png" alt></p>
-<p>果然如此，那么剩下的问题就是如何在后台都在所有文件的格式后都加了jpg的情况下，getshell</p>
-<p>这里可以使用php伪协议中的phar://进行绕过和文件的读取<br><a href="https://php.net/manual/zh/wrappers.phar.php" target="_blank" rel="noopener">https://php.net/manual/zh/wrappers.phar.php</a><br>zip文件包含<br><a href="https://lightless.me/archives/include-file-from-zip-or-phar.html" target="_blank" rel="noopener">https://lightless.me/archives/include-file-from-zip-or-phar.html</a></p>
-<p>写一个shell.php，里面包含需要执行的命令，将其压缩为zip格式后，再修改其zip为jpg格式的文件，上传后使用phar://来解压，执行文件</p>
-<hr>
-<p><strong>phar://格式：</strong> phar:// + 压缩文件路径 + / + 解压文件<br>（这里需要注意的是解压文件和压缩文件中的文件名要一致）</p>
-<hr>
-<p>结合之前找到的文件包含的漏洞点（action=），提交payload</p>
-<p><img src="/2019/06/06/ciscn2019/Picture7.png" alt></p>
-<hr>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>两天国赛打的很自闭，因为自己什么都不会，见到的题都不知道如何下手，找不到漏洞点<br>即使是这个web3，也是在fix it的环节才做出来的（做题时找不到文件包含的地方。。</p>
-
-          
+          <p>2019.6.1-2019.6.2<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/06/06/ciscn2019/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
