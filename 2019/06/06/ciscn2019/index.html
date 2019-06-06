@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台 {width=”5.60625in”height=”1.8494783464566928in”} 登录后有两个">
+<meta name="description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台  登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限">
 <meta name="keywords" content="ciscn,CTF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ciscn2019 writeup">
 <meta property="og:url" content="http://yoursite.com/2019/06/06/ciscn2019/index.html">
 <meta property="og:site_name" content="zww">
-<meta property="og:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台 {width=”5.60625in”height=”1.8494783464566928in”} 登录后有两个">
+<meta property="og:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台  登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture1.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture2.png">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture5.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture7.png">
-<meta property="og:updated_time" content="2019-06-06T13:23:04.704Z">
+<meta property="og:updated_time" content="2019-06-06T13:27:04.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ciscn2019 writeup">
-<meta name="twitter:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台 {width=”5.60625in”height=”1.8494783464566928in”} 登录后有两个">
+<meta name="twitter:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台  登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限">
 <meta name="twitter:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture1.png">
 
 
@@ -302,7 +302,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  546
+                  504
                 </span>
               
 
@@ -318,7 +318,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  1
                 </span>
               
             </div>
@@ -339,27 +339,28 @@
       
 
       
-        <h2 id="web3："><a href="#web3：" class="headerlink" title="web3："></a>web3：</h2><p>首先扫描目录可以扫出robots.txt和readme.txt两个文件</p>
+        <a id="more"></a>
+<h2 id="web3："><a href="#web3：" class="headerlink" title="web3："></a>web3：</h2><p>首先扫描目录可以扫出robots.txt和readme.txt两个文件</p>
 <p>robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框</p>
 <p>readme.txt文件内容是登录账号和密码，通过这两个登录到后台</p>
-<p><img src="/2019/06/06/ciscn2019/Picture1.png" alt>{width=”5.60625in”<br>height=”1.8494783464566928in”}</p>
+<p><img src="/2019/06/06/ciscn2019/Picture1.png" alt></p>
 <p>登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限制了提交的格式为图片，而并没有在后端检测文件的格式类型。</p>
 <p>但是通过抓包修改文件格式后，所有上传到服务器的文件格式都为jpg格式，但是里面的内容没有变化。</p>
 <p>uploads目录</p>
-<p><img src="/2019/06/06/ciscn2019/Picture2.png" alt>{width=”5.23125in”<br>height=”1.7276826334208224in”}</p>
+<p><img src="/2019/06/06/ciscn2019/Picture2.png" alt></p>
 <p>观察获取当前页面的url格式，发现时一个get型参数action，是读取文件目录中的pages/profile来显示页面的</p>
-<p><img src="/2019/06/06/ciscn2019/Picture3.png" alt>{width=”6.2555555555555555in”<br>height=”0.2701388888888889in”}</p>
-<p>猜测这里是文件包含的地方，那么尝试使用php://filter来读取文件<br><img src="/2019/06/06/ciscn2019/Picture4.png" alt>{width=”6.2625in”<br>height=”0.20416666666666666in”}</p>
+<p><img src="/2019/06/06/ciscn2019/Picture3.png" alt></p>
+<p>猜测这里是文件包含的地方，那么尝试使用php://filter来读取文件<br><img src="/2019/06/06/ciscn2019/Picture4.png" alt></p>
 <p>可以看到base64加密后的index.php的代码</p>
-<p><img src="/2019/06/06/ciscn2019/Picture5.png" alt>{width=”6.247916666666667in”<br>height=”0.4013888888888889in”}</p>
-<p><img src="/2019/06/06/ciscn2019/Picture6.png" alt>{width=”3.368493000874891in”<br>height=”2.326683070866142in”}</p>
+<p><img src="/2019/06/06/ciscn2019/Picture5.png" alt></p>
+<p><img src="/2019/06/06/ciscn2019/Picture6.png" alt></p>
 <p>果然如此，那么剩下的问题就是如何在后台都在所有文件的格式后都加了jpg的情况下，getshell</p>
 <p>这里可以使用php伪协议中的phar://进行绕过和文件的读取</p>
 <p>写一个shell.php，里面包含需要执行的命令，将其压缩为zip格式后，再修改其zip为jpg格式的文件，上传后使用phar://来解压，执行文件</p>
-<p>phar://格式：phar:// + 压缩文件路径 + / + 解压文件</p>
+<p><strong>phar://格式：</strong> phar:// + 压缩文件路径 + / + 解压文件</p>
 <p>（这里需要注意的是解压文件和压缩文件中的文件名要一致）</p>
 <p>结合之前找到的文件包含的漏洞点（action=），提交payload</p>
-<p><img src="/2019/06/06/ciscn2019/Picture7.png" alt>{width=”6.247916666666667in”<br>height=”0.6201388888888889in”}</p>
+<p><img src="/2019/06/06/ciscn2019/Picture7.png" alt></p>
 <hr>
 <h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>两天国赛打的很自闭，因为自己什么都不会，见到的题都不知道如何下手，找不到漏洞点<br>即使是这个web3，也是在fix it的环节才做出来的（做题时找不到文件包含的地方。。</p>
 
@@ -559,7 +560,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">4.7k</span>
+    <span title="Site words total count">4.6k</span>
   
 </div>
 
