@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="ciscn,CTF,">
+  <meta name="keywords" content="ciscn,CTF,文件包含,">
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台  登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限">
-<meta name="keywords" content="ciscn,CTF">
+<meta name="keywords" content="ciscn,CTF,文件包含">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ciscn2019 writeup">
 <meta property="og:url" content="http://yoursite.com/2019/06/06/ciscn2019/index.html">
@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture5.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture7.png">
-<meta property="og:updated_time" content="2019-06-06T13:29:19.165Z">
+<meta property="og:updated_time" content="2019-06-06T13:32:06.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ciscn2019 writeup">
 <meta name="twitter:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台  登录后有两个功能，一个是文件上传功能，另一个是留言功能。通过初步的fuzz可以大概明白这个文件上传在前端限">
@@ -302,7 +302,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  504
+                  526
                 </span>
               
 
@@ -355,7 +355,7 @@
 <p><img src="/2019/06/06/ciscn2019/Picture5.png" alt></p>
 <p><img src="/2019/06/06/ciscn2019/Picture6.png" alt></p>
 <p>果然如此，那么剩下的问题就是如何在后台都在所有文件的格式后都加了jpg的情况下，getshell</p>
-<p>这里可以使用php伪协议中的phar://进行绕过和文件的读取</p>
+<p>这里可以使用php伪协议中的phar://进行绕过和文件的读取<br><a href="https://php.net/manual/zh/wrappers.phar.php" target="_blank" rel="noopener">https://php.net/manual/zh/wrappers.phar.php</a><br>zip文件包含<br><a href="https://lightless.me/archives/include-file-from-zip-or-phar.html" target="_blank" rel="noopener">https://lightless.me/archives/include-file-from-zip-or-phar.html</a></p>
 <p>写一个shell.php，里面包含需要执行的命令，将其压缩为zip格式后，再修改其zip为jpg格式的文件，上传后使用phar://来解压，执行文件</p>
 <hr>
 <p><strong>phar://格式：</strong> phar:// + 压缩文件路径 + / + 解压文件<br>（这里需要注意的是解压文件和压缩文件中的文件名要一致）</p>
@@ -384,6 +384,8 @@
             <a href="/tags/ciscn/" rel="tag"># ciscn</a>
           
             <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/文件包含/" rel="tag"># 文件包含</a>
           
         </div>
       
@@ -494,7 +496,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -561,7 +563,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">4.6k</span>
+    <span title="Site words total count">4.7k</span>
   
 </div>
 
