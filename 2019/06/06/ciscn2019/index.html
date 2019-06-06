@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="ciscn,CTF,">
 
 
 
@@ -79,16 +79,26 @@
 
 
 
-<meta name="description" content="stay hungry, stay foolish">
-<meta property="og:type" content="website">
-<meta property="og:title" content="zww">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台 {width=”5.60625in”height=”1.8494783464566928in”} 登录后有两个">
+<meta name="keywords" content="ciscn,CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ciscn2019 writeup">
+<meta property="og:url" content="http://yoursite.com/2019/06/06/ciscn2019/index.html">
 <meta property="og:site_name" content="zww">
-<meta property="og:description" content="stay hungry, stay foolish">
+<meta property="og:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台 {width=”5.60625in”height=”1.8494783464566928in”} 登录后有两个">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture1.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture2.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture3.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture4.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture5.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture6.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture7.png">
+<meta property="og:updated_time" content="2019-06-06T13:23:04.704Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zww">
-<meta name="twitter:description" content="stay hungry, stay foolish">
+<meta name="twitter:title" content="ciscn2019 writeup">
+<meta name="twitter:description" content="web3：首先扫描目录可以扫出robots.txt和readme.txt两个文件 robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框 readme.txt文件内容是登录账号和密码，通过这两个登录到后台 {width=”5.60625in”height=”1.8494783464566928in”} 登录后有两个">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/06/ciscn2019/Picture1.png">
 
 
 
@@ -118,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/06/06/ciscn2019/">
 
 
 
 
 
-  <title>zww</title>
+  <title>ciscn2019 writeup | zww</title>
   
 
 
@@ -143,8 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -217,9 +226,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -249,9 +258,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/06/ciscn2019/" itemprop="url">ciscn2019 writeup</a></h1>
+          <h1 class="post-title" itemprop="name headline">ciscn2019 writeup</h1>
         
 
         <div class="post-meta">
@@ -332,9 +339,7 @@
       
 
       
-        
-          
-            <h2 id="web3："><a href="#web3：" class="headerlink" title="web3："></a>web3：</h2><p>首先扫描目录可以扫出robots.txt和readme.txt两个文件</p>
+        <h2 id="web3："><a href="#web3：" class="headerlink" title="web3："></a>web3：</h2><p>首先扫描目录可以扫出robots.txt和readme.txt两个文件</p>
 <p>robots.txt文件内容是my-secret-diary-no-one-will-know-it/，打开该网站目录后可以看到一个登录框</p>
 <p>readme.txt文件内容是登录账号和密码，通过这两个登录到后台</p>
 <p><img src="/2019/06/06/ciscn2019/Picture1.png" alt>{width=”5.60625in”<br>height=”1.8494783464566928in”}</p>
@@ -358,8 +363,6 @@
 <hr>
 <h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>两天国赛打的很自闭，因为自己什么都不会，见到的题都不知道如何下手，找不到漏洞点<br>即使是这个web3，也是在fix it的环节才做出来的（做题时找不到文件包含的地方。。</p>
 
-          
-        
       
     </div>
     
@@ -374,325 +377,38 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/03/CSAPP-buflab/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WenWei Zeng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zww">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/03/CSAPP-buflab/" itemprop="url">CSAPP-buflab</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-03T12:35:13+08:00">
-                2019-06-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/ciscn/" rel="tag"># ciscn</a>
           
-            
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
           
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  1.8k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  8
-                </span>
-              
-            </div>
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          <p>CSAPP-buflab缓冲区溢出实验<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/06/03/CSAPP-buflab/#more" rel="contents">
-              Read more &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/03/CSAPP-buflab/" rel="next" title="CSAPP-buflab">
+                <i class="fa fa-chevron-left"></i> CSAPP-buflab
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/26/RCTF2019/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WenWei Zeng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zww">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/26/RCTF2019/" itemprop="url">RCTF2019 writeup</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-26T10:24:52+08:00">
-                2019-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  2.3k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  11
-                </span>
-              
-            </div>
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <hr>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="0x00-nextphp"><a href="#0x00-nextphp" class="headerlink" title="0x00 nextphp"></a>0x00 nextphp</h3><p><a href="http://nextphp.2019.rctf.rois.io" target="_blank" rel="noopener">http://nextphp.2019.rctf.rois.io</a><br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/26/RCTF2019/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -702,10 +418,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -713,6 +430,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -733,8 +454,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -785,6 +515,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#web3："><span class="nav-number">1.</span> <span class="nav-text">web3：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">2.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -927,6 +673,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
