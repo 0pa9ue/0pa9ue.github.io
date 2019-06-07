@@ -333,83 +333,14 @@
 
       
         
-          
-            <p><strong>0x00签到题</strong><br><img src="/2019/06/07/qwb2019/Picture1.png" alt></p>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><!-- **0x02 upload**
-
-注册用户登录后，可以很明显的看出这是一个upload的题，所以要寻找如何去上传一个shell脚本来getshell
-
-发现cookies中是一个base64的反序列化后的字符串 -->
-<h3 id="随便注"><a href="#随便注" class="headerlink" title="随便注"></a>随便注</h3><p>这一题虽然 or 1=1 等都可以使用，但是却找不到有用的信息，推测flag不再当前的表中，在进行常规的sql注入的过程中遇到了这个<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> preg_match(<span class="string">"/select|update|delete|drop|insert|where|\./i"</span>, $inject);</span><br></pre></td></tr></table></figure></p>
-<p>因为这里过滤了select，所以select from information那一套没用了，无法得到进一步的信息，当时就停在了这里。。</p>
-<p>在复现的时候学习到了一个新的姿势，堆叠注入，本质上是php中的一个可以执行多条sql语句的函数<br>multi_query<br>下面省去寻找过程</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">show</span> <span class="keyword">databases</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2019/06/07/qwb2019/Picture3.png" alt><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">show</span> <span class="keyword">tables</span> <span class="keyword">from</span> supersqli;<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/06/07/qwb2019/Picture4.png" alt></p>
-<p>从这里可以看出是从words表中选择的数据，flag在这个表名为1919810931114514的表中</p>
-<p>因为过滤了update和select，所以也不能将1919810931114514表中的数据复制到words表中</p>
-<p>这里可以使用alter对表结构进行修改，将words表的表名改为test，1919810931114514表的表名改为words，这样在查找的时候，就能够直接查找到flag了</p>
-<p>因为查找时是根据words表中的id进行选择的，所以我们在这里也需要在1919810931114514表中加一个名为id的列<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> <span class="string">`1919810931114514`</span> <span class="keyword">from</span> supersqli;<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/06/07/qwb2019/Picture5.png" alt></p>
-<p>修改表名，即拿到flag<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">alter</span> <span class="keyword">table</span> words <span class="keyword">rename</span> <span class="keyword">test</span>;<span class="keyword">alter</span> <span class="keyword">table</span> <span class="string">`1919810931114514`</span><span class="keyword">rename</span> words;<span class="comment">#</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/06/07/qwb2019/Picture6.png" alt></p>
-<font color="d3d3d3" size="2">这里不能够分开写的原因可能是他的逻辑是每次都要保证能查询到结果，如果只执行1\’;alter table words rename test;#，那么下一次在执行1\’;alter table`1919810931114514` renamewords;#的时候会因为找不到words表而结束查询，从而修改不了1919810931114514表的表名（这里不确定）</font>
-
-<h3 id="强网先锋-上单"><a href="#强网先锋-上单" class="headerlink" title="强网先锋-上单"></a>强网先锋-上单</h3><p>首先进入的是一个目录，搜索了一番后发现有几个信息。</p>
-<ol>
-<li><p>当前的php版本为5.0.23</p>
-</li>
-<li><p>在runtime/12.log和13.log中可以直接看到能命令执行payload</p>
-</li>
-</ol>
-<p><img src="/2019/06/07/qwb2019/Picture2.png" alt></p>
-<p>直接寻找flag:</p>
-<ul>
-<li>vars[0] = find / -name *flag*</li>
-<li>vars[0] = cat /flag</li>
-</ul>
-<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="鲲or鳗orGame"><a href="#鲲or鳗orGame" class="headerlink" title="鲲or鳗orGame"></a>鲲or鳗orGame</h3><p>打开题目后是两个音频和一个游戏，分别下载下来游戏为 game.gb<br><img src="/2019/06/07/qwb2019/Pictur7.png" alt></p>
-<p>在对音频一顿分析后(MP3stego, Audicaty)，没有发现什么隐藏的信息，进而转向 game.gb.</p>
-<p>查找一下gb格式的文件的信息</p>
-<p><img src="/2019/06/07/qwb2019/Picture8.png" alt></p>
-<p>发现是一个GameBoy的游戏，去官网下载GameBoy的模拟器</p>
-<p><a href="http://visualboyadvance.net" target="_blank" rel="noopener">http://visualboyadvance.net</a></p>
-<p>用visualboyadvance打开gb文件，可以看到是一个类似flappy bird的游戏</p>
-<p>进去试玩一通后，发现没有什么别的奇怪的关卡之类的东西，只能去研究一下这个模拟器的功能</p>
-<p>在研究模拟器的时候，发现VBA可以用来作弊</p>
-<p><img src="/2019/06/07/qwb2019/Picture9.png" alt></p>
-<p>看到这个页面就可以大致知道是要对游戏中的某些值进行修改，然后拿flag了</p>
-<p>而且因为这个游戏只有两个数值，一个result和best，所以尝试修改这两个值</p>
-<p><img src="/2019/06/07/qwb2019/Picture10.png" alt></p>
-<p>操作流程大致是:</p>
-<ol>
-<li>在准备开始阶段选择old value/Equal/8 bits（这里系统默认选的是32<br>bits，一直调试不出来。后来是想到这个值可能没有32bits），选择start后关闭，进入游戏</li>
-</ol>
-<p><img src="/2019/06/07/qwb2019/Picture11.png" alt></p>
-<ol start="2">
-<li>通过第一个柱子，让best为1之后，等待下一个准备开始阶段到来。</li>
-</ol>
-<p>选择old value/Greater than/search</p>
-<p><img src="/2019/06/07/qwb2019/Picture12.png" alt></p>
-<ol start="3">
-<li>重复2操作一次（这次需要通过两根柱子，让best为2）应该就可以找到代表best的地址了</li>
-</ol>
-<p><img src="/2019/06/07/qwb2019/Picture13.png" alt></p>
-<font color="grey">这里我的best是由2变为4</font>
-
-<ol start="4">
-<li>add cheat 并修改值为255（8 bits的最大值）</li>
-</ol>
-<p><img src="/2019/06/07/qwb2019/Picture14.png" alt></p>
-<ol start="5">
-<li>即拿到flag值</li>
-</ol>
-<p><img src="/2019/06/07/qwb2019/Picture15.png" alt></p>
-<p>flag{PS03R49UE576R421RE8}</p>
-<h3 id="强网先锋-打野"><a href="#强网先锋-打野" class="headerlink" title="强网先锋-打野"></a>强网先锋-打野</h3><p>使用zsteg工具查看bmp图片的隐藏信息<br><a href="https://github.com/zed-0xff/zsteg" target="_blank" rel="noopener">https://github.com/zed-0xff/zsteg</a></p>
-<p><img src="/2019/06/07/qwb2019/Picture16.png" alt></p>
-
-          
+          <p><strong>强网杯2019</strong><br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/06/07/qwb2019/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -968,7 +899,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
