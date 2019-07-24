@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="RSA 与Rabin算法">
+<meta name="description" content="RSA与Rabin算法">
 <meta name="keywords" content="RSA,Rabin,Jarvisoj">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RSA_Rabin">
 <meta property="og:url" content="http://yoursite.com/2019/07/25/RSA-Rabin/index.html">
 <meta property="og:site_name" content="zww">
-<meta property="og:description" content="RSA 与Rabin算法">
+<meta property="og:description" content="RSA与Rabin算法">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture1.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture2.png">
@@ -95,10 +95,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture8.png">
-<meta property="og:updated_time" content="2019-07-24T16:38:48.262Z">
+<meta property="og:updated_time" content="2019-07-24T16:48:50.743Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RSA_Rabin">
-<meta name="twitter:description" content="RSA 与Rabin算法">
+<meta name="twitter:description" content="RSA与Rabin算法">
 <meta name="twitter:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture1.png">
 
 
@@ -340,13 +340,13 @@
       
 
       
-        <p><strong>RSA 与Rabin算法</strong><br><a id="more"></a></p>
-<h2 id="1-RSA密钥生成流程"><a href="#1-RSA密钥生成流程" class="headerlink" title="1. RSA密钥生成流程"></a>1. RSA密钥生成流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture1.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture2.png" alt></p>
-<h2 id="2-RSA加密解密流程"><a href="#2-RSA加密解密流程" class="headerlink" title="2. RSA加密解密流程"></a>2. RSA加密解密流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture3.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture4.png" alt></p>
-<h2 id="3-Rabin算法"><a href="#3-Rabin算法" class="headerlink" title="3. Rabin算法"></a>3. Rabin算法</h2><blockquote>
-<p>The Rabin cryptosystem is an<br>asymmetric <a href="https://en.wikipedia.org/wiki/Cryptographic" target="_blank" rel="noopener">cryptographic</a> technique,<br>whose security, like that<br>of <a href="https://en.wikipedia.org/wiki/RSA_(algorithm" target="_blank" rel="noopener">RSA</a>), is related to<br>the difficulty of <a href="https://en.wikipedia.org/wiki/Integer_factorization" target="_blank" rel="noopener">integer<br>factorization</a>.<br>However the Rabin cryptosystem has the advantage that it has been<br>mathematically proven to be computationally secure against a<br>chosen-plaintext attack as long as the attacker cannot efficiently</p>
+        <p><strong>RSA与Rabin算法</strong><br><a id="more"></a></p>
+<h2 id="RSA密钥生成流程"><a href="#RSA密钥生成流程" class="headerlink" title="RSA密钥生成流程"></a>RSA密钥生成流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture1.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture2.png" alt></p>
+<h2 id="RSA加密解密流程"><a href="#RSA加密解密流程" class="headerlink" title="RSA加密解密流程"></a>RSA加密解密流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture3.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture4.png" alt></p>
+<h2 id="Rabin算法"><a href="#Rabin算法" class="headerlink" title="Rabin算法"></a>Rabin算法</h2><blockquote>
+<p>The Rabin cryptosystem is an asymmetric cryptographic technique,whose security, like that of RSA, is related to the difficulty of integer actorization</p>
 </blockquote>
-<h2 id="factor-integers-while-there-is-no-such-proof-known-for-RSA"><a href="#factor-integers-while-there-is-no-such-proof-known-for-RSA" class="headerlink" title="factor integers, while there is no such proof known for RSA."></a>factor integers, while there is no such proof known for RSA.</h2><blockquote>
+<h2 id="However-the-Rabin-cryptosystem-has-the-advantage-that-it-has-been-mathematically-proven-to-be-computationally-secure-against-a-chosen-plaintext-attack-as-long-as-the-attacker-cannot-efficiently-factor-integers-while-there-is-no-such-proof-known-for-RSA"><a href="#However-the-Rabin-cryptosystem-has-the-advantage-that-it-has-been-mathematically-proven-to-be-computationally-secure-against-a-chosen-plaintext-attack-as-long-as-the-attacker-cannot-efficiently-factor-integers-while-there-is-no-such-proof-known-for-RSA" class="headerlink" title="However the Rabin cryptosystem has the advantage that it has been mathematically proven to be computationally secure against a chosen-plaintext attack as long as the attacker cannot efficiently factor integers, while there is no such proof known for RSA."></a>However the Rabin cryptosystem has the advantage that it has been mathematically proven to be computationally secure against a chosen-plaintext attack as long as the attacker cannot efficiently factor integers, while there is no such proof known for RSA.</h2><blockquote>
 <p><strong>Thm1(Rabin密码体制)</strong><br>设n=pqn=pq，其中pp和qq是素数，且p,q≡3(mod4)p,q≡3(mod4)，设P=C=Z⋆nP=C=Zn⋆，且定义</p>
 $$\kappa = \{(n,p,q)\}$$
 <p>对K=(n,p,q)K=(n,p,q)，定义<br>$$eK(x) = x2(modn)$$<br>和<br>$$dK = \sqrt{}y(modn)$$<br>n为公钥，p和q为私钥<br>注：条件p,q≡3(mod4)p,q≡3(mod4)可以省去，条件P=C=Zn⋆P=C=Z⋆n也可以弱化为P=C=ZnP=C=Zn，只是在使用更多的限制性描述的时候，简化了许多方面的计算和密码体制分析。</p>
@@ -582,7 +582,7 @@ $c^{\frac{p + 1}{4}}$ 或$\ {p - c}^{\frac{p + 1}{4}}$
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-RSA密钥生成流程"><span class="nav-number">1.</span> <span class="nav-text">1. RSA密钥生成流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-RSA加密解密流程"><span class="nav-number">2.</span> <span class="nav-text">2. RSA加密解密流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Rabin算法"><span class="nav-number">3.</span> <span class="nav-text">3. Rabin算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#factor-integers-while-there-is-no-such-proof-known-for-RSA"><span class="nav-number">4.</span> <span class="nav-text">factor integers, while there is no such proof known for RSA.</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-密钥导出，加密与解密"><span class="nav-number">4.1.</span> <span class="nav-text">1. 密钥导出，加密与解密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-讨论"><span class="nav-number">4.2.</span> <span class="nav-text">2. 讨论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Jarvisoj-hard-RSA"><span class="nav-number">4.3.</span> <span class="nav-text">3. Jarvisoj hard RSA</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA密钥生成流程"><span class="nav-number">1.</span> <span class="nav-text">RSA密钥生成流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA加密解密流程"><span class="nav-number">2.</span> <span class="nav-text">RSA加密解密流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabin算法"><span class="nav-number">3.</span> <span class="nav-text">Rabin算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#However-the-Rabin-cryptosystem-has-the-advantage-that-it-has-been-mathematically-proven-to-be-computationally-secure-against-a-chosen-plaintext-attack-as-long-as-the-attacker-cannot-efficiently-factor-integers-while-there-is-no-such-proof-known-for-RSA"><span class="nav-number">4.</span> <span class="nav-text">However the Rabin cryptosystem has the advantage that it has been mathematically proven to be computationally secure against a chosen-plaintext attack as long as the attacker cannot efficiently factor integers, while there is no such proof known for RSA.</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-密钥导出，加密与解密"><span class="nav-number">4.1.</span> <span class="nav-text">1. 密钥导出，加密与解密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-讨论"><span class="nav-number">4.2.</span> <span class="nav-text">2. 讨论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Jarvisoj-hard-RSA"><span class="nav-number">4.3.</span> <span class="nav-text">3. Jarvisoj hard RSA</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -791,6 +791,28 @@ $c^{\frac{p + 1}{4}}$ 或$\ {p - c}^{\frac{p + 1}{4}}$
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
 
   
 
