@@ -232,6 +232,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/24/Cybrics2019/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WenWei Zeng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zww">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/24/Cybrics2019/" itemprop="url">Cybrics2019</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-24T18:35:53+08:00">
+                2019-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  587
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Cybrics 2019</p>
+<p><strong>1.Network Sender:</strong></p>
+<p><img src="/2019/07/24/Cybrics2019/Picture1.png" alt></p>
+<p>打开后可以看到是一个ESMTP的验证和发送邮件的过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">220 ugm.cybrics.net ESMTP Postfix (Ubuntu)</span><br><span class="line"></span><br><span class="line">EHLO localhost</span><br><span class="line"></span><br><span class="line">250-ugm.cybrics.net</span><br><span class="line"></span><br><span class="line">250-PIPELINING</span><br><span class="line"></span><br><span class="line">250-SIZE 10240000</span><br><span class="line"></span><br><span class="line">250-VRFY</span><br><span class="line"></span><br><span class="line">250-ETRN</span><br><span class="line"></span><br><span class="line">250-AUTH PLAIN LOGIN</span><br><span class="line"></span><br><span class="line">250-ENHANCEDSTATUSCODES</span><br><span class="line"></span><br><span class="line">250-8BITMIME</span><br><span class="line"></span><br><span class="line">250 DSN</span><br><span class="line"></span><br><span class="line">AUTH LOGIN</span><br><span class="line"></span><br><span class="line">334 VXNlcm5hbWU6</span><br><span class="line"></span><br><span class="line">ZmF3a2Vz \#base64解密为fawkes</span><br><span class="line"></span><br><span class="line">334 UGFzc3dvcmQ6</span><br><span class="line"></span><br><span class="line">Q29tYmluNHQxb25YWFk= \#base64解密为Combin4t1onXXY</span><br><span class="line"></span><br><span class="line">235 2.7.0 Authentication successful</span><br><span class="line"></span><br><span class="line">MAIL FROM: \&lt;fawkes\@ugm.cybrics.net\&gt;</span><br><span class="line"></span><br><span class="line">250 2.1.0 Ok</span><br><span class="line"></span><br><span class="line">RCPT TO: \&lt;area51\@af.mil\&gt;</span><br><span class="line"></span><br><span class="line">250 2.1.5 Ok</span><br><span class="line"></span><br><span class="line">DATA</span><br><span class="line"></span><br><span class="line">354 End data with \&lt;CR\&gt;\&lt;LF\&gt;.\&lt;CR\&gt;\&lt;LF\&gt;</span><br><span class="line"></span><br><span class="line">From: fawkes \&lt;fawkes\@ugm.cybrics.net\&gt;</span><br><span class="line"></span><br><span class="line">To: Area51 \&lt;area51\@af.mil\&gt;</span><br><span class="line"></span><br><span class="line">Subject: add - archive pw</span><br><span class="line"></span><br><span class="line">Content-Type: text/plain; charset=\&quot;iso-8859-1\&quot;</span><br><span class="line"></span><br><span class="line">Content-Transfer-Encoding: quoted-printable</span><br><span class="line"></span><br><span class="line">MIME-Version: 1.0</span><br><span class="line"></span><br><span class="line">=62=74=77=2E=0A=0A=70=61=73=73=77=6F=72=64 =66=6F=72 =74=68=65</span><br><span class="line">=61=72=63=</span><br><span class="line"></span><br><span class="line">=68=69=76=65 =77=69=74=68 =66=6C=61=67=3A</span><br><span class="line">=63=72=61=63=6B=30=57=65=73=74=</span><br><span class="line"></span><br><span class="line">=6F=6E=38=38=76=65=72=74=65=62=72=61=0A=0A=63=68=65=65=72=73=21=0A</span><br><span class="line"></span><br><span class="line">\#quoted-printable解码</span><br><span class="line"></span><br><span class="line">\#http://web.chacuo.net/charsetquotedprintable</span><br><span class="line"></span><br><span class="line">\#btw.</span><br><span class="line"></span><br><span class="line">\#password for the archive with flag: crack0Weston88vertebra</span><br><span class="line"></span><br><span class="line">\#cheers!</span><br><span class="line"></span><br><span class="line">250 2.0.0 Ok: queued as C4D593E8B6</span><br><span class="line"></span><br><span class="line">QUIT</span><br><span class="line"></span><br><span class="line">221 2.0.0 Bye</span><br></pre></td></tr></table></figure></p>
+<p>提示给了压缩包密码，所以接下来需要去寻找压缩包</p>
+<p>使用nmap扫描一下端口，发现110端口打开，存在pop3服务</p>
+<p><img src="/2019/07/24/Cybrics2019/Picture2.png" alt></p>
+<p>SMTP与pop3的区别：</p>
+<p>POP是负责邮件程序和邮件服务器收信的通讯协定，SMTP则是负责邮件服务器与邮件服务器之间的寄信的通讯协定</p>
+<p>ESMTP则是在SMTP的基础上加了验证身份的过程</p>
+<p>接下来忘记截图了，大致过程是使用telnet连接ugm.cybrics.net的110端口，使用fawkes和Combin4t1onXXY的base64编码后的字符串通过验证，stat命令列举邮箱的邮件数量，发现只有一份邮件，并且其中有大附件，retr<br>1命令收取邮箱中的第一份邮件的内容，即拿到zip文件，最后使用crack0Weston88vertebra解密即可</p>
+<p><strong>2.Network Paranoid:</strong><br><img src="/2019/07/24/Cybrics2019/Picture3.png" alt></p>
+<p>下载后发现是一个802.11的无线包</p>
+<p><img src="/2019/07/24/Cybrics2019/Picture4.png" alt></p>
+<p>这些包都是被加密了，所以我们需要去寻找一下密码</p>
+<p>找寻一下http包</p>
+<p><img src="/2019/07/24/Cybrics2019/Picture5.png" alt></p>
+<p>可以发现有wep密码:<strong>58:69:31:6e:76:79:35:4b:47:53:67:49:32</strong><img src="/2019/07/24/Cybrics2019/Picture6.png" alt></p>
+<p>wpa-psk密码:<strong>8d6025a0132b25c014eb501ff7a14bbe484e13716a885b6e169a66ea675e9068</strong><br><img src="/2019/07/24/Cybrics2019/Picture7.png" alt></p>
+<p>wpa-psk加密<a href="https://www.wireshark.org/tools/wpa-psk.html" target="_blank" rel="noopener">https://www.wireshark.org/tools/wpa-psk.html</a></p>
+<p>wireshark 802.11解密过程和密码格式<br><a href="https://wiki.wireshark.org/HowToDecrypt802.11" target="_blank" rel="noopener">https://wiki.wireshark.org/HowToDecrypt802.11</a></p>
+<p>因为这里只有一个SSID产生的wifi包，所以也可以直接使用密码进行解密</p>
+<p><img src="/2019/07/24/Cybrics2019/Picture8.png" alt></p>
+<p>或者wpa-pwd密码:<strong>2_RGR_xO-uiJFiAxdA33-PsdanuK</strong></p>
+<p>2_RGR_xO-uiJFiAxdA33-PsdanuK</p>
+<p><img src="/2019/07/24/Cybrics2019/Picture9.png" alt></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/26/SCTF2019/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1041,7 +1217,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1054,7 +1230,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -1105,7 +1281,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">7.8k</span>
+    <span title="Site words total count">8.3k</span>
   
 </div>
 
