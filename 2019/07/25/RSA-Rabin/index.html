@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture8.png">
-<meta property="og:updated_time" content="2019-07-24T17:01:02.551Z">
+<meta property="og:updated_time" content="2019-07-24T17:05:56.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RSA_Rabin">
 <meta name="twitter:description" content="RSA与Rabin算法">
@@ -362,18 +362,18 @@ $$e = 2$$
 $$\ p \equiv q \equiv 3\ mod\ 4$$
 $$\ n = p*q$$
 <p>加密：</p>
-$$c \equiv m^{2}\text{\ mod\ n}$$
+$$c \equiv m^{2}\text{mod n}$$
 <p>其中c为密文，m为明文，n为公钥</p>
 <p>首先，由模运算的对称性</p>
-$c \equiv m^{2}\text{\ mod\ n}$ ⇔ $m^{2} \equiv c\text{\ mod\ n}$
+$c \equiv m^{2}\text{ mod n}$ ⇔ $m^{2} \equiv c\text{ mod n}$
 <p>所以解密即是求</p>
-$$x^{2} \equiv c\text{\ mod\ n}$$
+$$x^{2} \equiv c\text{ mod n}$$
 <p>由中国剩余定理，该等式等价于求解</p>
 $$\ \left\{ \begin{matrix}
 x^{2} \equiv c\ mod\ p \\
 x^{2} \equiv c\ mod\ q \\
 \end{matrix} \right.\ $$
-<p>即x有四组解($c = m^{2}\text{\ mod\ n}$)</p>
+<p>即x有四组解($c = m^{2}\text{mod n}$)</p>
 $$\left\{ \begin{matrix}
 x \equiv \ \ \ m\ mod\ p \\
 x \equiv - m\ mod\ p \\
@@ -382,7 +382,7 @@ x \equiv \ \ \ m\ mod\ q \\
 x \equiv - m\ mod\ q \\
 \end{matrix} \right.\ $$
 <p>因为$p \equiv q \equiv 3\ mod\ 4$,有</p>
-$p + 1 = 4*k\ $(k为整数)<br><br>由于c是模p的平方剩余，并且p是奇素数,有<br><br>$$c^{\frac{p - 1}{2}} \equiv 1\text{\ mod\ p}$$
+$p + 1 = 4*k\ $(k为整数)<br><br>由于c是模p的平方剩余，并且p是奇素数,有<br><br>$$c^{\frac{p - 1}{2}} \equiv 1\text{ mod p}$$
 <p>那么</p>
 $${{{{(c}^{\frac{p + 1}{4}})}^{2} \equiv c}^{\frac{p + 1}{2}} \equiv c}^{\frac{p - 1}{2}}*c \equiv c\text{\ mod\ p}$$
 <p>即得到$x^{2} \equiv c\ mod\ q$的两个解为</p>
