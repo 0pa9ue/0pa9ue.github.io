@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture8.png">
-<meta property="og:updated_time" content="2019-07-24T16:48:50.743Z">
+<meta property="og:updated_time" content="2019-07-24T16:58:05.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RSA_Rabin">
 <meta name="twitter:description" content="RSA与Rabin算法">
@@ -347,9 +347,9 @@
 <p>The Rabin cryptosystem is an asymmetric cryptographic technique,whose security, like that of RSA, is related to the difficulty of integer actorization</p>
 </blockquote>
 <h2 id="However-the-Rabin-cryptosystem-has-the-advantage-that-it-has-been-mathematically-proven-to-be-computationally-secure-against-a-chosen-plaintext-attack-as-long-as-the-attacker-cannot-efficiently-factor-integers-while-there-is-no-such-proof-known-for-RSA"><a href="#However-the-Rabin-cryptosystem-has-the-advantage-that-it-has-been-mathematically-proven-to-be-computationally-secure-against-a-chosen-plaintext-attack-as-long-as-the-attacker-cannot-efficiently-factor-integers-while-there-is-no-such-proof-known-for-RSA" class="headerlink" title="However the Rabin cryptosystem has the advantage that it has been mathematically proven to be computationally secure against a chosen-plaintext attack as long as the attacker cannot efficiently factor integers, while there is no such proof known for RSA."></a>However the Rabin cryptosystem has the advantage that it has been mathematically proven to be computationally secure against a chosen-plaintext attack as long as the attacker cannot efficiently factor integers, while there is no such proof known for RSA.</h2><blockquote>
-<p><strong>Thm1(Rabin密码体制)</strong><br>设n=pqn=pq，其中pp和qq是素数，且p,q≡3(mod4)p,q≡3(mod4)，设P=C=Z⋆nP=C=Zn⋆，且定义</p>
+<p><strong>Thm1(Rabin密码体制)</strong><br>设n=p*q，其中p和q是素数，且p,q≡3(mod4)p,q≡3(mod4)，设$P = C = Z_{*}^{n}$，且定义</p>
 $$\kappa = \{(n,p,q)\}$$
-<p>对K=(n,p,q)K=(n,p,q)，定义<br>$$eK(x) = x2(modn)$$<br>和<br>$$dK = \sqrt{}y(modn)$$<br>n为公钥，p和q为私钥<br>注：条件p,q≡3(mod4)p,q≡3(mod4)可以省去，条件P=C=Zn⋆P=C=Z⋆n也可以弱化为P=C=ZnP=C=Zn，只是在使用更多的限制性描述的时候，简化了许多方面的计算和密码体制分析。</p>
+<p>对K=(n,p,q)K=(n,p,q)，定义<br>$$eK(x) = x^{2}(modn)$$<br>和<br>$$dK = \sqrt{y}(modn)$$<br>n为公钥，p和q为私钥<br>注：条件 p, q ≡ 3 (mod4) 可以省去，条件$P = C = Z_{*}^{n}$也可以弱化为$\ P = C = Z^{n}$，只是在使用更多的限制性描述的时候，简化了许多方面的计算和密码体制分析。</p>
 </blockquote>
 <p><a href="https://www.cnblogs.com/jcchan/articles/8441159.html" target="_blank" rel="noopener">https://www.cnblogs.com/jcchan/articles/8441159.html</a></p>
 <h3 id="1-密钥导出，加密与解密"><a href="#1-密钥导出，加密与解密" class="headerlink" title="1. 密钥导出，加密与解密"></a>1. 密钥导出，加密与解密</h3><p><img src="/2019/07/25/RSA-Rabin/Picture5.png" alt></p>
