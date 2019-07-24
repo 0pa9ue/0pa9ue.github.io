@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="Cybrics 2019 1.Network Sender:  打开后可以看到是一个ESMTP的验证和发送邮件的过程1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757">
+<meta name="description" content="Cybrics 2019">
 <meta name="keywords" content="Cybrics,CTF,wireshark,802.11,SMTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cybrics2019">
+<meta property="og:title" content="Cybrics2019 writeup">
 <meta property="og:url" content="http://yoursite.com/2019/07/24/Cybrics2019/index.html">
 <meta property="og:site_name" content="zww">
-<meta property="og:description" content="Cybrics 2019 1.Network Sender:  打开后可以看到是一个ESMTP的验证和发送邮件的过程1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757">
+<meta property="og:description" content="Cybrics 2019">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture1.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture2.png">
@@ -96,10 +96,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture8.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture9.png">
-<meta property="og:updated_time" content="2019-07-24T11:04:12.510Z">
+<meta property="og:updated_time" content="2019-07-24T14:34:21.709Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cybrics2019">
-<meta name="twitter:description" content="Cybrics 2019 1.Network Sender:  打开后可以看到是一个ESMTP的验证和发送邮件的过程1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757">
+<meta name="twitter:title" content="Cybrics2019 writeup">
+<meta name="twitter:description" content="Cybrics 2019">
 <meta name="twitter:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture1.png">
 
 
@@ -136,7 +136,7 @@
 
 
 
-  <title>Cybrics2019 | zww</title>
+  <title>Cybrics2019 writeup | zww</title>
   
 
 
@@ -260,7 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Cybrics2019</h1>
+          <h1 class="post-title" itemprop="name headline">Cybrics2019 writeup</h1>
         
 
         <div class="post-meta">
@@ -304,7 +304,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  587
+                  585
                 </span>
               
 
@@ -341,10 +341,9 @@
       
 
       
-        <p>Cybrics 2019</p>
-<p><strong>1.Network Sender:</strong></p>
-<p><img src="/2019/07/24/Cybrics2019/Picture1.png" alt></p>
-<p>打开后可以看到是一个ESMTP的验证和发送邮件的过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">220 ugm.cybrics.net ESMTP Postfix (Ubuntu)</span><br><span class="line"></span><br><span class="line">EHLO localhost</span><br><span class="line"></span><br><span class="line">250-ugm.cybrics.net</span><br><span class="line"></span><br><span class="line">250-PIPELINING</span><br><span class="line"></span><br><span class="line">250-SIZE 10240000</span><br><span class="line"></span><br><span class="line">250-VRFY</span><br><span class="line"></span><br><span class="line">250-ETRN</span><br><span class="line"></span><br><span class="line">250-AUTH PLAIN LOGIN</span><br><span class="line"></span><br><span class="line">250-ENHANCEDSTATUSCODES</span><br><span class="line"></span><br><span class="line">250-8BITMIME</span><br><span class="line"></span><br><span class="line">250 DSN</span><br><span class="line"></span><br><span class="line">AUTH LOGIN</span><br><span class="line"></span><br><span class="line">334 VXNlcm5hbWU6</span><br><span class="line"></span><br><span class="line">ZmF3a2Vz \#base64解密为fawkes</span><br><span class="line"></span><br><span class="line">334 UGFzc3dvcmQ6</span><br><span class="line"></span><br><span class="line">Q29tYmluNHQxb25YWFk= \#base64解密为Combin4t1onXXY</span><br><span class="line"></span><br><span class="line">235 2.7.0 Authentication successful</span><br><span class="line"></span><br><span class="line">MAIL FROM: \&lt;fawkes\@ugm.cybrics.net\&gt;</span><br><span class="line"></span><br><span class="line">250 2.1.0 Ok</span><br><span class="line"></span><br><span class="line">RCPT TO: \&lt;area51\@af.mil\&gt;</span><br><span class="line"></span><br><span class="line">250 2.1.5 Ok</span><br><span class="line"></span><br><span class="line">DATA</span><br><span class="line"></span><br><span class="line">354 End data with \&lt;CR\&gt;\&lt;LF\&gt;.\&lt;CR\&gt;\&lt;LF\&gt;</span><br><span class="line"></span><br><span class="line">From: fawkes \&lt;fawkes\@ugm.cybrics.net\&gt;</span><br><span class="line"></span><br><span class="line">To: Area51 \&lt;area51\@af.mil\&gt;</span><br><span class="line"></span><br><span class="line">Subject: add - archive pw</span><br><span class="line"></span><br><span class="line">Content-Type: text/plain; charset=\&quot;iso-8859-1\&quot;</span><br><span class="line"></span><br><span class="line">Content-Transfer-Encoding: quoted-printable</span><br><span class="line"></span><br><span class="line">MIME-Version: 1.0</span><br><span class="line"></span><br><span class="line">=62=74=77=2E=0A=0A=70=61=73=73=77=6F=72=64 =66=6F=72 =74=68=65</span><br><span class="line">=61=72=63=</span><br><span class="line"></span><br><span class="line">=68=69=76=65 =77=69=74=68 =66=6C=61=67=3A</span><br><span class="line">=63=72=61=63=6B=30=57=65=73=74=</span><br><span class="line"></span><br><span class="line">=6F=6E=38=38=76=65=72=74=65=62=72=61=0A=0A=63=68=65=65=72=73=21=0A</span><br><span class="line"></span><br><span class="line">\#quoted-printable解码</span><br><span class="line"></span><br><span class="line">\#http://web.chacuo.net/charsetquotedprintable</span><br><span class="line"></span><br><span class="line">\#btw.</span><br><span class="line"></span><br><span class="line">\#password for the archive with flag: crack0Weston88vertebra</span><br><span class="line"></span><br><span class="line">\#cheers!</span><br><span class="line"></span><br><span class="line">250 2.0.0 Ok: queued as C4D593E8B6</span><br><span class="line"></span><br><span class="line">QUIT</span><br><span class="line"></span><br><span class="line">221 2.0.0 Bye</span><br></pre></td></tr></table></figure></p>
+        <p><strong>Cybrics 2019</strong><br><a id="more"></a></p>
+<h2 id="Network-Sender"><a href="#Network-Sender" class="headerlink" title="Network Sender"></a>Network Sender</h2><p><img src="/2019/07/24/Cybrics2019/Picture1.png" alt></p>
+<p>打开后可以看到是一个ESMTP的验证和发送邮件的过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">220 ugm.cybrics.net ESMTP Postfix (Ubuntu)</span><br><span class="line"></span><br><span class="line">EHLO localhost</span><br><span class="line"></span><br><span class="line">250-ugm.cybrics.net</span><br><span class="line"></span><br><span class="line">250-PIPELINING</span><br><span class="line"></span><br><span class="line">250-SIZE 10240000</span><br><span class="line"></span><br><span class="line">250-VRFY</span><br><span class="line"></span><br><span class="line">250-ETRN</span><br><span class="line"></span><br><span class="line">250-AUTH PLAIN LOGIN</span><br><span class="line"></span><br><span class="line">250-ENHANCEDSTATUSCODES</span><br><span class="line"></span><br><span class="line">250-8BITMIME</span><br><span class="line"></span><br><span class="line">250 DSN</span><br><span class="line"></span><br><span class="line">AUTH LOGIN</span><br><span class="line"></span><br><span class="line">334 VXNlcm5hbWU6</span><br><span class="line"></span><br><span class="line">ZmF3a2Vz \#base64解密为fawkes</span><br><span class="line"></span><br><span class="line">334 UGFzc3dvcmQ6</span><br><span class="line"></span><br><span class="line">Q29tYmluNHQxb25YWFk= \#base64解密为Combin4t1onXXY</span><br><span class="line"></span><br><span class="line">235 2.7.0 Authentication successful</span><br><span class="line"></span><br><span class="line">MAIL FROM: \&lt;fawkes\@ugm.cybrics.net\&gt;</span><br><span class="line"></span><br><span class="line">250 2.1.0 Ok</span><br><span class="line"></span><br><span class="line">RCPT TO: \&lt;area51\@af.mil\&gt;</span><br><span class="line"></span><br><span class="line">250 2.1.5 Ok</span><br><span class="line"></span><br><span class="line">DATA</span><br><span class="line"></span><br><span class="line">354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;</span><br><span class="line"></span><br><span class="line">From: fawkes &lt;fawkes@ugm.cybrics.net&gt;</span><br><span class="line"></span><br><span class="line">To: Area51 &lt;area51@af.mil&gt;</span><br><span class="line"></span><br><span class="line">Subject: add - archive pw</span><br><span class="line"></span><br><span class="line">Content-Type: text/plain; charset=&quot;iso-8859-1&quot;</span><br><span class="line"></span><br><span class="line">Content-Transfer-Encoding: quoted-printable</span><br><span class="line"></span><br><span class="line">MIME-Version: 1.0</span><br><span class="line"></span><br><span class="line">=62=74=77=2E=0A=0A=70=61=73=73=77=6F=72=64 =66=6F=72 =74=68=65</span><br><span class="line">=61=72=63=</span><br><span class="line"></span><br><span class="line">=68=69=76=65 =77=69=74=68 =66=6C=61=67=3A</span><br><span class="line">=63=72=61=63=6B=30=57=65=73=74=</span><br><span class="line"></span><br><span class="line">=6F=6E=38=38=76=65=72=74=65=62=72=61=0A=0A=63=68=65=65=72=73=21=0A</span><br><span class="line"></span><br><span class="line">#quoted-printable解码</span><br><span class="line"></span><br><span class="line">#http://web.chacuo.net/charsetquotedprintable</span><br><span class="line"></span><br><span class="line">#btw.</span><br><span class="line"></span><br><span class="line">#password for the archive with flag: crack0Weston88vertebra</span><br><span class="line"></span><br><span class="line">#cheers!</span><br><span class="line"></span><br><span class="line">250 2.0.0 Ok: queued as C4D593E8B6</span><br><span class="line"></span><br><span class="line">QUIT</span><br><span class="line"></span><br><span class="line">221 2.0.0 Bye</span><br></pre></td></tr></table></figure></p>
 <p>提示给了压缩包密码，所以接下来需要去寻找压缩包</p>
 <p>使用nmap扫描一下端口，发现110端口打开，存在pop3服务</p>
 <p><img src="/2019/07/24/Cybrics2019/Picture2.png" alt></p>
@@ -352,7 +351,7 @@
 <p>POP是负责邮件程序和邮件服务器收信的通讯协定，SMTP则是负责邮件服务器与邮件服务器之间的寄信的通讯协定</p>
 <p>ESMTP则是在SMTP的基础上加了验证身份的过程</p>
 <p>接下来忘记截图了，大致过程是使用telnet连接ugm.cybrics.net的110端口，使用fawkes和Combin4t1onXXY的base64编码后的字符串通过验证，stat命令列举邮箱的邮件数量，发现只有一份邮件，并且其中有大附件，retr<br>1命令收取邮箱中的第一份邮件的内容，即拿到zip文件，最后使用crack0Weston88vertebra解密即可</p>
-<p><strong>2.Network Paranoid:</strong><br><img src="/2019/07/24/Cybrics2019/Picture3.png" alt></p>
+<h2 id="Network-Paranoid"><a href="#Network-Paranoid" class="headerlink" title="Network Paranoid"></a>Network Paranoid</h2><p><img src="/2019/07/24/Cybrics2019/Picture3.png" alt></p>
 <p>下载后发现是一个802.11的无线包</p>
 <p><img src="/2019/07/24/Cybrics2019/Picture4.png" alt></p>
 <p>这些包都是被加密了，所以我们需要去寻找一下密码</p>
@@ -465,8 +464,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -517,6 +525,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-Sender"><span class="nav-number">1.</span> <span class="nav-text">Network Sender</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-Paranoid"><span class="nav-number">2.</span> <span class="nav-text">Network Paranoid</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
