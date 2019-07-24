@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture8.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/24/Cybrics2019/Picture9.png">
-<meta property="og:updated_time" content="2019-07-24T15:49:07.862Z">
+<meta property="og:updated_time" content="2019-07-24T17:00:52.875Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cybrics2019 writeup">
 <meta name="twitter:description" content="Cybrics 2019">
@@ -304,7 +304,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  583
+                  584
                 </span>
               
 
@@ -347,10 +347,10 @@
 <p>提示给了压缩包密码，所以接下来需要去寻找压缩包</p>
 <p>使用nmap扫描一下端口，发现110端口打开，存在pop3服务</p>
 <p><img src="/2019/07/24/Cybrics2019/Picture2.png" alt></p>
-<p>SMTP与pop3的区别：</p>
+<p><strong>SMTP与pop3的区别:</strong></p>
 <p>POP是负责邮件程序和邮件服务器收信的通讯协定，SMTP则是负责邮件服务器与邮件服务器之间的寄信的通讯协定</p>
 <p>ESMTP则是在SMTP的基础上加了验证身份的过程</p>
-<p>接下来忘记截图了，大致过程是使用telnet连接ugm.cybrics.net的110端口，使用fawkes和Combin4t1onXXY的base64编码后的字符串通过验证，stat命令列举邮箱的邮件数量，发现只有一份邮件，并且其中有大附件，retr<br>1命令收取邮箱中的第一份邮件的内容，即拿到zip文件，最后使用crack0Weston88vertebra解密即可</p>
+<p>接下来忘记截图了，大致过程是使用<strong>telnet</strong>连接ugm.cybrics.net的110端口，使用fawkes和Combin4t1onXXY的base64编码后的字符串通过验证，<strong>stat</strong>命令列举邮箱的邮件数量，发现只有一份邮件，并且其中有大附件，<strong>retr 1</strong>命令收取邮箱中的第一份邮件的内容，即拿到zip文件，最后使用crack0Weston88vertebra解密即可</p>
 <h2 id="Network-Paranoid"><a href="#Network-Paranoid" class="headerlink" title="Network Paranoid"></a>Network Paranoid</h2><p><img src="/2019/07/24/Cybrics2019/Picture3.png" alt></p>
 <p>下载后发现是一个802.11的无线包</p>
 <p><img src="/2019/07/24/Cybrics2019/Picture4.png" alt></p>
