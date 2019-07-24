@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture8.png">
-<meta property="og:updated_time" content="2019-07-24T17:05:56.191Z">
+<meta property="og:updated_time" content="2019-07-24T17:09:28.176Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RSA_Rabin">
 <meta name="twitter:description" content="RSA与Rabin算法">
@@ -388,12 +388,11 @@ $${{{{(c}^{\frac{p + 1}{4}})}^{2} \equiv c}^{\frac{p + 1}{2}} \equiv c}^{\frac{p
 <p>即得到$x^{2} \equiv c\ mod\ q$的两个解为</p>
 $c^{\frac{p + 1}{4}}$ 或$\ {p - c}^{\frac{p + 1}{4}}$
 <p>平方剩余：</p>
-<p>假设p是素数，a是整数。如果存在一个整数x使得$\ x\hat{}2 \equiv a(mod\ p)$（即$x\hat{}2 - a$可以被p整除），<br>那么就称a在p的剩余类中是平方剩余的</p>
-<p>欧拉定理说：如果p是奇素数，则a平方剩余当且仅当<br>$a^{\frac{p - 1}{2}} \equiv 1\ \left( \text{mod\ p} \right)$</p>
+<p>假设p是素数，a是整数。如果存在一个整数x使得$\ x\hat{}2 \equiv a(mod\ p)$（即$x\hat{}2 - a$可以被p整除）,那么就称a在p的剩余类中是平方剩余的</p>
+<p>欧拉定理说：如果p是奇素数，则a平方剩余当且仅当$a^{\frac{p - 1}{2}} \equiv 1\ \left( \text{mod p} \right)$</p>
 <h3 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h3><ul>
 <li><p><strong>e = 2?</strong></p>
-<p>  RSA中选取的公开钥e满足$1 < e < \Phi(n)$，且</p>
-  $gcd(e,\Phi\left( n \right)) = \ 1$
+<p>  RSA中选取的公开钥e满足$1 < e < \Phi(n)$，且$gcd(e,\Phi\left( n \right)) = \ 1$</p>
 <p>  Rabin密码体制则取e = 2</p>
 <p>  <a href="https://crypto.stackexchange.com/questions/30240/can-e-2-be-used-in-unpadded-rsa" target="_blank" rel="noopener">https://crypto.stackexchange.com/questions/30240/can-e-2-be-used-in-unpadded-rsa</a></p>
 </li>
@@ -401,10 +400,7 @@ $c^{\frac{p + 1}{4}}$ 或$\ {p - c}^{\frac{p + 1}{4}}$
 <p>  The Rabin Cryptosystem is based on the idea that computing square<br>  roots modulo a composite N is simple when the factorization is known,<br>  but the very complex when it is unknown.</p>
 <p>  Rabin加密系统是基于在已知合数N的因式分解的情况下，可以计算出二次剩余的平方根；但是在因式分解N未知的情况下很难求解的原理。</p>
 <p>  It is possible to prove that the hardness of breaking the Rabin<br>  cryptosystem is equivalent to the hardness of facting。</p>
-<p>  Rabin加密系统的安全性源于计算二次剩余平方根( square roots modulo a<br>  composite N) 和 因式分解N 具有相同的难度。</p>
-<p>  无法证明 求解RSA问题 和 因式分解N<br>  具有直接联系。从这个方面来说，Rabin比RSA更安全。</p>
-<p>  但是在CCA (Chosen Ciphertext Attack)<br>  攻击模式下，Rabin加密系统有可能会被攻破密钥；而RSA加密系统虽然也不安全，却可以保证密钥不被攻破。</p>
-<p>  之所以在公钥加密系统实际使用领域，RSA比Rabin流行的多，主要是因为一些历史原因，而非技术上的原因。</p>
+<p>  Rabin加密系统的安全性源于计算二次剩余平方根( square roots modulo a composite N) 和 因式分解N 具有相同的难度。无法证明 求解RSA问题 和 因式分解N 具有直接联系。从这个方面来说，Rabin比RSA更安全。但是在CCA (Chosen Ciphertext Attack)攻击模式下，Rabin加密系统有可能会被攻破密钥；而RSA加密系统虽然也不安全，却可以保证密钥不被攻破。之所以在公钥加密系统实际使用领域，RSA比Rabin流行的多，主要是因为一些历史原因，而非技术上的原因。</p>
 </li>
 <li><p><strong>Rabin算法的缺点</strong></p>
 <p>  The variants based on the Rabin cryptosystem have the advantage that<br>  they allow the public exponent e = 2, so that signature veriﬁcation is<br>  very efﬁcient; but on the other hand some extra steps are required due<br>  to the fact that not every message representative may have a square<br>  root modulo n.</p>
