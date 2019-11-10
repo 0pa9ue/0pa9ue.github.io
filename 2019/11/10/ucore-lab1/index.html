@@ -87,6 +87,7 @@
 <meta property="og:site_name" content="zww">
 <meta property="og:description" content="LAB1">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/14.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/3.png">
@@ -100,11 +101,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/11.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/12.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/13.png">
-<meta property="og:updated_time" content="2019-11-10T09:03:55.666Z">
+<meta property="og:updated_time" content="2019-11-10T09:08:56.818Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ucore-lab1">
 <meta name="twitter:description" content="LAB1">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/10/ucore-lab1/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/10/ucore-lab1/14.png">
 
 
 
@@ -308,7 +309,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  3.4k
+                  3.3k
                 </span>
               
 
@@ -354,13 +355,8 @@
 <p> 总结ucore.img的生成过程:</p>
 <p> 编译libs和kern目录下所有的.c和.S文件，生成.o文件，并链接得到bin/kernel文件<br> 编译boot目录下所有的.c和.S文件，生成.o文件，并链接得到bin/bootblock.out文件<br> 编译tools/sign.c文件，得到bin/sign文件<br> 利用bin/sign工具将bin/bootblock.out文件转化为512字节的bin/bootblock文件，并将bin/bootblock的最后两个字节设置为0x55AA<br> 为bin/ucore.img分配5000MB的内存空间，并将bin/bootblock复制到bin/ucore.img的第一个block，紧接着将bin/kernel复制到bin/ucore.img第二个block开始的位置</p>
 <p> ucore.img 镜像文件<br> kernel 内核文件<br> bootblock 启动文件<br> sign 磁盘分区文件</p>
-<p> make后的文件路径<br> ├── bin<br> │   ├── bootblock<br> │   ├── kernel<br> │   ├── sign<br> │   └── ucore.img<br> ├── boot<br> │   ├── asm.h<br> │   ├── bootasm.S<br> │   └── bootmain.c<br> ├── kern<br> │   ├── ···<br> ├── libs<br> │   ├── elf.h<br> │   ├── ···<br> ├── Makefile<br> ├── obj<br> │   ├── boot<br> │   │   ├── bootasm.d<br> │   │   ├── bootasm.o<br> │   │   ├── bootmain.d<br> │   │   └── bootmain.o<br> │   ├── bootblock.asm<br> │   ├── bootblock.o<br> │   ├── bootblock.out<br> │   ├── kern<br> │   │   ├── ···<br> │   ├── kernel.asm<br> │   ├── kernel.sym<br> │   ├── libs<br> │   │   ├── ···<br> │   └── sign<br> │       └── ···<br> └── tools</p>
-<pre><code>├── gdbinit
-└── ···
-</code></pre><p> 23 directories, 93 files</p>
+<p> make后的文件路径<br> <img src="/2019/11/10/ucore-lab1/14.png" alt></p>
 </li>
-</ol>
-<ol start="2">
 <li><p>一个被系统认为是符合规范的硬盘主引导扇区的特征是什么？<br> 大小为512字节<br> 最后两个字节为0x55AA</p>
  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tool/sign.c</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 22-23行对应答案1</span></span><br><span class="line"><span class="comment">// 申请一个512长度的数组，并赋值为0</span></span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">512</span>];</span><br><span class="line"><span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 31-33行对应答案2</span></span><br><span class="line"><span class="comment">// 结束标志（占2个字节）其值为AA55，存储时低位在前，高位在后(小端法），即看上去是55AA</span></span><br><span class="line">buf[<span class="number">510</span>] = <span class="number">0x55</span>;</span><br><span class="line">buf[<span class="number">511</span>] = <span class="number">0xAA</span>;</span><br></pre></td></tr></table></figure>
 </li>
@@ -667,7 +663,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">14.2k</span>
+    <span title="Site words total count">14.1k</span>
   
 </div>
 
