@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="zww">
 <meta property="og:description" content="LAB1">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/lab1/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/3.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/4.png">
@@ -100,11 +100,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/11.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/12.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/13.png">
-<meta property="og:updated_time" content="2019-11-10T07:53:23.010Z">
+<meta property="og:updated_time" content="2019-11-10T07:58:24.924Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ucore-lab1">
 <meta name="twitter:description" content="LAB1">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/10/ucore-lab1/lab1/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/10/ucore-lab1/1.png">
 
 
 
@@ -367,7 +367,7 @@
 <li><p>从CPU加电后执行的第一条指令开始，单步跟踪BIOS的执行</p>
 <p> 执行make debug命令，启动qemu和gdb开始debug<br> 然后在gdb中输入b *0x7c00，在内存0x7c00处设置断点。<br> c 让程序继续执行，程序会在前面设置的0x7c00的断点处停下来。<br> 输入<strong>x /10i $pc</strong>查看接下来的10条指令，得到如下输出:</p>
 <p> 可以发现，这和boot/bootasm.S文件中的内容一致。通过单步跟踪，发现执行指令确实是bootasm.S中的指令。</p>
-<p> <img src="/2019/11/10/ucore-lab1/lab1/1.png" alt></p>
+<p> <img src="/2019/11/10/ucore-lab1/1.png" alt></p>
 <p> bootasm.S大致过程如下：</p>
 <pre><code>禁用中断 (cli)
 复位操作方向标志(cld)
