@@ -101,7 +101,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/11.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/12.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/13.png">
-<meta property="og:updated_time" content="2019-11-10T09:08:56.818Z">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/15.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/16.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/17.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/18.png">
+<meta property="og:updated_time" content="2019-11-20T14:14:04.173Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ucore-lab1">
 <meta name="twitter:description" content="LAB1">
@@ -309,7 +313,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  3.3k
+                  3.9k
                 </span>
               
 
@@ -325,7 +329,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  13
+                  16
                 </span>
               
             </div>
@@ -457,10 +461,16 @@
 <p>对比可得两者得到的program Header表信息是一致的</p>
 <p>同理<br><img src="/2019/11/10/ucore-lab1/12.png" alt><br>e_phnum = e_phoff + 0x10 = 0x1c + 0x10 = 0x2c<br>0x10000（OS的ELF文件的起始地址） + 0x2c（e_phoff） = 0x1002c （e_phnum）<br>movzwl 0x1002c, %esi后esi的值为<br><img src="/2019/11/10/ucore-lab1/13.png" alt></p>
 <p>esi的值为3，也就是上面readelf结果中Program Headers中总共3项的意思</p>
+<h2 id="练习5"><a href="#练习5" class="headerlink" title="练习5"></a>练习5</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /kern/kdebug.c</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_stackframe</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">     <span class="comment">/* LAB1 YOUR CODE : STEP 1 */</span></span><br><span class="line">     <span class="comment">/* (1) call read_ebp() to get the value of ebp. the type is (uint32_t);</span></span><br><span class="line"><span class="comment">      * (2) call read_eip() to get the value of eip. the type is (uint32_t);</span></span><br><span class="line"><span class="comment">      * (3) from 0 .. STACKFRAME_DEPTH</span></span><br><span class="line"><span class="comment">      *    (3.1) printf value of ebp, eip</span></span><br><span class="line"><span class="comment">      *    (3.2) (uint32_t)calling arguments [0..4] = the contents in address (uint32_t)ebp +2 [0..4]</span></span><br><span class="line"><span class="comment">      *    (3.3) cprintf("\n");</span></span><br><span class="line"><span class="comment">      *    (3.4) call print_debuginfo(eip-1) to print the C calling function name and line number, etc.</span></span><br><span class="line"><span class="comment">      *    (3.5) popup a calling stackframe</span></span><br><span class="line"><span class="comment">      *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]</span></span><br><span class="line"><span class="comment">      *                   the calling funciton's ebp = ss:[ebp]</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">	<span class="keyword">uint32_t</span> ebp = read_ebp();</span><br><span class="line">	<span class="keyword">uint32_t</span> eip = read_eip();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; STACKFRAME_DEPTH &amp;&amp; ebp != <span class="number">0</span>;i++)&#123;</span><br><span class="line">		cprintf(<span class="string">"ebp:0x%08x eip:0x%08x "</span>, ebp, eip);</span><br><span class="line">        	<span class="keyword">uint32_t</span>* ptr = (<span class="keyword">uint32_t</span> *) (ebp + <span class="number">8</span>); <span class="comment">// the pointer of args[4]</span></span><br><span class="line">        	cprintf(<span class="string">"args:0x%08x 0x%08x 0x%08x 0x%08x\n"</span>, ptr[<span class="number">0</span>], ptr[<span class="number">1</span>], ptr[<span class="number">2</span>], ptr[<span class="number">3</span>]);</span><br><span class="line">        	print_debuginfo(eip - <span class="number">1</span>);</span><br><span class="line">        	eip = *((<span class="keyword">uint32_t</span> *) (ebp + <span class="number">4</span>));</span><br><span class="line">        	ebp = *((<span class="keyword">uint32_t</span> *) ebp);</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 </li>
 </ol>
+<p>使用read_ebp()和read_eip()读取ebp和eip的当前值<br>在递归深度STACKFRAME_DEPTH以内，并且ebp不为零的情况下，取出栈上的值<br>假设传入函数的参数ptr[0],ptr[1],ptr[2],ptr[3]共4个，依次打印<br>使用print_debuginfo来打印调用C函数的函数名和行号<br>最后更新ebp和eip的值(ebp的高4个字节为返回地址，也就是eip的更新值 )</p>
+<p><img src="/2019/11/10/ucore-lab1/15.png" alt></p>
+<p>输入make qemu<br>运行结果:<br><img src="/2019/11/10/ucore-lab1/16.png" alt><br>让我们拿出最后一行进行分析<br>ebp:0x00007bf8 eip:0x00007d72 args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8</p>
+<p><strong>ebp:0x00007bf8</strong><br>从obj/bootblock.asm文件中知道整个栈的栈顶地址为0x00007c00<br>ebp指向的栈位置存放调用者的ebp寄存器的值，ebp+4指向的栈位置存放返回地址的值，这意味着kern_init函数的调用者（也就是bootmain函数）没有传递任何输入参数给它！因为单是存放旧的ebp、返回地址已经占用8字节了(0x7bf8+0x8=0x7c00,bootmain函数调用了kern_init函数)<br><strong>eip:0x00007d72</strong><br>查看0x7d72地址对应的指令(eip寄存器)，可以看到在obj/bootblock.asm文件中是kern_init函数的返回地址，也就是bootmain函数调用kern_init对应的指令 <strong>call *%eax</strong> 的下一条指令的地址<br><img src="/2019/11/10/ucore-lab1/17.png" alt><br><strong>args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8</strong><br>这里很巧合，由于bootmain函数调用kern_init并没传递任何输入参数，并且栈顶的位置恰好在boot loader第一条指令存放的地址的上面，而args恰好是kern_int的ebp寄存器指向的栈顶往上第2~5个单元，因此args存放的就是boot loader指令的前16个字节！可以对比obj/bootblock.asm文件来验证（验证时要注意系统是小端字节序）</p>
+<p>fa fc 31 c0 小端字节序为 c031fcfa<br><img src="/2019/11/10/ucore-lab1/18.png" alt></p>
 <p>参考资料:<br><a href="https://segmentfault.com/a/1190000016766079" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016766079</a><br><a href="https://www.cnblogs.com/wuhualong/" target="_blank" rel="noopener">https://www.cnblogs.com/wuhualong/</a></p>
 
       
@@ -587,7 +597,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -600,7 +610,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -633,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LAB1"><span class="nav-number">1.</span> <span class="nav-text">LAB1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#练习1"><span class="nav-number">1.1.</span> <span class="nav-text">练习1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习2"><span class="nav-number">1.2.</span> <span class="nav-text">练习2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习3"><span class="nav-number">1.3.</span> <span class="nav-text">练习3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习4"><span class="nav-number">1.4.</span> <span class="nav-text">练习4</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LAB1"><span class="nav-number">1.</span> <span class="nav-text">LAB1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#练习1"><span class="nav-number">1.1.</span> <span class="nav-text">练习1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习2"><span class="nav-number">1.2.</span> <span class="nav-text">练习2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习3"><span class="nav-number">1.3.</span> <span class="nav-text">练习3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习4"><span class="nav-number">1.4.</span> <span class="nav-text">练习4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习5"><span class="nav-number">1.5.</span> <span class="nav-text">练习5</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -667,7 +677,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">15.1k</span>
+    <span title="Site words total count">15.9k</span>
   
 </div>
 
