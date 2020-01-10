@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="afl,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AFL使用及源码分析">
+<meta name="keywords" content="afl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AFL使用及源码分析">
+<meta property="og:url" content="http://yoursite.com/2020/01/10/afl-tools/index.html">
+<meta property="og:site_name" content="zww">
+<meta property="og:description" content="AFL使用及源码分析">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/2.png">
+<meta property="og:updated_time" content="2020-01-10T03:58:48.367Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AFL使用及源码分析">
+<meta name="twitter:description" content="AFL使用及源码分析">
+<meta name="twitter:image" content="http://yoursite.com/2020/01/10/afl-tools/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/10/afl-tools/">
+
+
+
+
+
+  <title>AFL使用及源码分析 | zww</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zww</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/afl-tools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WenWei Zeng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zww">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AFL使用及源码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-10T11:56:47+08:00">
+                2020-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.7k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>AFL使用及源码分析<br><a id="more"></a></p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>阿里云学生版服务器<br>OS: Ubuntu 16.04.6 LTS<br>Processor: Intel Xeon E5-2682v4 2.5 GHz<br>Memory: 2 GiB<br>afl verison: 2.52</p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="修剪"><a href="#修剪" class="headerlink" title="修剪"></a>修剪</h3><h4 id="afl-cmin"><a href="#afl-cmin" class="headerlink" title="afl-cmin"></a>afl-cmin</h4><p>功能：移除执行相同代码的输入文件<br>afl-cmin的核心思想是：尝试找到与语料库全集具有相同覆盖范围的最小子集<br>假设有多个文件，都覆盖了相同的代码，那么就丢掉多余的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params]</span><br></pre></td></tr></table></figure></p>
+<p>更多的时候，我们需要从文件中获取输入，这时可以使用“@@”代替被测试程序命令行中输入文件名的位置。Fuzzer会将其替换为实际执行的文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params] @@</span><br></pre></td></tr></table></figure></p>
+<p>一个有114个html文件的语料库，精简到只包含60个文件<br><img src="/2020/01/10/afl-tools/1.png" alt></p>
+<p><strong>afl-cmin的处理步骤</strong><br>STEP 1: COLLECTING TRACES<br>STEP 2: SORTING TUPLES<br>STEP 3: SELECTING CANDIDATE FILES<br>STEP 4: LOADING CANDIDATES<br>STEP 5: WRITING OUTPUT</p>
+<p>afl-cmin实际上是一个shell脚本，具体来说调用了afl-showmap，读入所有文件，并将showmap的结果放入$TRACE_DIR/中<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$STDIN_FILE</span>"</span> = <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">read</span> -r fn; <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">      CUR=$((CUR+1))</span><br><span class="line">      <span class="built_in">printf</span> <span class="string">"\\r    Processing file <span class="variable">$CUR</span>/<span class="variable">$IN_COUNT</span>... "</span></span><br><span class="line"></span><br><span class="line">      <span class="string">"<span class="variable">$SHOWMAP</span>"</span> -m <span class="string">"<span class="variable">$MEM_LIMIT</span>"</span> -t <span class="string">"<span class="variable">$TIMEOUT</span>"</span> -o <span class="string">"<span class="variable">$TRACE_DIR</span>/<span class="variable">$fn</span>"</span> -Z <span class="variable">$EXTRA_PAR</span> -- <span class="string">"<span class="variable">$@</span>"</span> &lt;<span class="string">"<span class="variable">$IN_DIR</span>/<span class="variable">$fn</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">done</span> &lt; &lt;(ls <span class="string">"<span class="variable">$IN_DIR</span>"</span>)</span><br><span class="line"><span class="keyword">else</span></span><br></pre></td></tr></table></figure></p>
+<p>将得到的tuple进行排序，并选择最适合的候选者（原则是选择那些尽可能小的输入，但是也能覆盖一定量的路径）<br>将tuple与file关联后，最后选择容量最小的file，就得到了精简后的文件</p>
+<h4 id="afl-tmin"><a href="#afl-tmin" class="headerlink" title="afl-tmin"></a>afl-tmin</h4><p>整体的大小得到了改善后，接下来还要对每个文件进行更细化的处理<br>afl-tmin这个工具可以用来减小单个文件的体积<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> afl-tmin -i input_file -o output_file -- /path/to/tested/program [params] @@</span></span><br></pre></td></tr></table></figure></p>
+<p>批量修改文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in *;do afl-tmin -i $i -o tmin-$i -- /path/to/tested/program [params] @@;done;</span><br></pre></td></tr></table></figure></p>
+<p><strong>目的</strong></p>
+<blockquote>
+<p>File size has a dramatic impact on fuzzing performance, both because large files make the target binary slower, and because they reduce the likelihood that a mutation would touch important format control structures, rather than redundant data blocks.<br>The built-in trimmer in afl-fuzz attempts to sequentially remove blocks of data with variable length and stepover; any deletion that doesn’t affect the checksum of the trace map is committed to disk.</p>
+</blockquote>
+<p>文件的大小能够显著的影响fuzz效率，所以afl提供了一个内置的工具tmin。通过控制步长和块的大小，最后移除掉对fuzz无用的数据</p>
+<p><strong>处理步骤</strong><br>STEP 1: BLOCK NORMALIZATION<br>STEP 2: BLOCK DELETION<br>STEP 3: ALPHABET MINIMIZATION<br>STEP 4: CHARACTER MINIMIZATION<br><img src="/2020/01/10/afl-tools/2.png" alt></p>
+<p>官方文档是这么描述这个算法流程的</p>
+<blockquote>
+<p>The actual minimization algorithm is:<br>1. Attempt to zero large blocks of data with large stepovers. Empirically,this is shown to reduce the number of execs by preempting finer-grained efforts later on.<br>2. Perform a block deletion pass with decreasing block sizes and stepovers,binary-search-style.<br>3. Perform alphabet normalization by counting unique characters and trying to bulk-replace each with a zero value.<br>4. As a last result, perform byte-by-byte normalization on non-zero bytes.</p>
+</blockquote>
+<p><a href="https://github.com/mirrorer/afl/blob/master/docs/technical_details.txt#L331" target="_blank" rel="noopener">https://github.com/mirrorer/afl/blob/master/docs/technical_details.txt#L331</a></p>
+<p>这个算法流程就对应于afl-tmin的四个步骤</p>
+<p><strong>STEP 1: BLOCK NORMALIZATION</strong><br>尝试按照大步长来将大的代码数据块归零。从经验上来说，这样可以在进行细粒度更深的尝试之前先减少一定的执行次数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BLOCK NORMALIZATION</span></span><br><span class="line">set_len    = next_p2(in_len / TMIN_SET_STEPS);<span class="comment">/* Find first power of two greater or equal to val. */</span></span><br><span class="line">set_pos    = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (set_pos &lt; in_len) &#123;</span><br><span class="line"></span><br><span class="line">  u8  res;</span><br><span class="line">  u32 use_len = MIN(set_len, in_len - set_pos);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; use_len; i++)</span><br><span class="line">    <span class="keyword">if</span> (in_data[set_pos + i] != <span class="string">'0'</span>) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (i != use_len) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(tmp_buf, in_data, in_len);</span><br><span class="line">    <span class="built_in">memset</span>(tmp_buf + set_pos, <span class="string">'0'</span>, use_len);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">    * run_target</span></span><br><span class="line"><span class="comment">    * Execute target application. </span></span><br><span class="line"><span class="comment">    * Returns 0 if the changes are a dud</span></span><br><span class="line"><span class="comment">    * or 1 if they should be kept. */</span></span><br><span class="line">    res = run_target(argv, tmp_buf, in_len, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (res) &#123;</span><br><span class="line"></span><br><span class="line">      <span class="built_in">memset</span>(in_data + set_pos, <span class="string">'0'</span>, use_len);</span><br><span class="line">      changed_any = <span class="number">1</span>;</span><br><span class="line">      alpha_del0 += use_len;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  set_pos += set_len;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ······</span></span><br></pre></td></tr></table></figure></p>
+<p>这部分代码的思路就是按照设定的步数(TMIN_SET_STEPS)，逐块进行归零<br>以块为单位，找到一个非零的位置开始，将后面的所有位都置为0后，丢入run_target进行判断<br>如果返回1，就保留这次修改<br><strong>STEP 2: BLOCK DELETION</strong><br>采取二进制的搜索方式，通过逐步减小块大小和步长来执行块的删除操作</p>
+<p>这里是使用一个双重的while循环来实现<br>外层while循环（使用goto实现）<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BLOCK DELETION</span></span><br><span class="line">next_del_blksize:</span><br><span class="line"><span class="comment">// ······</span></span><br><span class="line"><span class="keyword">if</span> (del_len &gt; <span class="number">1</span> &amp;&amp; in_len &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">  del_len /= <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">goto</span> next_del_blksize;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (cur_pass &gt; <span class="number">1</span> &amp;&amp; !changed_any) <span class="keyword">goto</span> finalize_all;</span><br></pre></td></tr></table></figure></p>
+<p>步长每次缩小一半，直到步长为1并且处理的块长度为1时，就可以退出了</p>
+<p>内层的while循环<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// BLOCK DELETION</span></span><br><span class="line"><span class="keyword">while</span> (del_pos &lt; in_len) &#123;</span><br><span class="line">  <span class="comment">// ······</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Head */</span></span><br><span class="line">  <span class="built_in">memcpy</span>(tmp_buf, in_data, del_pos);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Tail */</span></span><br><span class="line">  <span class="built_in">memcpy</span>(tmp_buf + del_pos, in_data + del_pos + del_len, tail_len);</span><br><span class="line"></span><br><span class="line">  res = run_target(argv, tmp_buf, del_pos + tail_len, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (res) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(in_data, tmp_buf, del_pos + tail_len);</span><br><span class="line">    prev_del = <span class="number">1</span>;</span><br><span class="line">    in_len   = del_pos + tail_len;</span><br><span class="line"></span><br><span class="line">    changed_any = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">else</span> del_pos += del_len;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>思路其实很简单，找到第一个为0的位置，然后再找到最后一个为0的位置，将其中间的所有数据删除（因为有了<strong>STEP 1</strong>的铺垫）<br>在删去了中间数据，合并了块后，丢入run_target中<br>同样，如果返回1，则保留这次修改</p>
+<p><strong>STEP 3: ALPHABET MINIMIZATION</strong><br>通过计数唯一字符并尝试对字母进行归一化，也就是将其替换为零</p>
+<p>使用alpha_map对每个出现的字符（ascii内）进行计数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ALPHABET MINIMIZATION</span></span><br><span class="line"><span class="built_in">memset</span>(alpha_map, <span class="number">0</span>, <span class="number">256</span> * <span class="keyword">sizeof</span>(u32));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; in_len; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!alpha_map[in_data[i]]) alpha_size++;</span><br><span class="line">    alpha_map[in_data[i]]++;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>alpha_map的作用其实只是去统计ascii表内所有字符出现的频率</p>
+<p>归一化：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ALPHABET MINIMIZATION</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++) &#123;</span><br><span class="line"></span><br><span class="line">  u32 r;</span><br><span class="line">  u8 res;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (i == <span class="string">'0'</span> || !alpha_map[i]) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">memcpy</span>(tmp_buf, in_data, in_len);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (r = <span class="number">0</span>; r &lt; in_len; r++)</span><br><span class="line">    <span class="keyword">if</span> (tmp_buf[r] == i) tmp_buf[r] = <span class="string">'0'</span>; </span><br><span class="line"></span><br><span class="line">  res = run_target(argv, tmp_buf, in_len, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (res) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(in_data, tmp_buf, in_len);</span><br><span class="line">    syms_removed++;</span><br><span class="line">    alpha_del1 += alpha_map[i];</span><br><span class="line">    changed_any = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>遍历整个ascii表，将输入中ascii值相同的位置替换为0<br>同样，将修改丢入run_target中，如果返回1，则保留这次修改<br><strong>STEP 4: CHARACTER MINIMIZATION</strong><br>最后对非零字节进行逐字节的归一化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memcpy</span>(tmp_buf, in_data, in_len);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; in_len; i++) &#123;</span><br><span class="line"></span><br><span class="line">  u8 res, orig = tmp_buf[i];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (orig == <span class="string">'0'</span>) <span class="keyword">continue</span>;</span><br><span class="line">  tmp_buf[i] = <span class="string">'0'</span>;</span><br><span class="line"></span><br><span class="line">  res = run_target(argv, tmp_buf, in_len, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (res) &#123;</span><br><span class="line">  <span class="comment">// ······</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个没啥好说的了，就是逐字节的转换为0后，丢入run_target中</p>
+<p>总体来说，minimize函数的结构如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/***********************</span></span><br><span class="line"><span class="comment">   * BLOCK NORMALIZATION *</span></span><br><span class="line"><span class="comment">   ***********************/</span></span><br><span class="line">next_pass:</span><br><span class="line">  <span class="comment">/******************</span></span><br><span class="line"><span class="comment">   * BLOCK DELETION *</span></span><br><span class="line"><span class="comment">   ******************/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/*************************</span></span><br><span class="line"><span class="comment">   * ALPHABET MINIMIZATION *</span></span><br><span class="line"><span class="comment">   *************************/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**************************</span></span><br><span class="line"><span class="comment">   * CHARACTER MINIMIZATION *</span></span><br><span class="line"><span class="comment">   **************************/</span></span><br><span class="line"><span class="keyword">if</span> (changed_any) <span class="keyword">goto</span> next_pass;</span><br></pre></td></tr></table></figure></p>
+<p>BLOCK NORMALIZATION只会进行一次，然后会循环进行 BLOCK DELETION, ALPHABET MINIMIZATION 和 CHARACTER MINIMIZATION<br>当没有发生了任何的改变后（changed_any为0），就跳出这个循环，完成了整个minimize的过程</p>
+<p><strong>问题，效率和实用性</strong></p>
+<ol>
+<li>afl-tmin在这里使用的是ascii码’0’值来进行归零化，而不是0x00的原因是为了防止与字符编码的转换出现冲突，增加修改的困难</li>
+<li>这里没有选择很多学术论文中所使用的算法，是因为这样的设计可以减少很多的执行步骤。而且在现实生活中，也能产生比较客观的实质性效果</li>
+<li>这个算法其实算是一个<strong>精准度-执行次数</strong>的权衡，官方文档上说这个算法大概可以提供5%-20%的文件修剪率</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/afl/" rel="tag"># afl</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/14/tps/" rel="next" title="thinkphps">
+                <i class="fa fa-chevron-left"></i> thinkphps
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">WenWei Zeng</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修剪"><span class="nav-number">2.1.</span> <span class="nav-text">修剪</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#afl-cmin"><span class="nav-number">2.1.1.</span> <span class="nav-text">afl-cmin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#afl-tmin"><span class="nav-number">2.1.2.</span> <span class="nav-text">afl-tmin</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WenWei Zeng</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">21.7k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
