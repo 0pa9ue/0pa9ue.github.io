@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="AFL使用及源码分析">
+<meta name="description" content="AFL修剪工具分析">
 <meta name="keywords" content="afl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AFL使用及源码分析">
+<meta property="og:title" content="AFL使用及源码分析(二)">
 <meta property="og:url" content="http://yoursite.com/2020/01/10/afl-tools/index.html">
 <meta property="og:site_name" content="zww">
-<meta property="og:description" content="AFL使用及源码分析">
+<meta property="og:description" content="AFL修剪工具分析">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/1.png">
 <meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/2.png">
-<meta property="og:updated_time" content="2020-01-10T03:58:48.367Z">
+<meta property="og:updated_time" content="2020-01-10T04:01:11.822Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AFL使用及源码分析">
-<meta name="twitter:description" content="AFL使用及源码分析">
+<meta name="twitter:title" content="AFL使用及源码分析(二)">
+<meta name="twitter:description" content="AFL修剪工具分析">
 <meta name="twitter:image" content="http://yoursite.com/2020/01/10/afl-tools/1.png">
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title>AFL使用及源码分析 | zww</title>
+  <title>AFL使用及源码分析(二) | zww</title>
   
 
 
@@ -253,7 +253,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">AFL使用及源码分析</h1>
+          <h1 class="post-title" itemprop="name headline">AFL使用及源码分析(二)</h1>
         
 
         <div class="post-meta">
@@ -334,7 +334,7 @@
       
 
       
-        <p>AFL使用及源码分析<br><a id="more"></a></p>
+        <p>AFL修剪工具分析<br><a id="more"></a></p>
 <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>阿里云学生版服务器<br>OS: Ubuntu 16.04.6 LTS<br>Processor: Intel Xeon E5-2682v4 2.5 GHz<br>Memory: 2 GiB<br>afl verison: 2.52</p>
 <h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="修剪"><a href="#修剪" class="headerlink" title="修剪"></a>修剪</h3><h4 id="afl-cmin"><a href="#afl-cmin" class="headerlink" title="afl-cmin"></a>afl-cmin</h4><p>功能：移除执行相同代码的输入文件<br>afl-cmin的核心思想是：尝试找到与语料库全集具有相同覆盖范围的最小子集<br>假设有多个文件，都覆盖了相同的代码，那么就丢掉多余的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params]</span><br></pre></td></tr></table></figure></p>
 <p>更多的时候，我们需要从文件中获取输入，这时可以使用“@@”代替被测试程序命令行中输入文件名的位置。Fuzzer会将其替换为实际执行的文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params] @@</span><br></pre></td></tr></table></figure></p>
