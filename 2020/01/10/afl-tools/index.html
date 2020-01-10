@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="afl,">
+  <meta name="keywords" content="afl,fuzz,">
 
 
 
@@ -80,20 +80,20 @@
 
 
 <meta name="description" content="AFL修剪工具分析">
-<meta name="keywords" content="afl">
+<meta name="keywords" content="afl,fuzz">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AFL使用及源码分析(二)">
 <meta property="og:url" content="http://yoursite.com/2020/01/10/afl-tools/index.html">
 <meta property="og:site_name" content="zww">
 <meta property="og:description" content="AFL修剪工具分析">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/1.png">
-<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/2.png">
-<meta property="og:updated_time" content="2020-01-10T04:01:11.822Z">
+<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/4.png">
+<meta property="og:updated_time" content="2020-01-10T13:45:19.209Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AFL使用及源码分析(二)">
 <meta name="twitter:description" content="AFL修剪工具分析">
-<meta name="twitter:image" content="http://yoursite.com/2020/01/10/afl-tools/1.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/01/10/afl-tools/3.png">
 
 
 
@@ -336,20 +336,21 @@
       
         <p>AFL修剪工具分析<br><a id="more"></a></p>
 <h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>阿里云学生版服务器<br>OS: Ubuntu 16.04.6 LTS<br>Processor: Intel Xeon E5-2682v4 2.5 GHz<br>Memory: 2 GiB<br>afl verison: 2.52</p>
-<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="修剪"><a href="#修剪" class="headerlink" title="修剪"></a>修剪</h3><h4 id="afl-cmin"><a href="#afl-cmin" class="headerlink" title="afl-cmin"></a>afl-cmin</h4><p>功能：移除执行相同代码的输入文件<br>afl-cmin的核心思想是：尝试找到与语料库全集具有相同覆盖范围的最小子集<br>假设有多个文件，都覆盖了相同的代码，那么就丢掉多余的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params]</span><br></pre></td></tr></table></figure></p>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="afl-cmin"><a href="#afl-cmin" class="headerlink" title="afl-cmin"></a>afl-cmin</h3><p>功能：移除执行相同代码的输入文件<br>afl-cmin的核心思想是：尝试找到与语料库全集具有相同覆盖范围的最小子集<br>假设有多个文件，都覆盖了相同的代码，那么就丢掉多余的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params]</span><br></pre></td></tr></table></figure></p>
 <p>更多的时候，我们需要从文件中获取输入，这时可以使用“@@”代替被测试程序命令行中输入文件名的位置。Fuzzer会将其替换为实际执行的文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params] @@</span><br></pre></td></tr></table></figure></p>
-<p>一个有114个html文件的语料库，精简到只包含60个文件<br><img src="/2020/01/10/afl-tools/1.png" alt></p>
+<p>一个有114个html文件的语料库，精简到只包含60个文件<br><img src="/2020/01/10/afl-tools/3.png" alt></p>
 <p><strong>afl-cmin的处理步骤</strong><br>STEP 1: COLLECTING TRACES<br>STEP 2: SORTING TUPLES<br>STEP 3: SELECTING CANDIDATE FILES<br>STEP 4: LOADING CANDIDATES<br>STEP 5: WRITING OUTPUT</p>
 <p>afl-cmin实际上是一个shell脚本，具体来说调用了afl-showmap，读入所有文件，并将showmap的结果放入$TRACE_DIR/中<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$STDIN_FILE</span>"</span> = <span class="string">""</span> ]; <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">read</span> -r fn; <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">      CUR=$((CUR+1))</span><br><span class="line">      <span class="built_in">printf</span> <span class="string">"\\r    Processing file <span class="variable">$CUR</span>/<span class="variable">$IN_COUNT</span>... "</span></span><br><span class="line"></span><br><span class="line">      <span class="string">"<span class="variable">$SHOWMAP</span>"</span> -m <span class="string">"<span class="variable">$MEM_LIMIT</span>"</span> -t <span class="string">"<span class="variable">$TIMEOUT</span>"</span> -o <span class="string">"<span class="variable">$TRACE_DIR</span>/<span class="variable">$fn</span>"</span> -Z <span class="variable">$EXTRA_PAR</span> -- <span class="string">"<span class="variable">$@</span>"</span> &lt;<span class="string">"<span class="variable">$IN_DIR</span>/<span class="variable">$fn</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">done</span> &lt; &lt;(ls <span class="string">"<span class="variable">$IN_DIR</span>"</span>)</span><br><span class="line"><span class="keyword">else</span></span><br></pre></td></tr></table></figure></p>
 <p>将得到的tuple进行排序，并选择最适合的候选者（原则是选择那些尽可能小的输入，但是也能覆盖一定量的路径）<br>将tuple与file关联后，最后选择容量最小的file，就得到了精简后的文件</p>
-<h4 id="afl-tmin"><a href="#afl-tmin" class="headerlink" title="afl-tmin"></a>afl-tmin</h4><p>整体的大小得到了改善后，接下来还要对每个文件进行更细化的处理<br>afl-tmin这个工具可以用来减小单个文件的体积<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> afl-tmin -i input_file -o output_file -- /path/to/tested/program [params] @@</span></span><br></pre></td></tr></table></figure></p>
+<p>afl-showmap的分析留在后面</p>
+<h3 id="afl-tmin"><a href="#afl-tmin" class="headerlink" title="afl-tmin"></a>afl-tmin</h3><p>整体的大小得到了改善后，接下来还要对每个文件进行更细化的处理<br>afl-tmin这个工具可以用来减小单个文件的体积<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> afl-tmin -i input_file -o output_file -- /path/to/tested/program [params] @@</span></span><br></pre></td></tr></table></figure></p>
 <p>批量修改文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in *;do afl-tmin -i $i -o tmin-$i -- /path/to/tested/program [params] @@;done;</span><br></pre></td></tr></table></figure></p>
 <p><strong>目的</strong></p>
 <blockquote>
 <p>File size has a dramatic impact on fuzzing performance, both because large files make the target binary slower, and because they reduce the likelihood that a mutation would touch important format control structures, rather than redundant data blocks.<br>The built-in trimmer in afl-fuzz attempts to sequentially remove blocks of data with variable length and stepover; any deletion that doesn’t affect the checksum of the trace map is committed to disk.</p>
 </blockquote>
 <p>文件的大小能够显著的影响fuzz效率，所以afl提供了一个内置的工具tmin。通过控制步长和块的大小，最后移除掉对fuzz无用的数据</p>
-<p><strong>处理步骤</strong><br>STEP 1: BLOCK NORMALIZATION<br>STEP 2: BLOCK DELETION<br>STEP 3: ALPHABET MINIMIZATION<br>STEP 4: CHARACTER MINIMIZATION<br><img src="/2020/01/10/afl-tools/2.png" alt></p>
+<p><strong>处理步骤</strong><br>STEP 1: BLOCK NORMALIZATION<br>STEP 2: BLOCK DELETION<br>STEP 3: ALPHABET MINIMIZATION<br>STEP 4: CHARACTER MINIMIZATION<br><img src="/2020/01/10/afl-tools/4.png" alt></p>
 <p>官方文档是这么描述这个算法流程的</p>
 <blockquote>
 <p>The actual minimization algorithm is:<br>1. Attempt to zero large blocks of data with large stepovers. Empirically,this is shown to reduce the number of execs by preempting finer-grained efforts later on.<br>2. Perform a block deletion pass with decreasing block sizes and stepovers,binary-search-style.<br>3. Perform alphabet normalization by counting unique characters and trying to bulk-replace each with a zero value.<br>4. As a last result, perform byte-by-byte normalization on non-zero bytes.</p>
@@ -377,6 +378,7 @@
 <li>这里没有选择很多学术论文中所使用的算法，是因为这样的设计可以减少很多的执行步骤。而且在现实生活中，也能产生比较客观的实质性效果</li>
 <li>这个算法其实算是一个<strong>精准度-执行次数</strong>的权衡，官方文档上说这个算法大概可以提供5%-20%的文件修剪率</li>
 </ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://ch4r1l3.github.io/" target="_blank" rel="noopener">https://ch4r1l3.github.io/</a></p>
 
       
     </div>
@@ -395,6 +397,8 @@
         <div class="post-tags">
           
             <a href="/tags/afl/" rel="tag"># afl</a>
+          
+            <a href="/tags/fuzz/" rel="tag"># fuzz</a>
           
         </div>
       
@@ -416,6 +420,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/10/afl-analyze/" rel="prev" title="AFL使用及源码分析(三)">
+                AFL使用及源码分析(三) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -492,7 +500,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -505,7 +513,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -538,7 +546,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修剪"><span class="nav-number">2.1.</span> <span class="nav-text">修剪</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#afl-cmin"><span class="nav-number">2.1.1.</span> <span class="nav-text">afl-cmin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#afl-tmin"><span class="nav-number">2.1.2.</span> <span class="nav-text">afl-tmin</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#afl-cmin"><span class="nav-number">2.1.</span> <span class="nav-text">afl-cmin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#afl-tmin"><span class="nav-number">2.2.</span> <span class="nav-text">afl-tmin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
@@ -572,7 +580,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">21.7k</span>
+    <span title="Site words total count">23.5k</span>
   
 </div>
 
