@@ -88,8 +88,8 @@
 <meta property="og:description" content="AFL修剪工具分析">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/3.png">
-<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/4.png">
-<meta property="og:updated_time" content="2020-01-10T13:45:19.209Z">
+<meta property="og:image" content="http://yoursite.com/2020/01/10/afl-tools/2.png">
+<meta property="og:updated_time" content="2020-01-10T14:58:20.018Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AFL使用及源码分析(二)">
 <meta name="twitter:description" content="AFL修剪工具分析">
@@ -335,7 +335,6 @@
 
       
         <p>AFL修剪工具分析<br><a id="more"></a></p>
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>阿里云学生版服务器<br>OS: Ubuntu 16.04.6 LTS<br>Processor: Intel Xeon E5-2682v4 2.5 GHz<br>Memory: 2 GiB<br>afl verison: 2.52</p>
 <h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="afl-cmin"><a href="#afl-cmin" class="headerlink" title="afl-cmin"></a>afl-cmin</h3><p>功能：移除执行相同代码的输入文件<br>afl-cmin的核心思想是：尝试找到与语料库全集具有相同覆盖范围的最小子集<br>假设有多个文件，都覆盖了相同的代码，那么就丢掉多余的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params]</span><br></pre></td></tr></table></figure></p>
 <p>更多的时候，我们需要从文件中获取输入，这时可以使用“@@”代替被测试程序命令行中输入文件名的位置。Fuzzer会将其替换为实际执行的文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ afl-cmin -i input_dir -o output_dir -- /path/to/tested/program [params] @@</span><br></pre></td></tr></table></figure></p>
 <p>一个有114个html文件的语料库，精简到只包含60个文件<br><img src="/2020/01/10/afl-tools/3.png" alt></p>
@@ -350,7 +349,7 @@
 <p>File size has a dramatic impact on fuzzing performance, both because large files make the target binary slower, and because they reduce the likelihood that a mutation would touch important format control structures, rather than redundant data blocks.<br>The built-in trimmer in afl-fuzz attempts to sequentially remove blocks of data with variable length and stepover; any deletion that doesn’t affect the checksum of the trace map is committed to disk.</p>
 </blockquote>
 <p>文件的大小能够显著的影响fuzz效率，所以afl提供了一个内置的工具tmin。通过控制步长和块的大小，最后移除掉对fuzz无用的数据</p>
-<p><strong>处理步骤</strong><br>STEP 1: BLOCK NORMALIZATION<br>STEP 2: BLOCK DELETION<br>STEP 3: ALPHABET MINIMIZATION<br>STEP 4: CHARACTER MINIMIZATION<br><img src="/2020/01/10/afl-tools/4.png" alt></p>
+<p><strong>处理步骤</strong><br>STEP 1: BLOCK NORMALIZATION<br>STEP 2: BLOCK DELETION<br>STEP 3: ALPHABET MINIMIZATION<br>STEP 4: CHARACTER MINIMIZATION<br><img src="/2020/01/10/afl-tools/2.png" alt></p>
 <p>官方文档是这么描述这个算法流程的</p>
 <blockquote>
 <p>The actual minimization algorithm is:<br>1. Attempt to zero large blocks of data with large stepovers. Empirically,this is shown to reduce the number of execs by preempting finer-grained efforts later on.<br>2. Perform a block deletion pass with decreasing block sizes and stepovers,binary-search-style.<br>3. Perform alphabet normalization by counting unique characters and trying to bulk-replace each with a zero value.<br>4. As a last result, perform byte-by-byte normalization on non-zero bytes.</p>
@@ -546,7 +545,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#afl-cmin"><span class="nav-number">2.1.</span> <span class="nav-text">afl-cmin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#afl-tmin"><span class="nav-number">2.2.</span> <span class="nav-text">afl-tmin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">1.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#afl-cmin"><span class="nav-number">1.1.</span> <span class="nav-text">afl-cmin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#afl-tmin"><span class="nav-number">1.2.</span> <span class="nav-text">afl-tmin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">2.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
