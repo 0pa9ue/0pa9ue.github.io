@@ -88,6 +88,7 @@
 <meta property="og:description" content="AFL使用">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/12.png">
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/2.png">
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/3.png">
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/4.png">
@@ -97,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/8.png">
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/10.png">
 <meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/11.png">
-<meta property="og:updated_time" content="2020-01-12T02:59:06.455Z">
+<meta property="og:updated_time" content="2020-01-12T03:15:28.735Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AFL使用及源码分析(一)">
 <meta name="twitter:description" content="AFL使用">
@@ -305,7 +306,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  979
+                  1.1k
                 </span>
               
 
@@ -360,6 +361,12 @@
 <p>首先创建两个文件夹，in存放输入文件（也就是语料库），out存放输出文件<br>我们在这里将”hello”写入in文件夹中，作为种子</p>
 <p><strong>开始fuzz</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">afl-fuzz -i in -o out ./test @@</span><br></pre></td></tr></table></figure></p>
 <p>@@的含义：目标程序需要从文件读取输入<br>如果目标程序直接从stdin读取输入，则不需要@@</p>
+<blockquote>
+<p>在这里，当我们通过ssh连接服务器进行fuzz的时候，经常会遇到ssh断开的情况，这样会导致fuzz的程序终止<br>在这里我们可以使用screen命令，创建一个screen的实例，专门运行fuzz程序，这样即使ssh断开后，fuzz程序也不会被中断</p>
+</blockquote>
+<p>安装<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install screen</span><br></pre></td></tr></table></figure></p>
+<p>创建screen实例<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">screen -S yourename</span><br></pre></td></tr></table></figure></p>
+<p>创建后默认就在screen实例里面了，所以直接启动afl进行fuzz即可<br>退出screen实例：Ctrl + a + d<br><img src="/2020/01/09/afl-fuzz/12.png" alt><br>常用命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">screen -ls 查看实例</span><br><span class="line">screen -r yourname 恢复实例</span><br><span class="line">screen -X -S PID quit 删除实例</span><br></pre></td></tr></table></figure></p>
 <p><strong>afl界面</strong><br><img src="/2020/01/09/afl-fuzz/2.png" alt></p>
 <p>比较重要的是stage progress，这里标明的是当初正在执行怎么样的变异策略，当前执行的状态等</p>
 <p><img src="/2020/01/09/afl-fuzz/3.png" alt><br>只通过了1分钟的变异，我们就捕获到了一个crash，也就是说我们的输入”hello”最后成功变异为”deadbeef”，执行abort函数，抛出异常，程序终止</p>
@@ -580,7 +587,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">24.4k</span>
+    <span title="Site words total count">24.6k</span>
   
 </div>
 
