@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="afl,fuzz,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AFL使用">
+<meta name="keywords" content="afl,fuzz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AFL使用及源码分析(一)">
+<meta property="og:url" content="http://yoursite.com/2020/01/09/afl-fuzz/index.html">
+<meta property="og:site_name" content="zww">
+<meta property="og:description" content="AFL使用">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/4.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/5.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/6.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/7.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/8.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/10.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/09/afl-fuzz/11.png">
+<meta property="og:updated_time" content="2020-01-12T02:53:41.933Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AFL使用及源码分析(一)">
+<meta name="twitter:description" content="AFL使用">
+<meta name="twitter:image" content="http://yoursite.com/2020/01/09/afl-fuzz/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/09/afl-fuzz/">
+
+
+
+
+
+  <title>AFL使用及源码分析(一) | zww</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zww</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/09/afl-fuzz/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WenWei Zeng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zww">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AFL使用及源码分析(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-09T11:04:52+08:00">
+                2020-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  980
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>AFL使用<br><a id="more"></a></p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>阿里云学生版服务器<br>OS: Ubuntu 16.04.6 LTS<br>Processor: Intel Xeon E5-2682v4 2.5 GHz<br>Memory: 2 GiB<br>afl verison: 2.52</p>
+<h2 id="源码编译安装"><a href="#源码编译安装" class="headerlink" title="源码编译安装"></a>源码编译安装</h2><ol>
+<li>官网下载latest版本 <a href="http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz" target="_blank" rel="noopener">http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz</a> </li>
+<li>解压并安装<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装成功：<br><img src="/2020/01/09/afl-fuzz/1.png" alt></p>
+<h2 id="测试功能"><a href="#测试功能" class="headerlink" title="测试功能"></a>测试功能</h2><p><strong>test.c</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>**argv)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span> ptr[<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(argc &gt; <span class="number">1</span>)&#123;</span><br><span class="line">            FILE *fp = fopen(argv[<span class="number">1</span>], <span class="string">"r"</span>);</span><br><span class="line">            fgets(ptr, <span class="keyword">sizeof</span>(ptr), fp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">            fgets(ptr, <span class="keyword">sizeof</span>(ptr), <span class="built_in">stdin</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    printf("%s", ptr);</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(ptr[<span class="number">0</span>] == <span class="string">'d'</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span> (ptr[<span class="number">1</span>] == <span class="string">'e'</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(ptr[<span class="number">2</span>] == <span class="string">'a'</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(ptr[<span class="number">3</span>] == <span class="string">'d'</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(ptr[<span class="number">4</span>] == <span class="string">'b'</span>)&#123;</span><br><span class="line">                        <span class="keyword">if</span>(ptr[<span class="number">5</span>] == <span class="string">'e'</span>)&#123;</span><br><span class="line">                            <span class="keyword">if</span>(ptr[<span class="number">6</span>] == <span class="string">'e'</span>)&#123;</span><br><span class="line">                                <span class="keyword">if</span>(ptr[<span class="number">7</span>] == <span class="string">'f'</span>)&#123;</span><br><span class="line">                                    <span class="built_in">abort</span>();</span><br><span class="line">                                &#125;</span><br><span class="line">                                <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 7"</span> ,ptr[<span class="number">7</span>]);</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 6"</span> ,ptr[<span class="number">6</span>]);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 5"</span> ,ptr[<span class="number">5</span>]);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 4"</span> ,ptr[<span class="number">4</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 3"</span> ,ptr[<span class="number">3</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 2"</span> ,ptr[<span class="number">2</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 1"</span> ,ptr[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"%c 0"</span> ,ptr[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个代码首先会读取传入的第一个文件的内容，并判断是否为deadbeef，如果是的话，就abort()</p>
+<blockquote>
+<p>abort这个函数会向调用者发送SIGABRT信号</p>
+</blockquote>
+<p><strong>使用afl-gcc编译</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">afl-gcc -g -o test test.c</span><br></pre></td></tr></table></figure></p>
+<p><strong>创建输入和输出文件</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir in out</span><br><span class="line">echo "hello" &gt; in/base</span><br></pre></td></tr></table></figure></p>
+<p>首先创建两个文件夹，in存放输入文件（也就是语料库），out存放输出文件<br>我们在这里将”hello”写入in文件夹中，作为种子</p>
+<p><strong>开始fuzz</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">afl-fuzz -i in -o out ./test @@</span><br></pre></td></tr></table></figure></p>
+<p>@@的含义：目标程序需要从文件读取输入<br>如果目标程序直接从stdin读取输入，则不需要@@</p>
+<p><strong>afl界面</strong><br><img src="/2020/01/09/afl-fuzz/2.png" alt></p>
+<p>比较重要的是stage progress，这里标明的是当初正在执行怎么样的变异策略，当前执行的状态等</p>
+<p><img src="/2020/01/09/afl-fuzz/3.png" alt><br>只通过了1分钟的变异，我们就捕获到了一个crash，也就是说我们的输入”hello”最后成功变异为”deadbeef”，执行abort函数，抛出异常，程序终止</p>
+<p>在out文件夹中可以看到造成crash的原因<br><img src="/2020/01/09/afl-fuzz/4.png" alt><br>crashes：存储造成crash的输入<br>fuzz_bitmap：<br>fuzzer_stats：afl-fuzz的运行状态<br>hangs：导致目标超时的独特测试用例<br>plot_data：用于afl-plot绘图<br>queue：存放所有具有独特执行路径的测试用例</p>
+<p>查看crashes内的文件<br><img src="/2020/01/09/afl-fuzz/5.png" alt><br>可以看到这里是我们的需要的输入结果”deadbeef”</p>
+<p>查看queue内的文件<br><img src="/2020/01/09/afl-fuzz/6.png" alt><br>可以看到我们的原始输入”hello”是如何编译为deadbeef的<br>【hello -&gt; hell -&gt; dell -&gt; dll -&gt; deal -&gt; dead -&gt; deadb -&gt; deadbead -&gt; deadbeed】<br>g</p>
+<p>使用afl-plot进行处理plot-data<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">afl-plot afl_state_dir graph_output_dir</span><br></pre></td></tr></table></figure></p>
+<p>exec_speed.png<br><img src="/2020/01/09/afl-fuzz/7.png" alt><br>因为fuzz的程序很简单，所以就不贴出全部的图片了</p>
+<h2 id="Fuzz-w3m"><a href="#Fuzz-w3m" class="headerlink" title="Fuzz w3m"></a>Fuzz w3m</h2><p>从github下载w3m的最新版本<br><a href="https://github.com/tats/w3m/releases/tag/v0.5.3%2Bgit20190105" target="_blank" rel="noopener">https://github.com/tats/w3m/releases/tag/v0.5.3%2Bgit20190105</a><br>（这里本身想找旧的版本进行fuzz的，这样更有可能跑出crash来进行分析，但是因为旧版本w3m的源码编译总是会各种错误，就选择了最新版本的）</p>
+<p><strong>源码编译安装</strong><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ./w3m-0.5.3-git20190105</span><br><span class="line">CC=afl-gcc ./configure</span><br><span class="line">make</span><br></pre></td></tr></table></figure></p>
+<p>和前面的步骤相同，创建输入和输出文件夹，并添加语料库。<br>在这里我添加了114个html文件进行fuzz</p>
+<p>但afl提示语料库中有冗余的输入，所以我们可以进行适当的修剪<br><img src="/2020/01/09/afl-fuzz/8.png" alt><br>使用afl内置的修剪工具（cmin, tmin）对文件的大小和数量进行修剪<br>后面会对这两个工具具体的使用和源码进行分析</p>
+<p>最后，贴上两张fuzz的图片<br><img src="/2020/01/09/afl-fuzz/10.png" alt><br><img src="/2020/01/09/afl-fuzz/11.png" alt><br>差不多都运行了一天多，没什么收获。<br>原因有</p>
+<ol>
+<li>没有对语料库的内容进行特定筛选，不具有特征性和覆盖性</li>
+<li>客观上说：使用的是最新版的w3，相对来说漏洞比较少;配置太低，导致fuzz的效率也不高</li>
+<li>针对于这种解析html语言的程序，应该需要改写afl中的变异策略，使得效率更高</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://xz.aliyun.com/t/4314" target="_blank" rel="noopener">https://xz.aliyun.com/t/4314</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/afl/" rel="tag"># afl</a>
+          
+            <a href="/tags/fuzz/" rel="tag"># fuzz</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/14/tps/" rel="next" title="thinkphps">
+                <i class="fa fa-chevron-left"></i> thinkphps
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/10/afl-tools/" rel="prev" title="AFL使用及源码分析(二)">
+                AFL使用及源码分析(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">WenWei Zeng</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码编译安装"><span class="nav-number">2.</span> <span class="nav-text">源码编译安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试功能"><span class="nav-number">3.</span> <span class="nav-text">测试功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fuzz-w3m"><span class="nav-number">4.</span> <span class="nav-text">Fuzz w3m</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WenWei Zeng</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">24.5k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
