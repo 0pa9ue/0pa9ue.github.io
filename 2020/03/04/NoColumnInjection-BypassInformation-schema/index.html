@@ -88,7 +88,7 @@
 <meta property="og:description" content="SQL无列名注入及限制条件下获取表名">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2020/03/04/NoColumnInjection-BypassInformation-schema/img/NoColumnInjection&BypassInformation_schema/1.png">
-<meta property="og:updated_time" content="2020-03-06T07:44:25.351Z">
+<meta property="og:updated_time" content="2020-03-10T07:59:39.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NoColumnInjection&amp;BypassInformation_schema">
 <meta name="twitter:description" content="SQL无列名注入及限制条件下获取表名">
@@ -366,7 +366,29 @@
 <p>但是在这个情况下，明明ascii(G)是小于ascii(f)，为什么会返回1呢</p>
 <p>这是因为 <strong>mysql默认是不区分大小写的</strong> ，所以说实际上比较的是ascii(g)与ascii(f)，当然前者大，返回1</p>
 <p>如果我们要比较ascii码的大小，那我们就需要使用 <strong>二进制字符串</strong> 进行比较</p>
-<p>具体来说，mysql可以使用三类函数进行类型的转换<br>| Name | Description |<br>| —— | —— |<br>| BINARY | Cast a string to a binary string |<br>| CAST() | Cast a value as a certain type |<br>| CONVERT() | Cast a value as a certain type |</p>
+<p>具体来说，mysql可以使用三类函数进行类型的转换</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BINARY</td>
+<td>Cast a string to a binary string</td>
+</tr>
+<tr>
+<td>CAST()</td>
+<td>Cast a value as a certain type</td>
+</tr>
+<tr>
+<td>CONVERT()</td>
+<td>Cast a value as a certain type</td>
+</tr>
+</tbody>
+</table>
 <p>所以我们只需要使用函数，进行转换类型即可实现比较 </p>
 <p>payload:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 使用binary</span></span><br><span class="line"><span class="keyword">select</span> ((<span class="keyword">select</span> <span class="number">1</span>,(<span class="built_in">binary</span> <span class="string">'G'</span>)) &gt; (<span class="keyword">select</span> * <span class="keyword">from</span> flag <span class="keyword">limit</span> <span class="number">1</span>));</span><br><span class="line"><span class="comment">## 使用cast</span></span><br><span class="line"><span class="keyword">select</span> ((<span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">cast</span>(<span class="string">'G'</span> <span class="keyword">as</span> <span class="built_in">binary</span>)) &gt; (<span class="keyword">select</span> * <span class="keyword">from</span> flag <span class="keyword">limit</span> <span class="number">1</span>));</span><br><span class="line"><span class="comment">## 使用convert</span></span><br><span class="line"><span class="keyword">select</span> ((<span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">convert</span>(<span class="string">'G'</span>, <span class="built_in">binary</span>)) &gt; (<span class="keyword">select</span> * <span class="keyword">from</span> flag <span class="keyword">limit</span> <span class="number">1</span>));</span><br></pre></td></tr></table></figure></p>
 <p>或者可以使用mysql8中新增的数据类型json，因为json的string类型是大小写敏感的</p>
@@ -595,7 +617,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">30.3k</span>
+    <span title="Site words total count">30.6k</span>
   
 </div>
 
