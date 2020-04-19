@@ -92,10 +92,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture3.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture4.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture5.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture9.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture6.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture7.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture8.png">
-<meta property="og:updated_time" content="2019-07-26T14:15:36.614Z">
+<meta property="og:updated_time" content="2020-04-19T10:41:36.162Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RSA_Rabin">
 <meta name="twitter:description" content="RSA与Rabin算法">
@@ -303,7 +304,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.3k
+                  1.1k
                 </span>
               
 
@@ -319,7 +320,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  6
+                  5
                 </span>
               
             </div>
@@ -357,37 +358,7 @@ $$\kappa = \{(n,p,q)\}$$
 <p><a href="https://en.wikipedia.org/wiki/Rabin_cryptosystem" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Rabin_cryptosystem</a></p>
 <hr>
 <p><strong>证明过程：</strong></p>
-<p>条件：</p>
-$$e = 2$$
-$$\ p \equiv q \equiv 3\ mod\ 4$$
-$$\ n = p*q$$
-<p>加密：</p>
-$$c \equiv m^{2}\text{mod n}$$
-<p>其中c为密文，m为明文，n为公钥</p>
-<p>首先，由模运算的对称性</p>
-$$c \equiv m^{2}\text{ mod n}$$ ⇔ $$m^{2} \equiv c\text{ mod n}$$
-<p>所以解密即是求</p>
-$$x^{2} \equiv c\text{ mod n}$$
-<p>由中国剩余定理，该等式等价于求解</p>
-$$\ \left\{ \begin{matrix}
-x^{2} \equiv c\ mod\ p \\
-x^{2} \equiv c\ mod\ q \\
-\end{matrix} \right.\ $$
-<p>即x有四组解($c = m^{2}\text{mod n}$)</p>
-$$\left\{ \begin{matrix}
-x \equiv \ \ \ m\ mod\ p \\
-x \equiv - m\ mod\ p \\
-\end{matrix} \right.\ \ \left\{ \begin{matrix}
-x \equiv \ \ \ m\ mod\ q \\
-x \equiv - m\ mod\ q \\
-\end{matrix} \right.\ $$
-<p>因为$p \equiv q \equiv 3\ mod\ 4$,有</p>
-$$p + 1 = 4*k\ $$(k为整数)
-<p>由于c是模p的平方剩余，并且p是奇素数,有</p>
-$$c^{\frac{p - 1}{2}} \equiv 1\text{ mod p}$$
-<p>那么</p>
-$${{{{(c}^{\frac{p + 1}{4}})}^{2} \equiv c}^{\frac{p + 1}{2}} \equiv c}^{\frac{p - 1}{2}}*c \equiv c\text{mod p}$$
-<p>即得到$$c^{\frac{p + 1}{4}}\text{ }，\ {p - c}^{\frac{p + 1}{4}}$$</p>
+<p><img src="/2019/07/25/RSA-Rabin/Picture9.png" alt></p>
 <p><strong>平方剩余：</strong><br>假设p是素数，a是整数。如果存在一个整数x使得$\ x\hat{}2 \equiv a(mod\ p)$（即$x\hat{}2 - a$可以被p整除）,那么就称a在p的剩余类中是平方剩余的<br>欧拉定理说：如果p是奇素数，则a平方剩余当且仅当$a^{\frac{p - 1}{2}} \equiv 1\ \left( \text{mod p} \right)$</p>
 <h3 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h3><ul>
 <li><p><strong>e = 2?</strong></p>
@@ -616,7 +587,7 @@ $${{{{(c}^{\frac{p + 1}{4}})}^{2} \equiv c}^{\frac{p + 1}{2}} \equiv c}^{\frac{p
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">30.6k</span>
+    <span title="Site words total count">30.3k</span>
   
 </div>
 
