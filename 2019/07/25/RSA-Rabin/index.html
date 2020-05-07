@@ -202,6 +202,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/%20" rel="section">
             
@@ -345,7 +355,8 @@
       
 
       
-        <p><strong>RSA与Rabin算法</strong><br><a id="more"></a></p>
+        <p><strong>RSA与Rabin算法</strong></p>
+<a id="more"></a>
 <h2 id="RSA密钥生成流程"><a href="#RSA密钥生成流程" class="headerlink" title="RSA密钥生成流程"></a>RSA密钥生成流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture1.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture2.png" alt></p>
 <h2 id="RSA加密解密流程"><a href="#RSA加密解密流程" class="headerlink" title="RSA加密解密流程"></a>RSA加密解密流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture3.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture4.png" alt></p>
 <h2 id="Rabin算法"><a href="#Rabin算法" class="headerlink" title="Rabin算法"></a>Rabin算法</h2><blockquote>
@@ -355,7 +366,11 @@
 <blockquote>
 <p><strong>Thm1(Rabin密码体制)</strong><br>设n=p*q，其中p和q是素数，且p,q≡3(mod4)，设$P = C = Z_{*}^{n}$，且定义</p>
 $$\kappa = \{(n,p,q)\}$$
-<p>对K=(n,p,q)K=(n,p,q)，定义<br>$$eK(x) = x^{2}(modn)$$<br>和<br>$$dK = \sqrt{y}(modn)$$<br>n为公钥，p和q为私钥<br>注：条件 p, q ≡ 3 (mod4) 可以省去，条件$P = C = Z_{*}^{n}$也可以弱化为$\ P = C = Z^{n}$，只是在使用更多的限制性描述的时候，简化了许多方面的计算和密码体制分析。</p>
+<p>对K=(n,p,q)K=(n,p,q)，定义</p>
+$$eK(x) = x^{2}(modn)$$
+<p>和</p>
+$$dK = \sqrt{y}(modn)$$
+<p>n为公钥，p和q为私钥<br>注：条件 p, q ≡ 3 (mod4) 可以省去，条件$P = C = Z_{*}^{n}$也可以弱化为$\ P = C = Z^{n}$，只是在使用更多的限制性描述的时候，简化了许多方面的计算和密码体制分析。</p>
 </blockquote>
 <p><a href="https://www.cnblogs.com/jcchan/articles/8441159.html" target="_blank" rel="noopener">https://www.cnblogs.com/jcchan/articles/8441159.html</a></p>
 <h3 id="密钥导出，加密与解密"><a href="#密钥导出，加密与解密" class="headerlink" title="密钥导出，加密与解密"></a>密钥导出，加密与解密</h3><p><img src="/2019/07/25/RSA-Rabin/Picture5.png" alt></p>
@@ -386,7 +401,9 @@ $$\kappa = \{(n,p,q)\}$$
 <h3 id="Jarvisoj-hard-RSA"><a href="#Jarvisoj-hard-RSA" class="headerlink" title="Jarvisoj hard RSA"></a>Jarvisoj hard RSA</h3><p>给出flag.enc和public.pem文件，使用openssl分析后可知道e为2</p>
 <p><strong>openssl rsa -pubin -text -modulus -in pubkey.pem</strong></p>
 <p><img src="/2019/07/25/RSA-Rabin/Picture6.png" alt></p>
-<p>e为2，所以可以使用Rabin算法进行解密，脚本如下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"></span><br><span class="line"><span class="comment"># Rabin</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'pubkey.pem'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    content = f.read()</span><br><span class="line">    key = RSA.importKey(content)</span><br><span class="line">    n = key.n</span><br><span class="line">    e = key.e</span><br><span class="line">    print(<span class="string">"n:"</span>, n)</span><br><span class="line">    print(<span class="string">"e:"</span>, e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'flag.enc'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    c = f.read().hex()</span><br><span class="line">    c = int(c, <span class="number">16</span>)</span><br><span class="line">    print(<span class="string">"c:"</span>, c)</span><br><span class="line"><span class="comment"># http://factordb.com 分解</span></span><br><span class="line">p = <span class="number">275127860351348928173285174381581152299</span></span><br><span class="line">q = <span class="number">319576316814478949870590164193048041239</span></span><br><span class="line"><span class="comment"># calculate yp and yq</span></span><br><span class="line">inv_p = gmpy2.invert(p, q)</span><br><span class="line">inv_q = gmpy2.invert(q, p)</span><br><span class="line"><span class="comment"># calculate mp and mq</span></span><br><span class="line"><span class="comment"># mp = pow(c, (p + 1) / 4, p) #python2.7</span></span><br><span class="line">mp = <span class="number">201511392364600794166602640869426530039</span></span><br><span class="line"><span class="comment"># mq = pow(c, (q + 1) / 4, q)</span></span><br><span class="line">mq = <span class="number">172773325262349523480434822433191472001</span></span><br><span class="line"><span class="comment"># calculate a,b,c,d</span></span><br><span class="line">a = (inv_p * p * mq + inv_q * q * mp) % n</span><br><span class="line">b = n - int(a)</span><br><span class="line">c = (inv_p * p * mq - inv_q * q * mp) % n</span><br><span class="line">d = n - int(c)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"----------------------------result:-----------------------------"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (a, b, c, d):</span><br><span class="line">    s = <span class="string">'%x'</span> % i</span><br><span class="line">    <span class="keyword">if</span> len(s) % <span class="number">2</span> != <span class="number">0</span>:</span><br><span class="line">        s = <span class="string">'0'</span> + s</span><br><span class="line">    print(s)</span><br></pre></td></tr></table></figure></p>
+<p>e为2，所以可以使用Rabin算法进行解密，脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"></span><br><span class="line"><span class="comment"># Rabin</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'pubkey.pem'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    content = f.read()</span><br><span class="line">    key = RSA.importKey(content)</span><br><span class="line">    n = key.n</span><br><span class="line">    e = key.e</span><br><span class="line">    print(<span class="string">"n:"</span>, n)</span><br><span class="line">    print(<span class="string">"e:"</span>, e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'flag.enc'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    c = f.read().hex()</span><br><span class="line">    c = int(c, <span class="number">16</span>)</span><br><span class="line">    print(<span class="string">"c:"</span>, c)</span><br><span class="line"><span class="comment"># http://factordb.com 分解</span></span><br><span class="line">p = <span class="number">275127860351348928173285174381581152299</span></span><br><span class="line">q = <span class="number">319576316814478949870590164193048041239</span></span><br><span class="line"><span class="comment"># calculate yp and yq</span></span><br><span class="line">inv_p = gmpy2.invert(p, q)</span><br><span class="line">inv_q = gmpy2.invert(q, p)</span><br><span class="line"><span class="comment"># calculate mp and mq</span></span><br><span class="line"><span class="comment"># mp = pow(c, (p + 1) / 4, p) #python2.7</span></span><br><span class="line">mp = <span class="number">201511392364600794166602640869426530039</span></span><br><span class="line"><span class="comment"># mq = pow(c, (q + 1) / 4, q)</span></span><br><span class="line">mq = <span class="number">172773325262349523480434822433191472001</span></span><br><span class="line"><span class="comment"># calculate a,b,c,d</span></span><br><span class="line">a = (inv_p * p * mq + inv_q * q * mp) % n</span><br><span class="line">b = n - int(a)</span><br><span class="line">c = (inv_p * p * mq - inv_q * q * mp) % n</span><br><span class="line">d = n - int(c)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"----------------------------result:-----------------------------"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (a, b, c, d):</span><br><span class="line">    s = <span class="string">'%x'</span> % i</span><br><span class="line">    <span class="keyword">if</span> len(s) % <span class="number">2</span> != <span class="number">0</span>:</span><br><span class="line">        s = <span class="string">'0'</span> + s</span><br><span class="line">    print(s)</span><br></pre></td></tr></table></figure>
+
 <p><strong>解密后得到：</strong><br><img src="/2019/07/25/RSA-Rabin/Picture7.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture8.png" alt></p>
 
       
@@ -591,7 +608,7 @@ $$\kappa = \{(n,p,q)\}$$
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">33.3k</span>
+    <span title="Site words total count">32.4k</span>
   
 </div>
 

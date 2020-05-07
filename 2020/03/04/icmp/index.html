@@ -204,6 +204,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/%20" rel="section">
             
@@ -347,7 +357,8 @@
       
 
       
-        <p><strong>ICMP协议浅析</strong><br><a id="more"></a></p>
+        <p><strong>ICMP协议浅析</strong></p>
+<a id="more"></a>
 <h2 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h2><p>ICMP（Internet Control Message Protocol）Internet控制报文协议</p>
 <p>它是TCP/IP协议簇的一个子协议，用于在IP主机、路由器之间传递控制消息（网络通不通、主机是否可达、路由是否可用等网络本身的消息）</p>
 <p>这些控制消息虽然并不传输用户数据，但是对于用户数据的传递起着重要的作用</p>
@@ -370,6 +381,7 @@
 <p><img src="/2020/03/04/icmp/4.png" alt></p>
 <p>可以看到ICMP全部的报文是包裹在IPv4 Data内的，并且ICMP报文的Header中标明了ICMP的消息类型(Type和Code)，Data则表明了引起错误的IPv4数据包内的数据</p>
 <h2 id="Traceroute"><a href="#Traceroute" class="headerlink" title="Traceroute"></a>Traceroute</h2><h3 id="命令及参数"><a href="#命令及参数" class="headerlink" title="命令及参数"></a>命令及参数</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ traceroute</span><br><span class="line">Version 1.4a12+Darwin</span><br><span class="line">Usage: traceroute [-adDeFInrSvx] [-A as_server] [-f first_ttl] [-g gateway] [-i iface]</span><br><span class="line">	[-M first_ttl] [-m max_ttl] [-p port] [-P proto] [-q nqueries] [-s src_addr]</span><br><span class="line">	[-t tos] [-w waittime] [-z pausemsecs] host [packetlen]</span><br></pre></td></tr></table></figure>
+
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h4 id="基于UDP"><a href="#基于UDP" class="headerlink" title="基于UDP"></a>基于UDP</h4><p>如果tracereoute不指定参数，则默认使用的是UDP模式进行数据包的发送<br>traceroute会选择一个大于30000的端口作为目的ip的接收端口进行发送，服务器在收到这个数据包的时候会返回一个端口不可达的ICMP错误信息，客户端通过判断收到的错误信息是TTL超时还是端口不可达（按照type）来判断数据包是否到达目标主机</p>
 <p><img src="/2020/03/04/icmp/5.png" alt></p>
 <ul>
@@ -391,6 +403,7 @@
 <p>因为当前的ip是可以ping的通的，所以可以尝试一下使用icmp协议（ping使用的就是icmp协议进行）</p>
 <p>流程图:<br><img src="/2020/03/04/icmp/11.png" alt></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">traceroute -P icmp xiaolab.net</span><br></pre></td></tr></table></figure>
+
 <p><img src="/2020/03/04/icmp/8.png" alt><br>可以看到，虽然收到了两跳的超时，但是第21跳就可以收到目的地发过来的ICMP超时错误了</p>
 <p>wireshark抓包再看看<br><img src="/2020/03/04/icmp/9.png" alt><br>这一次使用的就是icmp作为请求数据包，类型为Type 8 (Echo (ping) request)，也就是使用ping工具发送的数据包了<br>其余的原理则与UDP相同</p>
 <p><a href="https://www.jianshu.com/p/75a5822d0eec" target="_blank" rel="noopener">参考链接</a></p>
@@ -597,7 +610,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">33.3k</span>
+    <span title="Site words total count">32.4k</span>
   
 </div>
 
