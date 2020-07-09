@@ -506,57 +506,14 @@
 
       
         
-          
-            <p>拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解</p>
-<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><p>sqlmap 1.0.124</p>
-<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><h2 id="源码分析点-汇总"><a href="#源码分析点-汇总" class="headerlink" title="源码分析点-汇总"></a>源码分析点-汇总</h2><h3 id="关键数据结构及函数"><a href="#关键数据结构及函数" class="headerlink" title="关键数据结构及函数"></a>关键数据结构及函数</h3><p>数据结构：</p>
-<ul>
-<li>conf，kb : 贯穿了整个代码流程的全局数据结构</li>
-<li>injection : 保存成功注入实例的字典</li>
-<li>conf.tests : 结构化的payload</li>
-<li>conf.boundaries : 根据设置的测试等级进行前缀，后缀的填充</li>
-</ul>
-<p>tests示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> &#123;&quot;title&quot;: &quot;MySQL AND boolean-based blind - WHERE, HAVING, ORDER BY or GROUP BY clause (MAKE_SET)&quot;, &quot;stype&quot;: 1, &quot;level&quot;: 3, &quot;risk&quot;: 1, &quot;clause&quot;: [1, 2, 3, 8], &quot;where&quot;: [1], &quot;vector&quot;: &quot;AND MAKE_SET([INFERENCE],[RANDNUM])&quot;, &quot;request&quot;: &#123;&quot;payload&quot;: &quot;AND MAKE_SET([RANDNUM]&#x3D;[RANDNUM],[RANDNUM1])&quot;&#125;, &quot;response&quot;: &#123;&quot;comparison&quot;: &quot;AND MAKE_SET([RANDNUM]&#x3D;[RANDNUM1],[RANDNUM1])&quot;&#125;, &quot;details&quot;: &#123;&quot;dbms&quot;: &quot;MySQL&quot;&#125;&#125;</span><br><span class="line">&#123;&quot;title&quot;: &quot;MySQL OR boolean-based blind - WHERE, HAVING, ORDER BY or GROUP BY clause (MAKE_SET)&quot;, &quot;stype&quot;: 1, &quot;level&quot;: 3, &quot;risk&quot;: 3, &quot;clause&quot;: [1, 2, 3], &quot;where&quot;: [2], &quot;vector&quot;: &quot;OR MAKE_SET([INFERENCE],[RANDNUM])&quot;, &quot;request&quot;: &#123;&quot;payload&quot;: &quot;OR MAKE_SET([RANDNUM]&#x3D;[RANDNUM],[RANDNUM1])&quot;&#125;, &quot;response&quot;: &#123;&quot;comparison&quot;: &quot;OR MAKE_SET([RANDNUM]&#x3D;[RANDNUM1],[RANDNUM1])&quot;&#125;, &quot;details&quot;: &#123;&quot;dbms&quot;: &quot;MySQL&quot;&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>boundaries示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;: 3, &quot;clause&quot;: [1], &quot;where&quot;: [1, 2], &quot;ptype&quot;: 1, &quot;prefix&quot;: &quot;)&quot;, &quot;suffix&quot;: &quot;[GENERIC_SQL_COMMENT]&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;: 1, &quot;clause&quot;: [1], &quot;where&quot;: [1, 2], &quot;ptype&quot;: 1, &quot;prefix&quot;: &quot;)&quot;, &quot;suffix&quot;: &quot; AND ([RANDNUM]&#x3D;[RANDNUM]&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;: 2, &quot;clause&quot;: [1], &quot;where&quot;: [1, 2], &quot;ptype&quot;: 1, &quot;prefix&quot;: &quot;))&quot;, &quot;suffix&quot;: &quot; AND (([RANDNUM]&#x3D;[RANDNUM]&quot;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>关键函数：</p>
-<ul>
-<li>findpageforms() 获取页面中的表单</li>
-<li>start() 注入的启动点</li>
-<li>heuristicCheckSqlInjection() 启发式注入</li>
-<li>checkSqlInjection() 对参数点进行测试，检查是否存在sql注入</li>
-<li>Request.queryPage() 请求页面，并且还能返回一个比较率（这个很重要，基本上所有的检测方法都用到了，但是我没有看懂。。）</li>
-<li>action() 进一步的获取目标信息（比如获取数据库的表名，列名等）</li>
-</ul>
-<p>action()示例：<br>指定了–dbs参数来获取数据库的库名，在目标为mysql下使用的是以下这条sql语句进行查询</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># databases.py 第101行 getDbs()函数</span></span><br><span class="line"><span class="keyword">SELECT</span> schema_name <span class="keyword">FROM</span> INFORMATION_SCHEMA.SCHEMATA</span><br></pre></td></tr></table></figure>
-
-<p>文件：</p>
-<ul>
-<li>sqlmap.py 进行一些变量和程序的初始化</li>
-<li>controller.py 里面有sql注入的主要逻辑，以及对注入点的提取和初始化</li>
-<li>crawler.py 一个能够爬取页面链接（和注入点？）的爬虫，具有参考意义</li>
-<li>checks.py 一系列的检查操作，比如检查注入点是否可注入，目标数据库的信息，目标是否稳定，是否存在waf等</li>
-<li>test.py 主要是处理union注入的逻辑（没看懂</li>
-<li>action.py 进一步的获取目标信息（比如获取数据库的表名，列名等）</li>
-<li>enums.py，settings.py 存储一些静态变量的数据结构</li>
-<li>cmdline.py 处理命令行输入的参数</li>
-</ul>
-<h3 id="构造payload"><a href="#构造payload" class="headerlink" title="构造payload"></a>构造payload</h3><p>首先会读取xml文件中已经结构化好的payload，保存到conf.tests中</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loadPayloads</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Loads payloads/tests from XML</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; conf.tests = []</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; loadPayloads()</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; len(conf.tests) &gt; 0</span></span><br><span class="line"><span class="string">    True</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">for</span> payloadFile <span class="keyword">in</span> PAYLOAD_XML_FILES: </span><br><span class="line">    <span class="comment"># PAYLOAD_XML_FILES = ("boolean_blind.xml", "error_based.xml", "inline_query.xml", "stacked_queries.xml", "time_blind.xml", "union_query.xml")</span></span><br><span class="line">    ···</span><br></pre></td></tr></table></figure>
-
-<p>然后根据注入的类型进行某些位置上值的变化，完成payload的构造</p>
-<h3 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h3><p>在lib/controller/checks.py第494行循环可以看出，sqlmap主要使用的是以布尔盲注，报错注入，时间注入和联合注入这四个方法进行注入点的测试<br><img src="/2020/07/07/sqlmap/1.png" alt></p>
-<h2 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h2><ul>
-<li>Request.queryPage函数待研究</li>
-<li>union注入的逻辑</li>
-<li>sqlmap中使用的是线程的技术，使得检测时的效率会变高很多，但其中涉及到的线程之间的数据共享以及锁的情况还需要进一步的研究</li>
-</ul>
-
-          
+          <p>拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/07/07/sqlmap/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

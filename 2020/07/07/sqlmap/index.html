@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解 版本sqlmap 1.0.124 流程图源码分析点-汇总关键数据结构及函数数据结构：  conf，kb : 贯穿了整个代码流程的全局数据结构 injection : 保存成功注入实例的字典 conf.tests : 结构化的payload conf.boundaries : 根据设置的测试等级进行前">
+<meta name="description" content="拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sqlmap">
 <meta property="og:url" content="http://yoursite.com/2020/07/07/sqlmap/index.html">
 <meta property="og:site_name" content="0pa9ue">
-<meta property="og:description" content="拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解 版本sqlmap 1.0.124 流程图源码分析点-汇总关键数据结构及函数数据结构：  conf，kb : 贯穿了整个代码流程的全局数据结构 injection : 保存成功注入实例的字典 conf.tests : 结构化的payload conf.boundaries : 根据设置的测试等级进行前">
+<meta property="og:description" content="拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解">
 <meta property="og:image" content="http://yoursite.com/2020/07/07/sqlmap/1.png">
 <meta property="article:published_time" content="2020-07-07T07:55:57.000Z">
-<meta property="article:modified_time" content="2020-07-09T08:36:17.714Z">
+<meta property="article:modified_time" content="2020-07-09T08:40:05.032Z">
 <meta property="article:author" content="0pa9ue">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2020/07/07/sqlmap/1.png">
@@ -345,6 +345,8 @@
 
       
         <p>拖了好久的sqlmap源码解读，到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解</p>
+<a id="more"></a>
+
 <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><p>sqlmap 1.0.124</p>
 <h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><h2 id="源码分析点-汇总"><a href="#源码分析点-汇总" class="headerlink" title="源码分析点-汇总"></a>源码分析点-汇总</h2><h3 id="关键数据结构及函数"><a href="#关键数据结构及函数" class="headerlink" title="关键数据结构及函数"></a>关键数据结构及函数</h3><p>数据结构：</p>
 <ul>
