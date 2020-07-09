@@ -87,7 +87,7 @@
 <meta property="og:description" content="拖了好久的sqlmap源码解读，">
 <meta property="og:image" content="http://yoursite.com/2020/07/07/sqlmap/1.png">
 <meta property="article:published_time" content="2020-07-07T07:55:57.000Z">
-<meta property="article:modified_time" content="2020-07-09T08:41:39.098Z">
+<meta property="article:modified_time" content="2020-07-09T08:51:05.533Z">
 <meta property="article:author" content="0pa9ue">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2020/07/07/sqlmap/1.png">
@@ -307,7 +307,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  982
+                  999
                 </span>
               
 
@@ -346,8 +346,8 @@
       
         <p>拖了好久的sqlmap源码解读，<a id="more"></a>到现在也算是摸清楚了一点点门路了，但还有很多不懂的逻辑需要慢慢理解</p>
 <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><p>sqlmap 1.0.124</p>
-<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><h2 id="源码分析点-汇总"><a href="#源码分析点-汇总" class="headerlink" title="源码分析点-汇总"></a>源码分析点-汇总</h2><h3 id="关键数据结构及函数"><a href="#关键数据结构及函数" class="headerlink" title="关键数据结构及函数"></a>关键数据结构及函数</h3><p>数据结构：</p>
-<ul>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><a href="http://www.0pa9ue.top/2020/07/07/sqlmap/sqlmap.drawio" target="_blank" rel="noopener">drawio流程图</a></p>
+<h2 id="源码分析-关键数据结构及函数"><a href="#源码分析-关键数据结构及函数" class="headerlink" title="源码分析-关键数据结构及函数"></a>源码分析-关键数据结构及函数</h2><h3 id="数据结构："><a href="#数据结构：" class="headerlink" title="数据结构："></a>数据结构：</h3><ul>
 <li>conf，kb : 贯穿了整个代码流程的全局数据结构</li>
 <li>injection : 保存成功注入实例的字典</li>
 <li>conf.tests : 结构化的payload</li>
@@ -359,8 +359,9 @@
 <p>boundaries示例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;level&quot;: 3, &quot;clause&quot;: [1], &quot;where&quot;: [1, 2], &quot;ptype&quot;: 1, &quot;prefix&quot;: &quot;)&quot;, &quot;suffix&quot;: &quot;[GENERIC_SQL_COMMENT]&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;: 1, &quot;clause&quot;: [1], &quot;where&quot;: [1, 2], &quot;ptype&quot;: 1, &quot;prefix&quot;: &quot;)&quot;, &quot;suffix&quot;: &quot; AND ([RANDNUM]&#x3D;[RANDNUM]&quot;&#125;</span><br><span class="line">&#123;&quot;level&quot;: 2, &quot;clause&quot;: [1], &quot;where&quot;: [1, 2], &quot;ptype&quot;: 1, &quot;prefix&quot;: &quot;))&quot;, &quot;suffix&quot;: &quot; AND (([RANDNUM]&#x3D;[RANDNUM]&quot;&#125;</span><br></pre></td></tr></table></figure>
 
-<p>关键函数：</p>
-<ul>
+<p>这里我分别dump了tests和boundaries的数据</p>
+<p><a href="http://www.0pa9ue.top/2020/07/07/sqlmap/sqlmap_tests.txt" target="_blank" rel="noopener">tests</a><br><a href="http://www.0pa9ue.top/2020/07/07/sqlmap/sqlmap_boundaries.txt" target="_blank" rel="noopener">boundaries</a></p>
+<h3 id="关键函数："><a href="#关键函数：" class="headerlink" title="关键函数："></a>关键函数：</h3><ul>
 <li>findpageforms() 获取页面中的表单</li>
 <li>start() 注入的启动点</li>
 <li>heuristicCheckSqlInjection() 启发式注入</li>
@@ -371,8 +372,7 @@
 <p>action()示例：<br>指定了–dbs参数来获取数据库的库名，在目标为mysql下使用的是以下这条sql语句进行查询</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># databases.py 第101行 getDbs()函数</span></span><br><span class="line"><span class="keyword">SELECT</span> schema_name <span class="keyword">FROM</span> INFORMATION_SCHEMA.SCHEMATA</span><br></pre></td></tr></table></figure>
 
-<p>文件：</p>
-<ul>
+<h3 id="文件："><a href="#文件：" class="headerlink" title="文件："></a>文件：</h3><ul>
 <li>sqlmap.py 进行一些变量和程序的初始化</li>
 <li>controller.py 里面有sql注入的主要逻辑，以及对注入点的提取和初始化</li>
 <li>crawler.py 一个能够爬取页面链接（和注入点？）的爬虫，具有参考意义</li>
@@ -392,7 +392,7 @@
 <li>union注入的逻辑</li>
 <li>sqlmap中使用的是线程的技术，使得检测时的效率会变高很多，但其中涉及到的线程之间的数据共享以及锁的情况还需要进一步的研究</li>
 </ul>
-
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2>
       
     </div>
     
@@ -547,7 +547,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#版本"><span class="nav-number">1.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程图"><span class="nav-number">2.</span> <span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析点-汇总"><span class="nav-number">3.</span> <span class="nav-text">源码分析点-汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键数据结构及函数"><span class="nav-number">3.1.</span> <span class="nav-text">关键数据结构及函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造payload"><span class="nav-number">3.2.</span> <span class="nav-text">构造payload</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注入"><span class="nav-number">3.3.</span> <span class="nav-text">注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一步"><span class="nav-number">4.</span> <span class="nav-text">下一步</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#版本"><span class="nav-number">1.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程图"><span class="nav-number">2.</span> <span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析-关键数据结构及函数"><span class="nav-number">3.</span> <span class="nav-text">源码分析-关键数据结构及函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构："><span class="nav-number">3.1.</span> <span class="nav-text">数据结构：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键函数："><span class="nav-number">3.2.</span> <span class="nav-text">关键函数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件："><span class="nav-number">3.3.</span> <span class="nav-text">文件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造payload"><span class="nav-number">3.4.</span> <span class="nav-text">构造payload</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注入"><span class="nav-number">3.5.</span> <span class="nav-text">注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下一步"><span class="nav-number">4.</span> <span class="nav-text">下一步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
