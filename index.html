@@ -402,6 +402,194 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/04/confused-isfile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/02/04/confused-isfile/" itemprop="url">confused_isfile</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-04T23:04:45+08:00">
+                2021-02-04
+              </time>
+            
+
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="is-file的困惑"><a href="#is-file的困惑" class="headerlink" title="is_file的困惑"></a>is_file的困惑</h1><p>本篇文章介绍了我踩一个小坑的全部过程，实际原理并不复杂</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在php代码审计过程中，遇到了一个”能够”文件包含的点：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">fetch</span><span class="params">($template=<span class="string">''</span>, $vars = [], $replace = [], $config = [] ,$render=false)</span> </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">if</span> (MODULE_MARK === <span class="string">'admin'</span>) &#123;</span><br><span class="line">            $template = <span class="string">'admin/'</span>.$controller.<span class="string">'/'</span>.$template;</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">if</span> ($template != <span class="string">''</span>) &#123; <span class="comment">// $template = admin/xxx/xxx/xxx/xxx/webshell.php</span></span><br><span class="line">            $flag = is_file($template);</span><br><span class="line">            $content = file_get_contents($template);</span><br><span class="line">            <span class="keyword">if</span> (!is_file($template)) &#123;</span><br><span class="line">                $template = <span class="keyword">$this</span>-&gt;pluginPath. <span class="string">'view/'</span>. $template . <span class="string">'.'</span> .config(<span class="string">'template.view_suffix'</span>);</span><br><span class="line">                <span class="keyword">if</span> (!is_file($template)) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="keyword">Exception</span>(<span class="string">'模板不存在：'</span>.$template, <span class="number">5001</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//$template = config('template.view_path').$template . '.' .config('template.view_suffix');</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;view-&gt;fetch($template, $vars, $replace, $config, $render);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该框架使用的是thinkphp，并且当前的路由为/home/admin/xxx/fetch，同时template可控。那么此时如果有一个上传好的webshell，我们就可以通过这个路由的文件包含漏洞来利用这个webshell</p>
+<p>如果需要进行文件包含，那么就不能进入<code>if (!is_file($template)) {</code> 的逻辑中，但每次thinkphp都给我返回了“模板不存在”的错误</p>
+<p>起初我一直以为是路径写错了，所以在一直调整$template的值，同时也用<code>file_get_content($template)</code>去读取webshell的内容，结果是正确的，说明路径没错</p>
+<p><img src="/2021/02/04/confused-isfile/./confused-isfile/16124454717095.jpg" alt="-w807"></p>
+<p>那么问题来了，难道问题出现在is_file身上吗？</p>
+<h2 id="“诡异”的is-file"><a href="#“诡异”的is-file" class="headerlink" title="“诡异”的is_file"></a>“诡异”的is_file</h2><p>直接看一张图：<br><img src="/2021/02/04/confused-isfile/./confused-isfile/16124458155981.jpg" alt="-w534"></p>
+<p>按理说，我使用”..”去回到上一层目录，那么应该不关当前目录是否存在才对的，只要这个路径的文件在，那么is_file就应该返回true才对</p>
+<p>同样file_exists也遇到了一样的情况:<br><img src="/2021/02/04/confused-isfile/./confused-isfile/16124462776832.jpg" alt="-w588"></p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>最后在stackoverflow的一个回答中找到了<a href="https://stackoverflow.com/questions/18460849/can-we-use-stat-with-relative-path-to-a-file-in-c" target="_blank" rel="noopener">答案</a><br>这个回答者也遇到了这个问题，并且他给了一个关于linux的手册，我则在这里找到了linux对于路径的]判断方式] (<a href="https://linux.die.net/man/7/path_resolution" target="_blank" rel="noopener">https://linux.die.net/man/7/path_resolution</a>)<br>linux path resolution 有以下几个步骤：<br>Step 1: start of the resolution process<br>Step 2: walk along the path<br>Step 3: find the final entry</p>
+<p>在Step 2中，linux会一层一层的去通过分割’/‘来解析字符串（路径），如果某一层的路径不存在，那么就会抛出ENOENT错误，并且终止解析的过程</p>
+<blockquote>
+<p>Step 2: walk along the path<br>Set the current lookup directory to the starting lookup directory. Now, for each nonfinal component of the pathname, where a component is a substring delimited by aq/aq characters, this component is looked up in the current lookup directory.</p>
+<p>If the process does not have search permission on the current lookup directory, an EACCES error is returned (“Permission denied”).</p>
+<p>If the component is not found, an ENOENT error is returned (“No such file or directory”).<br>…</p>
+</blockquote>
+<p>因此这也是为什么<code>is_file(&#39;./existfile.txt&#39;)</code>返回true而<code>is_file(&#39;./NOTEXISTPATH/../existfile.txt&#39;)</code>返回false的原因</p>
+<h2 id="题外-追溯"><a href="#题外-追溯" class="headerlink" title="题外 - 追溯"></a>题外 - 追溯</h2><p>没办法，既然php找不到思路，那么就去找一下php源码中是如何实现这几个函数的</p>
+<h3 id="is-file"><a href="#is-file" class="headerlink" title="is_file"></a>is_file</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; Returns true if file is a regular file */</span></span><br><span class="line">FileFunction(PHP_FN(is_file), FS_IS_FILE)</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br><span class="line">...</span><br><span class="line">    <span class="keyword">case</span> FS_IS_X:</span><br><span class="line">    	RETURN_BOOL((ssb.sb.st_mode&amp;xmask)!=<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">case</span> FS_IS_FILE: <span class="meta"># here</span></span><br><span class="line">    	RETURN_BOOL(S_ISREG(ssb.sb.st_mode));</span><br><span class="line">    <span class="keyword">case</span> FS_IS_DIR:</span><br><span class="line">    	RETURN_BOOL(S_ISDIR(ssb.sb.st_mode));</span><br></pre></td></tr></table></figure>
+<p>可以看到，php中is_file是由c语言中的S_ISREG来进行判断的，而S_ISREG是一个宏，其定义如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stat.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISBLK(m)      (((m) &amp; S_IFMT) == S_IFBLK)     <span class="comment">/* block special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISCHR(m)      (((m) &amp; S_IFMT) == S_IFCHR)     <span class="comment">/* char special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISDIR(m)      (((m) &amp; S_IFMT) == S_IFDIR)     <span class="comment">/* directory */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISFIFO(m)     (((m) &amp; S_IFMT) == S_IFIFO)     <span class="comment">/* fifo or socket */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISREG(m)      (((m) &amp; S_IFMT) == S_IFREG)     <span class="comment">/* regular file */</span>  <span class="comment">// here</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISLNK(m)      (((m) &amp; S_IFMT) == S_IFLNK)     <span class="comment">/* symbolic link */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISSOCK(m)     (((m) &amp; S_IFMT) == S_IFSOCK)    <span class="comment">/* socket */</span></span></span><br></pre></td></tr></table></figure>
+<p>S_ISREG(m)中传入的m是stat的结构体中的st_mode字段，那么向上，找stat进行初始化的源码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> stat</span></span><br><span class="line"><span class="keyword">int</span> </span><br><span class="line">attribute_hidden</span><br><span class="line">__stat (<span class="keyword">const</span> <span class="keyword">char</span> *file, struct stat *buf)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">return</span> __xstat (_STAT_VER, file, buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">weak_hidden_alias (__stat, stat)</span><br></pre></td></tr></table></figure>
+<p>函数<strong>stat调用了</strong>xstat 函数，而__xstat 函数定义在glibc/sysdeps/unix/sysv/linux/i386/xstat.c文件中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">__xstat (<span class="keyword">int</span> vers, <span class="keyword">const</span> <span class="keyword">char</span> *name, struct stat *buf)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">int</span> result;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (vers == _STAT_VER_KERNEL)</span><br><span class="line">    <span class="keyword">return</span> INLINE_SYSCALL (stat, <span class="number">2</span>, name, buf);</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat64</span> <span class="title">buf64</span>;</span></span><br><span class="line"></span><br><span class="line">    INTERNAL_SYSCALL_DECL (err);</span><br><span class="line">    result = INTERNAL_SYSCALL (stat64, err, <span class="number">2</span>, name, &amp;buf64); <span class="comment">// here</span></span><br><span class="line">    <span class="keyword">if</span> (__glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (result, err)))</span><br><span class="line">      <span class="keyword">return</span> INLINE_SYSCALL_ERROR_RETURN_VALUE (INTERNAL_SYSCALL_ERRNO (result,</span><br><span class="line">                                    err));</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">return</span> __xstat32_conv (vers, &amp;buf64, buf);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">hidden_def (__xstat)</span><br><span class="line">weak_alias (__xstat, _xstat);</span><br></pre></td></tr></table></figure>
+<p>最后定位到了<code>INTERNAL_SYSCALL (stat64, err, 2, name, &amp;buf64);</code></p>
+<h3 id="file-exists"><a href="#file-exists" class="headerlink" title="file_exists"></a>file_exists</h3><p>而同样file_exists最终也是的调用了这个INTERNAL_SYSCALL，只不过路径不太一样</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; Returns true if filename exists */</span></span><br><span class="line">FileFunction(PHP_FN(file_exists), FS_EXISTS)</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> F_OK</span></span><br><span class="line">		<span class="keyword">case</span> FS_EXISTS:</span><br><span class="line">			RETURN_BOOL(VCWD_ACCESS(local, F_OK) == <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>file_exists是VCWD_ACCESS来进行判断的，通过<a href="https://www.cnblogs.com/chenpingzhao/p/4922246.html" target="_blank" rel="noopener">这里</a>，可以找到VCWD_ACCESS()对应于标准C库中的access()</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># glibc/sysdeps/unix/sysv/linux/access.c</span></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">__access (<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">int</span> type)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">return</span> INLINE_SYSCALL_CALL (access, file, type);</span><br><span class="line">&#125;</span><br><span class="line">weak_alias (__access, access)</span><br></pre></td></tr></table></figure>
+<h2 id="st-mode"><a href="#st-mode" class="headerlink" title="st_mode"></a>st_mode</h2><p>S_IFMT是一个掩码（八进制表示），可以用来过滤出前四位表示的文件类型</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// _s_ifmt.h</span></span><br><span class="line"><span class="comment">/* File type */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFMT          0170000         <span class="comment">/* [XSI] type of file mask */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFIFO         0010000         <span class="comment">/* [XSI] named pipe (fifo) */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFCHR         0020000         <span class="comment">/* [XSI] character special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFDIR         0040000         <span class="comment">/* [XSI] directory */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFBLK         0060000         <span class="comment">/* [XSI] block special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFREG         0100000         <span class="comment">/* [XSI] regular */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFLNK         0120000         <span class="comment">/* [XSI] symbolic link */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFSOCK        0140000         <span class="comment">/* [XSI] socket */</span></span></span><br></pre></td></tr></table></figure>
+<p>而控制st_mode的值的属性有 文件类型，文件id以及文件的权限<br><img src="/2021/02/04/confused-isfile/./confused-isfile/16124473069831.jpg" alt="-w731"></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *filename4 = <span class="string">"existfile.txt"</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">m1</span>;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">int</span> status = stat(filename1, &amp;m1);  </span><br><span class="line"><span class="keyword">if</span> (status == <span class="number">-1</span>) &#123;</span><br><span class="line">    perror(<span class="string">"stat"</span>);</span><br><span class="line">&#125;   </span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, status);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%07o\n"</span>, m1.st_mode);</span><br><span class="line"><span class="keyword">int</span> a = S_ISREG(m1.st_mode);</span><br><span class="line"><span class="keyword">if</span>(a)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"It's a regular file\n"</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Not a regular file\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/07/sqlmap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1653,164 +1841,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/afl-analyze/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="0pa9ue">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="0pa9ue">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/10/afl-analyze/" itemprop="url">AFL使用及源码分析(三)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-10T12:07:05+08:00">
-                2020-01-10
-              </time>
-            
-
-            
-
-            
-
-            
-          </span>
-
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  1.8k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  8
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>AFL源码分析</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/01/10/afl-analyze/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1861,7 +1891,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1874,7 +1904,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -1925,7 +1955,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">41.1k</span>
+    <span title="Site words total count">42.4k</span>
   
 </div>
 
