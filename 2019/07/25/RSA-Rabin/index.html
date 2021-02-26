@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="RSA,Rabin,Jarvisoj," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="RSA与Rabin算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSA_Rabin">
+<meta property="og:url" content="http://yoursite.com/2019/07/25/RSA-Rabin/index.html">
+<meta property="og:site_name" content="0pa9ue">
+<meta property="og:description" content="RSA与Rabin算法">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture1.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture2.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture3.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture4.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture5.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture9.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture6.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture7.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture8.png">
+<meta property="article:published_time" content="2019-07-24T16:04:43.000Z">
+<meta property="article:modified_time" content="2020-04-19T12:16:41.637Z">
+<meta property="article:author" content="0pa9ue">
+<meta property="article:tag" content="RSA">
+<meta property="article:tag" content="Rabin">
+<meta property="article:tag" content="Jarvisoj">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/25/RSA-Rabin/Picture1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/25/RSA-Rabin/"/>
+
+
+
+
+
+  <title>RSA_Rabin | 0pa9ue</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">0pa9ue</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/RSA-Rabin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="0pa9ue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="0pa9ue">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RSA_Rabin</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T00:04:43+08:00">
+                2019-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> Views
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.1k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>RSA与Rabin算法</strong></p>
+<a id="more"></a>
+<h2 id="RSA密钥生成流程"><a href="#RSA密钥生成流程" class="headerlink" title="RSA密钥生成流程"></a>RSA密钥生成流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture1.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture2.png" alt></p>
+<h2 id="RSA加密解密流程"><a href="#RSA加密解密流程" class="headerlink" title="RSA加密解密流程"></a>RSA加密解密流程</h2><p><img src="/2019/07/25/RSA-Rabin/Picture3.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture4.png" alt></p>
+<h2 id="Rabin算法"><a href="#Rabin算法" class="headerlink" title="Rabin算法"></a>Rabin算法</h2><blockquote>
+<p>The Rabin cryptosystem is an asymmetric cryptographic technique,whose security, like that of RSA, is related to the difficulty of integer actorization<br>However the Rabin cryptosystem has the advantage that it has been mathematically proven to be computationally secure against a chosen-plaintext attack as long as the attacker cannot efficiently factor integers, while there is no such proof known for RSA.</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><strong>Thm1(Rabin密码体制)</strong><br>设n=p*q，其中p和q是素数，且p,q≡3(mod4)，设$P = C = Z_{*}^{n}$，且定义</p>
+$$\kappa = \{(n,p,q)\}$$
+<p>对K=(n,p,q)K=(n,p,q)，定义</p>
+$$eK(x) = x^{2}(modn)$$
+<p>和</p>
+$$dK = \sqrt{y}(modn)$$
+<p>n为公钥，p和q为私钥<br>注：条件 p, q ≡ 3 (mod4) 可以省去，条件$P = C = Z_{*}^{n}$也可以弱化为$\ P = C = Z^{n}$，只是在使用更多的限制性描述的时候，简化了许多方面的计算和密码体制分析。</p>
+</blockquote>
+<p><a href="https://www.cnblogs.com/jcchan/articles/8441159.html" target="_blank" rel="noopener">https://www.cnblogs.com/jcchan/articles/8441159.html</a></p>
+<h3 id="密钥导出，加密与解密"><a href="#密钥导出，加密与解密" class="headerlink" title="密钥导出，加密与解密"></a>密钥导出，加密与解密</h3><p><img src="/2019/07/25/RSA-Rabin/Picture5.png" alt></p>
+<p><a href="https://en.wikipedia.org/wiki/Rabin_cryptosystem" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Rabin_cryptosystem</a></p>
+<hr>
+<p><strong>证明过程：</strong></p>
+<p><img src="/2019/07/25/RSA-Rabin/Picture9.png" alt><br>如果p和q不是模4余3的话，c的指数就不是一个整数，也就不能用这个方法计算了</p>
+<p><strong>平方剩余：</strong><br>假设p是素数，a是整数。如果存在一个整数x使得$\ x\hat{}2 \equiv a(mod\ p)$（即$x\hat{}2 - a$可以被p整除）,那么就称a在p的剩余类中是平方剩余的<br>欧拉定理说：如果p是奇素数，则a平方剩余当且仅当$a^{\frac{p - 1}{2}} \equiv 1\ \left( \text{mod p} \right)$</p>
+<h3 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h3><ul>
+<li><p><strong>e = 2?</strong></p>
+<p>  RSA中选取的公开钥e满足$1 < e < \Phi(n)$，且$gcd(e,\Phi\left( n \right)) = \ 1$</p>
+<p>  Rabin密码体制则取e = 2</p>
+<p>  <a href="https://crypto.stackexchange.com/questions/30240/can-e-2-be-used-in-unpadded-rsa" target="_blank" rel="noopener">https://crypto.stackexchange.com/questions/30240/can-e-2-be-used-in-unpadded-rsa</a></p>
+</li>
+<li><p><strong>RSA与Rabin</strong></p>
+<p>  The Rabin Cryptosystem is based on the idea that computing square<br>  roots modulo a composite N is simple when the factorization is known,<br>  but the very complex when it is unknown.</p>
+<p>  Rabin加密系统是基于在已知合数N的因式分解的情况下，可以计算出二次剩余的平方根；但是在因式分解N未知的情况下很难求解的原理。</p>
+<p>  It is possible to prove that the hardness of breaking the Rabin<br>  cryptosystem is equivalent to the hardness of facting。</p>
+<p>  Rabin加密系统的安全性源于计算二次剩余平方根( square roots modulo a composite N) 和 因式分解N 具有相同的难度。无法证明 求解RSA问题 和 因式分解N 具有直接联系。从这个方面来说，Rabin比RSA更安全。但是在CCA (Chosen Ciphertext Attack)攻击模式下，Rabin加密系统有可能会被攻破密钥；而RSA加密系统虽然也不安全，却可以保证密钥不被攻破。之所以在公钥加密系统实际使用领域，RSA比Rabin流行的多，主要是因为一些历史原因，而非技术上的原因。</p>
+</li>
+<li><p><strong>Rabin算法的缺点</strong></p>
+<p>  The variants based on the Rabin cryptosystem have the advantage that they allow the public exponent e = 2, so that signature veriﬁcation is very efﬁcient; but on the other hand some extra steps are required due to the fact that not every message representative may have a square root modulo n.</p>
+<p>  It has the disadvantage that each output of the Rabin function can be generated by any of four possible inputs; if each output is a ciphertext, extra complexity is required on decryption to identify which of the four possible inputs was the true plaintext.</p>
+<p>  由于是寻找平方根，所以在用中国剩余定理求解时(modp)(modp)和(modq)(modq)都分别有2个解，他们的组合就是4个解。如何区分这4个解中哪个才是真正的m？目前所用的是加入一些冗余信息，比如timestamp。</p>
+<p>  由于公钥加密系统主要用于交换对称加密密钥，而不是实际有意义的可读消息，所以4个平方根都有可能是新的对称加密密钥。这就是为何在不加入冗余信息时，我们不能从4个平方根中直接区分出原始消息的原因</p>
+</li>
+</ul>
+<h3 id="Jarvisoj-hard-RSA"><a href="#Jarvisoj-hard-RSA" class="headerlink" title="Jarvisoj hard RSA"></a>Jarvisoj hard RSA</h3><p>给出flag.enc和public.pem文件，使用openssl分析后可知道e为2</p>
+<p><strong>openssl rsa -pubin -text -modulus -in pubkey.pem</strong></p>
+<p><img src="/2019/07/25/RSA-Rabin/Picture6.png" alt></p>
+<p>e为2，所以可以使用Rabin算法进行解密，脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"></span><br><span class="line"><span class="comment"># Rabin</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'pubkey.pem'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    content = f.read()</span><br><span class="line">    key = RSA.importKey(content)</span><br><span class="line">    n = key.n</span><br><span class="line">    e = key.e</span><br><span class="line">    print(<span class="string">"n:"</span>, n)</span><br><span class="line">    print(<span class="string">"e:"</span>, e)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'flag.enc'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    c = f.read().hex()</span><br><span class="line">    c = int(c, <span class="number">16</span>)</span><br><span class="line">    print(<span class="string">"c:"</span>, c)</span><br><span class="line"><span class="comment"># http://factordb.com 分解</span></span><br><span class="line">p = <span class="number">275127860351348928173285174381581152299</span></span><br><span class="line">q = <span class="number">319576316814478949870590164193048041239</span></span><br><span class="line"><span class="comment"># calculate yp and yq</span></span><br><span class="line">inv_p = gmpy2.invert(p, q)</span><br><span class="line">inv_q = gmpy2.invert(q, p)</span><br><span class="line"><span class="comment"># calculate mp and mq</span></span><br><span class="line"><span class="comment"># mp = pow(c, (p + 1) / 4, p) #python2.7</span></span><br><span class="line">mp = <span class="number">201511392364600794166602640869426530039</span></span><br><span class="line"><span class="comment"># mq = pow(c, (q + 1) / 4, q)</span></span><br><span class="line">mq = <span class="number">172773325262349523480434822433191472001</span></span><br><span class="line"><span class="comment"># calculate a,b,c,d</span></span><br><span class="line">a = (inv_p * p * mq + inv_q * q * mp) % n</span><br><span class="line">b = n - int(a)</span><br><span class="line">c = (inv_p * p * mq - inv_q * q * mp) % n</span><br><span class="line">d = n - int(c)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"----------------------------result:-----------------------------"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> (a, b, c, d):</span><br><span class="line">    s = <span class="string">'%x'</span> % i</span><br><span class="line">    <span class="keyword">if</span> len(s) % <span class="number">2</span> != <span class="number">0</span>:</span><br><span class="line">        s = <span class="string">'0'</span> + s</span><br><span class="line">    print(s)</span><br></pre></td></tr></table></figure>
+
+<p><strong>解密后得到：</strong><br><img src="/2019/07/25/RSA-Rabin/Picture7.png" alt><br><img src="/2019/07/25/RSA-Rabin/Picture8.png" alt></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RSA/" rel="tag"># RSA</a>
+          
+            <a href="/tags/Rabin/" rel="tag"># Rabin</a>
+          
+            <a href="/tags/Jarvisoj/" rel="tag"># Jarvisoj</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/24/Cybrics2019/" rel="next" title="Cybrics2019 writeup">
+                <i class="fa fa-chevron-left"></i> Cybrics2019 writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/29/XXE/" rel="prev" title="XXE原理及实现">
+                XXE原理及实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">0pa9ue</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry, stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA密钥生成流程"><span class="nav-number">1.</span> <span class="nav-text">RSA密钥生成流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSA加密解密流程"><span class="nav-number">2.</span> <span class="nav-text">RSA加密解密流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rabin算法"><span class="nav-number">3.</span> <span class="nav-text">Rabin算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#密钥导出，加密与解密"><span class="nav-number">3.1.</span> <span class="nav-text">密钥导出，加密与解密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#讨论"><span class="nav-number">3.2.</span> <span class="nav-text">讨论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jarvisoj-hard-RSA"><span class="nav-number">3.3.</span> <span class="nav-text">Jarvisoj hard RSA</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">0pa9ue</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">44.4k</span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
