@@ -304,7 +304,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  155
+                  197
                 </span>
               
 
@@ -342,18 +342,14 @@
 
       
         
-          
-            <a id="more"></a>
-
-<p>在2018 0CTF中的ezdoor中，也遇到了上面类似的思想</p>
-<p>关键代码：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>], $name);</span><br></pre></td></tr></table></figure>
-
-<p>这里的$name是可控的，题目的目标是覆盖index.php（新建当然没有问题）</p>
-<p>有一种“非预期”的解法是传入<code>name=aaa/../index.php/.</code>，但是诡异的是传入<code>name=index.php/.</code>却无法覆盖</p>
-<p>在这里，传入<code>name=aaa/../index.php</code> 这样的payload会使得<code>S_ISREG(ssbuf.sb.st_mode)</code>为0，那么move_uploaded_file会认为$name所指示的文件路径不存在文件（可以理解move_uploaded_file为被payload欺骗了），于是就可以进行文件移动的操作，从而覆盖文件</p>
-
-          
+          <p>来学习一下0CTF出题者的深邃思想</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/02/26/0CTF2018-ezdoor/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -502,7 +498,7 @@
 
       
         
-          <p>本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂</p>
+          <p>本篇文章介绍了我踩一个小坑（is_file函数）的全部过程，实际原理并不复杂</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2021/02/15/confused-isfile/#more" rel="contents">
@@ -1854,7 +1850,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -1905,7 +1901,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">44.2k</span>
+    <span title="Site words total count">44.3k</span>
   
 </div>
 

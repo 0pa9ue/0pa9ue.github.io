@@ -79,32 +79,32 @@
 
 
 
-<meta name="description" content="本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂">
+<meta name="description" content="本篇文章介绍了我踩一个小坑（is_file函数）的全部过程，实际原理并不复杂">
 <meta property="og:type" content="article">
 <meta property="og:title" content="confused_isfile">
 <meta property="og:url" content="http://yoursite.com/2021/02/15/confused-isfile/index.html">
 <meta property="og:site_name" content="0pa9ue">
-<meta property="og:description" content="本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂">
+<meta property="og:description" content="本篇文章介绍了我踩一个小坑（is_file函数）的全部过程，实际原理并不复杂">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124454717095.jpg">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124458155981.jpg">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124462776832.jpg">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210226010049859.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210226005818211.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210226010932041.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210226012911923.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210226012245909.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210226012320860.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210226005818211.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210226010932041.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210226012911923.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210226012245909.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210226012320860.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/16124473069831.jpg">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210223202702819.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210223235436295.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210223235501781.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210225005116722.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210223211615537.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210224004316001.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210224010030462.png">
-<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/confused-isfile/image-20210225011019065.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223202702819.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223235436295.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223235501781.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210225005116722.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223211615537.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210224004316001.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210224010030462.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210225011019065.png">
 <meta property="article:published_time" content="2021-02-15T08:19:49.000Z">
-<meta property="article:modified_time" content="2021-02-26T09:39:41.715Z">
+<meta property="article:modified_time" content="2021-02-26T09:50:58.132Z">
 <meta property="article:author" content="0pa9ue">
 <meta property="article:tag" content="php">
 <meta name="twitter:card" content="summary">
@@ -365,7 +365,7 @@
       
 
       
-        <p>本篇文章介绍了我踩一个小坑（isfile函数）的全部过程，实际原理并不复杂</p>
+        <p>本篇文章介绍了我踩一个小坑（is_file函数）的全部过程，实际原理并不复杂</p>
 <a id="more"></a>
 
 <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在php代码审计过程中，遇到了一个”能够”文件包含的点：</p>
@@ -407,15 +407,15 @@
 <p><img src="/2021/02/15/confused-isfile/image-20210226010049859.png" alt="image-20210226010049859"></p>
 <p>因为当前的<code>type =  FS_IS_FILE(0xc)</code>，不属于<code>IS_ACCESS_CHECK</code>，所以来到了894行的<code>php_stream_stat_path_ex</code>，而<code>php_stream_stat_path_ex</code>是一个宏，实际上调用的是<code>_php_stream_stat_path</code>函数</p>
 <p>跟进<code>_php_stream_stat_path</code>，发现在第1935行有一个动态调用，通过动态调试可以看出此刻调用的是<code>php_plain_files_url_stater</code>函数</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210226005818211.png" alt></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210226005818211.png" alt></p>
 <p>来到<code>php_plain_files_url_stater</code>函数，此时的<code>flags = 0x2 ,PHP_STREAM_URL_STAT_LINK = 1</code>，所以调用的是<code>VCWD_STAT</code>，也就是系统函数<code>stat</code>进行判断</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210226010932041.png" alt="image-20210226010932041"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210226010932041.png" alt="image-20210226010932041"></p>
 <p>此时，函数的调用栈如下</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210226012911923.png" alt="image-20210226012911923"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210226012911923.png" alt="image-20210226012911923"></p>
 <p>回到<code>_php_stream_stat_path</code>，可以看到<code>wrapper-&gt;wops-&gt;url_stat(wrapper, path_to_open, flags, ssb, context)</code>的返回值（也就是ret）为-1，并将-1 返回给上层调用的<code>php_stream_stat_path_ex</code>函数</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210226012245909.png" alt="image-20210226012245909"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210226012245909.png" alt="image-20210226012245909"></p>
 <p>因为此时<code>php_stream_stat_path_ex</code>的返回值为-1，所以进入了<code>if</code>循环然后<code>RETURN_FALSE</code>，最终导致<code>is_file(./NOTEXIST/../EXISTFILE)</code>的返回值为false</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210226012320860.png" alt="image-20210226012320860"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210226012320860.png" alt="image-20210226012320860"></p>
 <h3 id="file-exists"><a href="#file-exists" class="headerlink" title="file_exists"></a>file_exists</h3><p>如法炮制找到file_exists的位置</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># /ext/standand/filestat.c</span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; Returns true if filename exists */</span></span><br><span class="line">FileFunction(PHP_FN(file_exists), FS_EXISTS)</span><br><span class="line"><span class="comment">/* &#125;&#125;&#125; */</span></span><br><span class="line">  </span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">/* &#123;&#123;&#123; php_stat */</span></span><br><span class="line"><span class="function">PHPAPI <span class="keyword">void</span> <span class="title">php_stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">size_t</span> filename_length, <span class="keyword">int</span> type, zval *return_value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">// ···</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> F_OK</span></span><br><span class="line">		<span class="keyword">case</span> FS_EXISTS:</span><br><span class="line">			RETURN_BOOL(VCWD_ACCESS(local, F_OK) == <span class="number">0</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">// ···</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -450,18 +450,18 @@
 <p>通过一步步的调试，可以发现原因出现在<code>php_stream_open_wrapper_ex</code>函数上</p>
 <h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>下面只给出调试中遇到的关键点</p>
 <h4 id="php-stream-open-wrapper-ex"><a href="#php-stream-open-wrapper-ex" class="headerlink" title="php_stream_open_wrapper_ex"></a>php_stream_open_wrapper_ex</h4><p>在这里，<code>wrapper-&gt;wops-&gt;stream_opener</code>是一个动态调用，通过动态调试可以看出此刻调用的是<code>php_plain_files_stream_opener</code>函数</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210223202702819.png" alt="image-20210223202702819"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210223202702819.png" alt="image-20210223202702819"></p>
 <h4 id="php-plain-files-stream-opener"><a href="#php-plain-files-stream-opener" class="headerlink" title="php_plain_files_stream_opener"></a>php_plain_files_stream_opener</h4><p>php_plain_files_stream_opener返回php_stream_fopen_rel的执行结果</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210223235436295.png" alt="image-20210223235436295"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210223235436295.png" alt="image-20210223235436295"></p>
 <p><code>php_stream_fopen_rel</code>是一个宏，实际调用<code>_php_stream_fopen</code>函数，顾名思义，这里将会进行”文件”的的打开操作</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210223235501781.png" alt="image-20210223235501781"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210223235501781.png" alt="image-20210223235501781"></p>
 <h4 id="php-stream-fopen"><a href="#php-stream-fopen" class="headerlink" title="_php_stream_fopen"></a>_php_stream_fopen</h4><p>此时的<code>options</code>的值为0，也就是说程序会进入else分支，调用<code>expand_filepath</code>处理路径</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210225005116722.png" alt="image-20210225005116722"></p>
-<h5 id="virtual-file-ex"><a href="#virtual-file-ex" class="headerlink" title="virtual_file_ex"></a>virtual_file_ex</h5><p>继续追踪，可以发现在1315行，<code>virtual_file_ex</code>调用了<code>tsrm_real_path_r</code>（此时<code>resolved_path = state-&gt;cwd + path</code>），将<code>resolved_path</code>标准化（去掉了<code>/NOTEXISTPATH/../</code>这样的路径）<img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210223211615537.png" alt="image-20210223211615537"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210225005116722.png" alt="image-20210225005116722"></p>
+<h5 id="virtual-file-ex"><a href="#virtual-file-ex" class="headerlink" title="virtual_file_ex"></a>virtual_file_ex</h5><p>继续追踪，可以发现在1315行，<code>virtual_file_ex</code>调用了<code>tsrm_real_path_r</code>（此时<code>resolved_path = state-&gt;cwd + path</code>），将<code>resolved_path</code>标准化（去掉了<code>/NOTEXISTPATH/../</code>这样的路径）<img src="/2021/02/15/confused-isfile/image-20210223211615537.png" alt="image-20210223211615537"></p>
 <p>此时，完整的调用栈如下</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210224004316001.png" alt="image-20210224004316001"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210224004316001.png" alt="image-20210224004316001"></p>
 <p>回到<code>_php_stream_fopen</code>，因为此时的realpath已经进行了标准化，所以php可以正常的调用系统函数<code>open</code>来返回一个文件标识符<code>fd</code>，完成文件打开的操作</p>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210224010030462.png" alt="image-20210224010030462"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210224010030462.png" alt="image-20210224010030462"></p>
 <p>综上，因为<code>file_get_contents</code>中调用了<code>php_stream_open_wrapper_ex</code>来打开“文件“，其中就标准化了路径，最终可以成功的调用<code>open</code>函数来打开”文件“</p>
 <h3 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h3><p>并且<code>file_get_contents</code>不止能够打开文件，还可以打开各种流（这也是为什么在上文中我将”文件“引起来），关键点还是在于<code>_php_stream_open_wrapper_ex</code>函数</p>
 <blockquote>
@@ -473,7 +473,7 @@
 <li>调用<code>php_stream_locate_url_wrapper</code>函数获取协议包装器(wrapper)</li>
 <li>调用包装器打开资源并返回流对象</li>
 </ol>
-<p><img src="/2021/02/15/confused-isfile/./confused-isfile/image-20210225011019065.png" alt="image-20210225011019065"></p>
+<p><img src="/2021/02/15/confused-isfile/image-20210225011019065.png" alt="image-20210225011019065"></p>
 <p><code>php_stream_locate_url_wrapper</code>内部会对路径做了一系列的解析，判断使用的协议并寻找对应的wrapper来打开数据源（详细分析见<a href="https://segmentfault.com/a/1190000015052042" target="_blank" rel="noopener">博客</a>）</p>
 <h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>实际上，已经有师傅们分析过很多php因为文件操作存在的问题而导致各种奇奇怪怪的现象出现，比如<a href="https://xz.aliyun.com/t/4538" target="_blank" rel="noopener">对PHP中的mkdir()函数的研究</a>，2018 0ctf中ezdoor的一个非预期解以及2020 WMCTF中Make PHP Great Again系列，本质上都得去实际调试php底层才能明白其真正的原理   </p>
 <h2 id="更多学习链接"><a href="#更多学习链接" class="headerlink" title="更多学习链接"></a>更多学习链接</h2><ul>
@@ -613,7 +613,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -680,7 +680,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">44.2k</span>
+    <span title="Site words total count">44.3k</span>
   
 </div>
 
