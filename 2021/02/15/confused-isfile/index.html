@@ -99,12 +99,15 @@
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223235436295.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223235501781.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210225005116722.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210314145656023.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210314145819177.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210313183151946.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210223211615537.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210224004316001.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210224010030462.png">
 <meta property="og:image" content="http://yoursite.com/2021/02/15/confused-isfile/image-20210225011019065.png">
 <meta property="article:published_time" content="2021-02-15T08:19:49.000Z">
-<meta property="article:modified_time" content="2021-02-26T09:50:58.132Z">
+<meta property="article:modified_time" content="2021-03-16T16:01:53.375Z">
 <meta property="article:author" content="0pa9ue">
 <meta property="article:tag" content="php">
 <meta name="twitter:card" content="summary">
@@ -328,7 +331,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2.8k
+                  3k
                 </span>
               
 
@@ -344,7 +347,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  12
+                  13
                 </span>
               
             </div>
@@ -455,9 +458,21 @@
 <p><img src="/2021/02/15/confused-isfile/image-20210223235436295.png" alt="image-20210223235436295"></p>
 <p><code>php_stream_fopen_rel</code>是一个宏，实际调用<code>_php_stream_fopen</code>函数，顾名思义，这里将会进行”文件”的的打开操作</p>
 <p><img src="/2021/02/15/confused-isfile/image-20210223235501781.png" alt="image-20210223235501781"></p>
-<h4 id="php-stream-fopen"><a href="#php-stream-fopen" class="headerlink" title="_php_stream_fopen"></a>_php_stream_fopen</h4><p>此时的<code>options</code>的值为0，也就是说程序会进入else分支，调用<code>expand_filepath</code>处理路径</p>
+<h4 id="php-stream-fopen"><a href="#php-stream-fopen" class="headerlink" title="_php_stream_fopen"></a>_php_stream_fopen</h4><p>此时的<code>options</code>的值为0，也就是说程序会进入else分支，调用<code>expand_filepath</code>函数来处理路径</p>
 <p><img src="/2021/02/15/confused-isfile/image-20210225005116722.png" alt="image-20210225005116722"></p>
-<h5 id="virtual-file-ex"><a href="#virtual-file-ex" class="headerlink" title="virtual_file_ex"></a>virtual_file_ex</h5><p>继续追踪，可以发现在1315行，<code>virtual_file_ex</code>调用了<code>tsrm_real_path_r</code>（此时<code>resolved_path = state-&gt;cwd + path</code>），将<code>resolved_path</code>标准化（去掉了<code>/NOTEXISTPATH/../</code>这样的路径）<img src="/2021/02/15/confused-isfile/image-20210223211615537.png" alt="image-20210223211615537"></p>
+<h4 id="expand-filepath"><a href="#expand-filepath" class="headerlink" title="expand_filepath"></a>expand_filepath</h4><p>而<code>expand_filepath</code>实际上调用的是<code>expand_filepath_with_mode</code>函数</p>
+<p><img src="/2021/02/15/confused-isfile/image-20210314145656023.png" alt="image-20210314145656023"></p>
+<p><code>expand_filepath_with_mode</code>函数初始化了<code>new_state</code>结构体 ，并将其传入<code>virtual_file_ex</code>函数中，而这个函数就是处理路径的关键函数</p>
+<p><img src="/2021/02/15/confused-isfile/image-20210314145819177.png" alt="image-20210314145819177"></p>
+<h4 id="virtual-file-ex"><a href="#virtual-file-ex" class="headerlink" title="virtual_file_ex"></a>virtual_file_ex</h4><p>跟进<code>virtual_file_ex</code>函数，一上来就是变量的赋值操作。如果path不是绝对路径，同时<code>state-&gt;cwd</code>长度为0，那么直接将path作为绝对路径，保存在resolved_path，否则将path拼接在state-&gt;cwd后</p>
+<p><img src="/2021/02/15/confused-isfile/image-20210313183151946.png" alt="image-20210313183151946"></p>
+<p>接下来，在1316行调用了<code>tsrm_realpath_r</code>函数，这是路径处理的关键</p>
+<p><img src="/2021/02/15/confused-isfile/image-20210223211615537.png" alt="image-20210223211615537"></p>
+<h4 id="tsrm-realpath-r"><a href="#tsrm-realpath-r" class="headerlink" title="tsrm_realpath_r"></a>tsrm_realpath_r</h4><p>跟进<code>tsrm_realpath_r</code>函数，通过注释可以发现他对传入的路径主要做了以下操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. remove double slashes and &#39;.&#39;</span><br><span class="line">2. remove &#39;..&#39; and previous directory</span><br><span class="line">3. leading &#39;..&#39; must not be removed in case of relative path</span><br></pre></td></tr></table></figure>
+
+<p>因此，<code>virtual_file_ex</code>调用的<code>tsrm_real_path_r</code>（此时<code>resolved_path = state-&gt;cwd + path</code>），并返回<code>path_length</code></p>
+<p>最终将<code>resolved_path</code>标准化（去掉<code>/NOTEXISTPATH/../</code>），并将对应的值赋值给<code>new_state</code>结构体后返回</p>
 <p>此时，完整的调用栈如下</p>
 <p><img src="/2021/02/15/confused-isfile/image-20210224004316001.png" alt="image-20210224004316001"></p>
 <p>回到<code>_php_stream_fopen</code>，因为此时的realpath已经进行了标准化，所以php可以正常的调用系统函数<code>open</code>来返回一个文件标识符<code>fd</code>，完成文件打开的操作</p>
@@ -646,7 +661,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“诡异”的is-file"><span class="nav-number">2.</span> <span class="nav-text">“诡异”的is_file</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#追溯"><span class="nav-number">3.</span> <span class="nav-text">追溯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#is-file"><span class="nav-number">3.1.</span> <span class="nav-text">is_file</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正常的路径"><span class="nav-number">3.1.1.</span> <span class="nav-text">正常的路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不正常的路径"><span class="nav-number">3.1.2.</span> <span class="nav-text">不正常的路径</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-exists"><span class="nav-number">3.2.</span> <span class="nav-text">file_exists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-mode"><span class="nav-number">3.3.</span> <span class="nav-text">st_mode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C语言下的使用"><span class="nav-number">3.3.1.</span> <span class="nav-text">C语言下的使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“诡异”的file-get-contents"><span class="nav-number">5.</span> <span class="nav-text">“诡异”的file_get_contents</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调试"><span class="nav-number">5.1.</span> <span class="nav-text">调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-stream-open-wrapper-ex"><span class="nav-number">5.1.1.</span> <span class="nav-text">php_stream_open_wrapper_ex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-plain-files-stream-opener"><span class="nav-number">5.1.2.</span> <span class="nav-text">php_plain_files_stream_opener</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-stream-fopen"><span class="nav-number">5.1.3.</span> <span class="nav-text">_php_stream_fopen</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#virtual-file-ex"><span class="nav-number">5.1.3.1.</span> <span class="nav-text">virtual_file_ex</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多"><span class="nav-number">5.2.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感想"><span class="nav-number">6.</span> <span class="nav-text">感想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多学习链接"><span class="nav-number">7.</span> <span class="nav-text">更多学习链接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“诡异”的is-file"><span class="nav-number">2.</span> <span class="nav-text">“诡异”的is_file</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#追溯"><span class="nav-number">3.</span> <span class="nav-text">追溯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#is-file"><span class="nav-number">3.1.</span> <span class="nav-text">is_file</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正常的路径"><span class="nav-number">3.1.1.</span> <span class="nav-text">正常的路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不正常的路径"><span class="nav-number">3.1.2.</span> <span class="nav-text">不正常的路径</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-exists"><span class="nav-number">3.2.</span> <span class="nav-text">file_exists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-mode"><span class="nav-number">3.3.</span> <span class="nav-text">st_mode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C语言下的使用"><span class="nav-number">3.3.1.</span> <span class="nav-text">C语言下的使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“诡异”的file-get-contents"><span class="nav-number">5.</span> <span class="nav-text">“诡异”的file_get_contents</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调试"><span class="nav-number">5.1.</span> <span class="nav-text">调试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-stream-open-wrapper-ex"><span class="nav-number">5.1.1.</span> <span class="nav-text">php_stream_open_wrapper_ex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-plain-files-stream-opener"><span class="nav-number">5.1.2.</span> <span class="nav-text">php_plain_files_stream_opener</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-stream-fopen"><span class="nav-number">5.1.3.</span> <span class="nav-text">_php_stream_fopen</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#expand-filepath"><span class="nav-number">5.1.4.</span> <span class="nav-text">expand_filepath</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#virtual-file-ex"><span class="nav-number">5.1.5.</span> <span class="nav-text">virtual_file_ex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tsrm-realpath-r"><span class="nav-number">5.1.6.</span> <span class="nav-text">tsrm_realpath_r</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更多"><span class="nav-number">5.2.</span> <span class="nav-text">更多</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感想"><span class="nav-number">6.</span> <span class="nav-text">感想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多学习链接"><span class="nav-number">7.</span> <span class="nav-text">更多学习链接</span></a></li></ol></div>
             
 
           </div>
@@ -680,7 +695,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">44.3k</span>
+    <span title="Site words total count">45.5k</span>
   
 </div>
 
